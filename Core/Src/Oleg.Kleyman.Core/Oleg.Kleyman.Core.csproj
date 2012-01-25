@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E5860385-4532-4BDA-B835-ED7073BCEA31}</ProjectGuid>
+    <ProjectGuid>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oleg.Kleyman.Tests.Core</RootNamespace>
-    <AssemblyName>Oleg.Kleyman.Tests.Core</AssemblyName>
+    <RootNamespace>Oleg.Kleyman.Core</RootNamespace>
+    <AssemblyName>Oleg.Kleyman.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,14 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoverageAnalyzer.cs" />
+    <Compile Include="Linq\Enumerable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
-      <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
-      <Name>Oleg.Kleyman.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

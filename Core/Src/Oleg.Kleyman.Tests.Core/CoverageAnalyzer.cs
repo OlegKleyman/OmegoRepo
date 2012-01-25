@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+using Oleg.Kleyman.Core.Linq;
 
 namespace Oleg.Kleyman.Tests.Core
 {
@@ -18,9 +19,9 @@ namespace Oleg.Kleyman.Tests.Core
                             BindingFlags.DeclaredOnly;
         }
 
-        public bool ValidateMethods(IEnumerable<string> names)
+        public bool ValidateMethods(IDictionary<string, int> names)
         {
-            ValidateNames(names, true);
+            ValidateObjectIsNotNull(names, true);
             var methods = _targetType.GetMethods(_bindingFlags);
             var filteredMethods = FilterProperties(methods);
             var allKnown = ValidateMembers(names, filteredMethods);
@@ -41,15 +42,16 @@ namespace Oleg.Kleyman.Tests.Core
         }
 
 
-        private static bool ValidateNames(object names, bool throwException)
+        private static bool ValidateObjectIsNotNull(object names, bool throwException)
         {
+            //TODO: Figure out a better way to handle this issue
             if (names == null)
             {
                 if (throwException)
                 {
                     const string argumentName = "names";
                     const string argumentNullMessage = "Argument cannot be null or nothing.";
-                    throw new ArgumentNullException(argumentNullMessage, argumentName);
+                    throw new ArgumentNullException(argumentName, argumentNullMessage);
                 }
 
                 return false;
@@ -58,9 +60,9 @@ namespace Oleg.Kleyman.Tests.Core
             return true;
         }
 
-        public bool ValidateProperties(IEnumerable<string> names)
+        public bool ValidateProperties(IDictionary<string, int> names)
         {
-            ValidateNames(names, true);
+            ValidateObjectIsNotNull(names, true);
             var properties = _targetType.GetProperties(_bindingFlags);
 
             var allKnown = ValidateMembers(names, properties);
@@ -68,9 +70,29 @@ namespace Oleg.Kleyman.Tests.Core
             return allKnown;
         }
 
-        private bool ValidateMembers(IEnumerable<string> names, IEnumerable<MemberInfo> members)
+        public bool ValidateMembers(IDictionary<string, int> names)
         {
-            return members.All(member => names.Contains(member.Name));
+            ValidateObjectIsNotNull(names, true);
+            var methods = _targetType.GetMethods(_bindingFlags);
+            var properties = _targetType.GetProperties(_bindingFlags);
+            var filteredMethods = FilterProperties(methods);
+            var members = ((IEnumerable<MemberInfo>) filteredMethods).Union(properties);
+            var allKnown = ValidateMembers(names, members);
+
+            return allKnown;
+        }
+
+        private bool ValidateMembers(IDictionary<string, int> names, IEnumerable<MemberInfo> members)
+        {
+            var namesIncluded = (from name in names
+                                 where name.Value == members.Count(member => member.Name == name.Key)
+                                 select name).Count() == names.Count;
+            if(!namesIncluded)
+            {
+                return false;
+            }
+
+            return members.All(member => names.ContainsKey(member.Name));
         }
     }
 }
