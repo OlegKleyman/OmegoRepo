@@ -9,6 +9,9 @@ namespace Oleg.Kleyman.Tests.Core.Tests
     [TestFixture]
     public class CoverageAnalyzerTests
     {
+        private const string ARGUMENT_NULL_EXCEPTION_NAME = "System.ArgumentNullException";
+        private const string ARGUMENT_NULL_EXCEPTION_NAMES_EXPECTED_MESSAGE = "Argument cannot be null or nothing.\r\nParameter name: names";
+        private const string ARGUMENT_NULL_EXCEPTION_HANDLER = "ArgumentNullExceptionHandler";
         private object TestObject { get; set; }
 
         [TestFixtureSetUp]
@@ -16,13 +19,32 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             TestObject = new object();
         }
+        
+        [Test]
+        public void CheckCoverage()
+        {
+            var knownMembers = new Dictionary<string, int>
+                                      {
+                                          { ".ctor", 1 },
+                                          { "ValidateMembers", 2 }, 
+                                          { "ValidateMethods", 1 }, 
+                                          { "ValidateProperties", 1 }
+                                      };
 
+            CoverageAnalyzer.ValidateMembers<CoverageAnalyzer>(knownMembers, true);
+        }
+
+        [Test]
+        public void ConstructorTest()
+        {
+            new CoverageAnalyzer(typeof(object));
+        }
         [Test]
         public void ValidateMethodsTest()
         {
             var knownMethods = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 1 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<object>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
 
             var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsTrue(result);
@@ -33,7 +55,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownProperties = new Dictionary<string, int> { { "Baz", 1 }, { "Qux", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<TestClass>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClass));
 
             var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsTrue(result);
@@ -44,7 +66,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownMethods = new Dictionary<string, int> { { "Foo", 1 }, { "Bar", 1 }, { "CompareTo", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<TestClass>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClass));
 
             var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsTrue(result);
@@ -55,7 +77,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownProperties = new Dictionary<string, int> { { "Baz", 1 }, { "Quux", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<TestClassTwo>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClassTwo));
 
             var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsTrue(result);
@@ -66,7 +88,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownMethods = new Dictionary<string, int> { { "Foo", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<TestClassTwo>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClassTwo));
 
             var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsTrue(result);
@@ -77,17 +99,18 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownProperties = new Dictionary<string, int> { { "Baz", 1 }, { "Quux", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<TestClassTwo>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClassTwo));
 
             var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsTrue(result);
         }
 
         [Test]
-        public void ValidateAllTest()
+        public void ValidateAllMembers()
         {
             var knownMembers = new Dictionary<string, int>
                                       {
+                                          { ".ctor", 1 },
                                           { "Foo", 1 }, 
                                           { "Bar", 1 }, 
                                           { "Baz", 1 }, 
@@ -95,7 +118,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                           { "CompareTo", 1 }
                                       };
 
-            var coverageAnalyzer = new CoverageAnalyzer<TestClass>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClass));
 
             var result = coverageAnalyzer.ValidateMembers(knownMembers);
             Assert.IsTrue(result);
@@ -106,7 +129,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownMethods = new Dictionary<string, int> { { "Equals", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<object>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
 
             var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsFalse(result);
@@ -117,7 +140,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownMethods = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<object>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
 
             var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsFalse(result);
@@ -126,40 +149,184 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         [Test]
         public void ValidateMethodsExtraMethodTest()
         {
-            var knownMethods = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 1 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 }, {"IsNull", 1} };
+            var knownMethods = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 1 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 }, { "IsNull", 1 } };
 
-            var coverageAnalyzer = new CoverageAnalyzer<object>();
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
 
             var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsFalse(result);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException), 
-                           ExpectedExceptionName = "System.ArgumentNullException",
-                           ExpectedMessage = "Argument cannot be null or nothing.\r\nParameter name: names",
+        [ExpectedException(typeof(ArgumentNullException),
+                           ExpectedExceptionName = ARGUMENT_NULL_EXCEPTION_NAME,
+                           ExpectedMessage = ARGUMENT_NULL_EXCEPTION_NAMES_EXPECTED_MESSAGE,
                            MatchType = MessageMatch.Exact,
-                           UserMessage = "dsds",
-                           Handler = "ArgumentNullExceptionHandler")]
-        public void ValidateMethodsDictionaryArguementNullExceptionTest()
+                           Handler = ARGUMENT_NULL_EXCEPTION_HANDLER)]
+        public void ValidateMethodsDictionaryArgumentNullExceptionTest()
         {
-            IDictionary<string, int> knownMethods = null;
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
 
-            var coverageAnalyzer = new CoverageAnalyzer<object>();
-
-            var result = coverageAnalyzer.ValidateMethods(knownMethods);
+            var result = coverageAnalyzer.ValidateMethods(null);
             Assert.IsFalse(result);
         }
 
         public void ArgumentNullExceptionHandler(Exception exception)
         {
-            if(exception.GetType() != typeof(ArgumentNullException))
+            if (exception.GetType() != typeof(ArgumentNullException))
             {
                 const string invalidExceptionType = "This handler can only be used with an ArgumentNullException";
                 throw new InvalidOperationException(invalidExceptionType);
             }
-            var argumentNullException = (ArgumentNullException) exception;
+            var argumentNullException = (ArgumentNullException)exception;
             Assert.AreEqual("names", argumentNullException.ParamName);
+        }
+
+        [Test]
+        public void ValidateMembersStaticTest()
+        {
+            var knownMembers = new Dictionary<string, int>
+                                      {
+                                          { ".ctor", 1 },
+                                          { "Foo", 1 }, 
+                                          { "Bar", 1 }, 
+                                          { "Baz", 1 }, 
+                                          { "Qux", 1 }, 
+                                          { "CompareTo", 1 }
+                                      };
+            var result = CoverageAnalyzer.ValidateMembers<TestClass>(knownMembers, false);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ValidateMembersStaticMethodMissingTest()
+        {
+
+            var knownMembers = new Dictionary<string, int>
+                                      {
+                                          { ".ctor", 1 },
+                                          { "Foo", 1 }, 
+                                          { "Bar", 1 }, 
+                                          { "Baz", 1 }, 
+                                          { "Qux", 1 }
+                                      };
+            var result = CoverageAnalyzer.ValidateMembers<TestClass>(knownMembers, false);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidateMembersStaticMethodCountIncorrectTest()
+        {
+            var knownMembers = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
+
+            var result = CoverageAnalyzer.ValidateMembers<object>(knownMembers, false);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidateMembersStaticExtraMethodTest()
+        {
+            var knownMembers = new Dictionary<string, int> { { "Equals", 2 }, { "NoneExistingMethod", 1 }, { "GetHashCode", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
+
+            var result = CoverageAnalyzer.ValidateMembers<object>(knownMembers, false);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidatePropertiesPropertyMissingTest()
+        {
+            var knownProperties = new Dictionary<string, int> { { "Qux", 1 } };
+
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClass));
+
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
+            
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidatePropertiesPropertyCountIncorrectTest()
+        {
+            var knownProperties = new Dictionary<string, int> { { "Baz", 2 }, { "Qux", 1 } };
+
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClass));
+
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidatePropertiesExtraPropertyTest()
+        {
+            var knownProperties = new Dictionary<string, int> { { "Baz", 1 }, { "NoneExistingProperty", 1 }, { "Qux", 1 } };
+
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(TestClass));
+
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException),
+                           ExpectedExceptionName = ARGUMENT_NULL_EXCEPTION_NAME,
+                           ExpectedMessage = ARGUMENT_NULL_EXCEPTION_NAMES_EXPECTED_MESSAGE,
+                           MatchType = MessageMatch.Exact,
+                           Handler = ARGUMENT_NULL_EXCEPTION_HANDLER)]
+        public void ValidatePropertyDictionaryArgumentNullExceptionTest()
+        {
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
+
+            var result = coverageAnalyzer.ValidateProperties(null);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidateMembersMemberMissingTest()
+        {
+            var knownMembers = new Dictionary<string, int> { { "Equals", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
+
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
+
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidateMembersMemberCountIncorrectTest()
+        {
+            var knownMembers = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
+
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
+
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ValidateMembersExtraMemberTest()
+        {
+            var knownMembers = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 1 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 }, { "IsNull", 1 } };
+
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
+
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException),
+                           ExpectedExceptionName = ARGUMENT_NULL_EXCEPTION_NAME,
+                           ExpectedMessage = ARGUMENT_NULL_EXCEPTION_NAMES_EXPECTED_MESSAGE,
+                           MatchType = MessageMatch.Exact,
+                           Handler = ARGUMENT_NULL_EXCEPTION_HANDLER)]
+        public void ValidateMembersDictionaryArgumentNullExceptionTest()
+        {
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(object));
+
+            var result = coverageAnalyzer.ValidateMembers(null);
+            Assert.IsFalse(result);
         }
     }
 }

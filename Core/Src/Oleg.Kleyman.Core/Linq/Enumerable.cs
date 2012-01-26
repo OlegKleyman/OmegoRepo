@@ -9,16 +9,7 @@ namespace Oleg.Kleyman.Core.Linq
     {
         public static IEnumerable<TSource> Distinct<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> comparer)
         {
-            var distinctValues = new List<TSource>();
-            foreach(var value in source)
-            {
-                var containsValue = distinctValues.Any(distinctValue => comparer(value, distinctValue));
-                if(!containsValue)
-                {
-                    distinctValues.Add(value);
-                }
-            }
-            return distinctValues;
+            return source.Distinct(new GenericComparer<TSource>(comparer));
         }
     }
 }
