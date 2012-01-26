@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Linq;
+using Oleg.Kleyman.Tests.Core;
+using Enumerable = Oleg.Kleyman.Core.Linq.Enumerable;
 
 namespace Oleg.Kleyman.Core.Tests
 {
@@ -16,6 +18,23 @@ namespace Oleg.Kleyman.Core.Tests
 
         }
 
+        [Test]
+        public void CheckCoverage()
+        {
+            var knownMembers = new Dictionary<string, int>
+                                      {
+                                          { "Distinct", 1 }
+                                      };
+
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(Enumerable));
+
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
+            if (!result)
+            {
+                const string membersNotCoveredMessage = "All members not covered";
+                Assert.Inconclusive(membersNotCoveredMessage);
+            }
+        }
         [Test]
         public void DistinctTest()
         {
