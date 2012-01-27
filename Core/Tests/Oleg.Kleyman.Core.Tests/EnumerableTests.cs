@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Oleg.Kleyman.Core.Linq;
 using Oleg.Kleyman.Tests.Core;
 using Enumerable = Oleg.Kleyman.Core.Linq.Enumerable;
-
+//test
 namespace Oleg.Kleyman.Core.Tests
 {
     [TestFixture]
