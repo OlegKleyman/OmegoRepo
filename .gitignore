@@ -4,3 +4,4 @@ obj/
 \~*
 *.suo
 *.sln.DotSettings.user
+*.orig
