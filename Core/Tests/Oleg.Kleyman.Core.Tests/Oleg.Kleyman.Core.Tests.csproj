@@ -45,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumerableTests.cs" />
+    <Compile Include="GenericComparerTests.cs" />
+    <Compile Include="MockObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
