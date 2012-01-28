@@ -10,6 +10,14 @@ namespace Oleg.Kleyman.Core.Tests
     [TestFixture]
     public class GenericComparerTests
     {
+        private const string PARAMETER_NAME_Y = "y";
+        private const string EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME = "System.ArgumentNullException";
+        private const string EXPECTED_INVALID_OPERATION_EXCEPTION_NAME = "System.InvalidOperationException";
+        private const string PARAMETER_NAME_X = "x";
+        private const string COMPARER_NAME = "ComparerHandler ";
+        private const string CANNOT_BE_NULL_EXCEPTION_MESSAGE = "Cannot be null";
+        private const string PARAMETER_NAME_EXCEPTION_MESSAGE = "\r\nParameter name: ";
+
         [TestFixtureSetUp]
         public void Setup()
         {
@@ -23,9 +31,10 @@ namespace Oleg.Kleyman.Core.Tests
                                       {
                                           { ".ctor", 1 },
                                           { "Equals", 1 }, 
-                                          { "GetHashCode", 1 }
+                                          { "GetHashCode", 1 },
+                                          { "CompareHandler", 1}
                                       };
-            
+
             var coverageAnalyzer = new CoverageAnalyzer(typeof(GenericComparer<>));
 
             var result = coverageAnalyzer.ValidateMembers(knownMembers);
@@ -35,6 +44,14 @@ namespace Oleg.Kleyman.Core.Tests
                 Assert.Inconclusive(membersNotCoveredMessage);
 
             }
+        }
+
+        [Test]
+        public void ConstructorTest()
+        {
+            var compareHandler = new Func<double, double, bool>((x, y) => true);
+            var comparer = new GenericComparer<double>(compareHandler);
+            Assert.AreEqual(compareHandler, comparer.CompareHandler);
         }
 
         [Test]
@@ -106,5 +123,37 @@ namespace Oleg.Kleyman.Core.Tests
             Assert.IsFalse(result);
         }
 
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException),
+                           ExpectedExceptionName = EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME,
+                           ExpectedMessage = CANNOT_BE_NULL_EXCEPTION_MESSAGE + PARAMETER_NAME_EXCEPTION_MESSAGE + PARAMETER_NAME_X,
+                           MatchType = MessageMatch.Exact)]
+        public void EqualsFirstArgumentNullExceptionTest()
+        {
+            var comparer = new GenericComparer<object>(null);
+            comparer.Equals(null, 3.9999);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException),
+                           ExpectedExceptionName = EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME,
+                           ExpectedMessage = CANNOT_BE_NULL_EXCEPTION_MESSAGE + PARAMETER_NAME_EXCEPTION_MESSAGE + PARAMETER_NAME_Y,
+                           MatchType = MessageMatch.Exact)]
+        public void EqualsSecondArgumentNullExceptionTest()
+        {
+            var comparer = new GenericComparer<object>(null);
+            comparer.Equals(3.9999, null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException),
+                           ExpectedExceptionName = EXPECTED_INVALID_OPERATION_EXCEPTION_NAME,
+                           ExpectedMessage = COMPARER_NAME + CANNOT_BE_NULL_EXCEPTION_MESSAGE,
+                           MatchType = MessageMatch.Exact)]
+        public void EqualsComparerNullTest()
+        {
+            var comparer = new GenericComparer<object>(null);
+            comparer.Equals(3.9999, 3.9999);
+        }
     }
 }

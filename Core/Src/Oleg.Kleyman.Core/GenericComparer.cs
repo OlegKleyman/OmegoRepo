@@ -8,7 +8,11 @@ namespace Oleg.Kleyman.Core
     public class GenericComparer<T> : EqualityComparer<T>
     {
         private const string CANNOT_BE_NULL = "Cannot be null";
-        private readonly Func<T, T, bool> _compareHandler;
+
+        /// <summary>
+        /// Gets or sets the comparer handler to use for compare operations.
+        /// </summary>
+        public Func<T, T, bool> CompareHandler { get; set; }
 
         /// <summary>
         /// Constructor
@@ -16,7 +20,7 @@ namespace Oleg.Kleyman.Core
         /// <param name="compareHandler">Handler to handle the comparison of objects.</param>
         public GenericComparer(Func<T, T, bool> compareHandler)
         {
-            _compareHandler = compareHandler;
+            CompareHandler = compareHandler;
         }
 
         /// <summary>
@@ -30,8 +34,6 @@ namespace Oleg.Kleyman.Core
         /// Debug.WriteLine(valuesAreEqual); //writes true to the debug window
         public override bool Equals(T x, T y)
         {
-            ValidateState();
-            
             if (x == null)
             {
                 const string xParamName = "x";
@@ -44,15 +46,17 @@ namespace Oleg.Kleyman.Core
                 throw new ArgumentNullException(yParamName, CANNOT_BE_NULL);
             }
             
-            return _compareHandler(x, y);
+            ValidateState();
+
+            return CompareHandler(x, y);
         }
 
         private void ValidateState()
         {
-            if(_compareHandler == null)
+            if (CompareHandler == null)
             {
-                const string comparerIsHandlerIsNull = "Comparer is handler is null";
-                throw new InvalidCastException(comparerIsHandlerIsNull);
+                const string comparerName = "ComparerHandler ";
+                throw new InvalidOperationException(comparerName + CANNOT_BE_NULL);
             }
         }
 
