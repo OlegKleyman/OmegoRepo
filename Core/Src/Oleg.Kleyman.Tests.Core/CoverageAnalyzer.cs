@@ -21,7 +21,7 @@ namespace Oleg.Kleyman.Tests.Core
 
         public bool ValidateMethods(IDictionary<string, int> names)
         {
-            ValidateObjectIsNotNull(names, true, NAMES_ARGUMENT_NAME);
+            ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
             var methods = _targetType.GetMethods(BINDING_FLAGS);
             var filteredMethods = FilterProperties(methods);
             var allKnown = ValidateMembers(names, filteredMethods);
@@ -47,26 +47,20 @@ namespace Oleg.Kleyman.Tests.Core
                 || method.Name.StartsWith(propertyGetPrefix));
         }
 
-        private static bool ValidateObjectIsNotNull(object target, bool throwException, string argumentName)
+        private static void ThrowArgumentNullExceptionIfObjectIsNull(object target, string argumentName)
         {
             //TODO: Figure out a better way to handle this issue
             if (target == null)
             {
-                if (throwException)
-                {
-                    const string argumentNullMessage = "Argument cannot be null or nothing.";
-                    throw new ArgumentNullException(argumentName, argumentNullMessage);
-                }
+                const string argumentNullMessage = "Argument cannot be null or nothing.";
+                throw new ArgumentNullException(argumentName, argumentNullMessage);
 
-                return false;
             }
-
-            return true;
         }
 
         public bool ValidateProperties(IDictionary<string, int> names)
         {
-            ValidateObjectIsNotNull(names, true, NAMES_ARGUMENT_NAME);
+            ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
             var properties = _targetType.GetProperties(BINDING_FLAGS);
 
             var allKnown = ValidateMembers(names, properties);
@@ -76,12 +70,12 @@ namespace Oleg.Kleyman.Tests.Core
 
         public bool ValidateMembers(IDictionary<string, int> names)
         {
-            ValidateObjectIsNotNull(names, true, NAMES_ARGUMENT_NAME);
+            ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
             var members = _targetType.GetMembers(BINDING_FLAGS);
 
             var filteredMembers = (from mem in members
                                    where mem is PropertyInfo ||
-                                        (mem is MethodBase 
+                                        (mem is MethodBase
                                       && !IsMemberPropertyAAcessor((MethodBase)mem))
                                    select mem);
 
@@ -103,9 +97,9 @@ namespace Oleg.Kleyman.Tests.Core
             return members.All(member => names.ContainsKey(member.Name));
         }
 
-        public static bool ValidateMembers<T>(IDictionary<string, int> names, bool assertInconclusive)
+        public static bool ValidateMembersNoCoverage<T>(IDictionary<string, int> names, bool assertInconclusive)
         {
-            ValidateObjectIsNotNull(names, true, NAMES_ARGUMENT_NAME);
+            ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
             var coverageAnalyzer = new CoverageAnalyzer(typeof(T));
 
             var result = coverageAnalyzer.ValidateMembers(names);

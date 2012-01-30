@@ -1,0 +1,14 @@
+<Configuration>
+  <SnapshotDialog>
+    <InitialDirectory>C:\reports</InitialDirectory>
+  </SnapshotDialog>
+  <CoverageFilters>
+    <IncludeFilters>
+      <Filter ModuleMask="*" ClassMask="*" FunctionMask="*" />
+    </IncludeFilters>
+    <ExcludeFilters>
+      <Filter ModuleMask="*.Tests" ClassMask="*" FunctionMask="*" />
+      <Filter ModuleMask="*" ClassMask="*" FunctionMask="*NoCoverage" />
+    </ExcludeFilters>
+  </CoverageFilters>
+</Configuration>

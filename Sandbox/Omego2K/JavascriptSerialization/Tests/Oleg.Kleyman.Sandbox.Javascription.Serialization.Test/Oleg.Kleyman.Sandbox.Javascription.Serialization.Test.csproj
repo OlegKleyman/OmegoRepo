@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A8C165C7-CAC1-4E3F-8C51-BD9E0B81B9D5}</ProjectGuid>
+    <ProjectGuid>{8B98EB97-EC65-4E1D-BE99-C74237C3BE23}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oleg.Kleyman.Tests.Core.Tests</RootNamespace>
-    <AssemblyName>Oleg.Kleyman.Tests.Core.Tests</AssemblyName>
+    <RootNamespace>Oleg.Kleyman.Sandbox.Javascription.Serialization.Test</RootNamespace>
+    <AssemblyName>Oleg.Kleyman.Sandbox.Javascription.Serialization.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,12 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\..\..\..\Common\Lib\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.0.12017, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Common\Lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\..\..\Common\Lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,16 +48,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoverageAnalyzerTests.cs" />
+    <Compile Include="JsonSerializerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestClass.cs" />
-    <Compile Include="TestClassTwo.cs" />
+    <Compile Include="Torrents.cs" />
+    <Compile Include="UtorrentWebRequestTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
-      <Project>{E5860385-4532-4BDA-B835-ED7073BCEA31}</Project>
-      <Name>Oleg.Kleyman.Tests.Core</Name>
+    <ProjectReference Include="..\..\Src\Oleg.Kleyman.Sandbox.Javascription.Serialization\Oleg.Kleyman.Sandbox.Javascription.Serialization.csproj">
+      <Project>{5D1FF909-EE61-429A-9DA4-B3330EEB94B3}</Project>
+      <Name>Oleg.Kleyman.Sandbox.Javascription.Serialization</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Test.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

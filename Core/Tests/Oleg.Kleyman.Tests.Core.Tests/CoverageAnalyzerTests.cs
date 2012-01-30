@@ -1,37 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 
 namespace Oleg.Kleyman.Tests.Core.Tests
 {
     [TestFixture]
-    public class CoverageAnalyzerTests
+    public class CoverageAnalyzerTests : TestsBase
     {
         private const string ARGUMENT_NULL_EXCEPTION_NAME = "System.ArgumentNullException";
         private const string ARGUMENT_NULL_EXCEPTION_NAMES_EXPECTED_MESSAGE = "Argument cannot be null or nothing.\r\nParameter name: names";
         private const string ARGUMENT_NULL_EXCEPTION_HANDLER = "ArgumentNullExceptionHandler";
         private object TestObject { get; set; }
 
-        [TestFixtureSetUp]
-        public void Setup()
+        public override void Setup()
         {
             TestObject = new object();
         }
         
-        [Test]
-        public void CheckCoverage()
+        public override void CheckCoverage()
         {
             var knownMembers = new Dictionary<string, int>
                                       {
                                           { ".ctor", 1 },
-                                          { "ValidateMembers", 2 }, 
+                                          { "ValidateMembersNoCoverage", 2 }, 
                                           { "ValidateMethods", 1 }, 
                                           { "ValidateProperties", 1 }
                                       };
 
-            CoverageAnalyzer.ValidateMembers<CoverageAnalyzer>(knownMembers, true);
+            CoverageAnalyzer.ValidateMembersNoCoverage<CoverageAnalyzer>(knownMembers, true);
         }
 
         [Test]
@@ -194,7 +190,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                           { "Qux", 1 }, 
                                           { "CompareTo", 1 }
                                       };
-            var result = CoverageAnalyzer.ValidateMembers<TestClass>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<TestClass>(knownMembers, false);
             Assert.IsTrue(result);
         }
 
@@ -210,7 +206,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                           { "Baz", 1 }, 
                                           { "Qux", 1 }
                                       };
-            var result = CoverageAnalyzer.ValidateMembers<TestClass>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<TestClass>(knownMembers, false);
             Assert.IsFalse(result);
         }
 
@@ -219,7 +215,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownMembers = new Dictionary<string, int> { { "Equals", 2 }, { "GetHashCode", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
 
-            var result = CoverageAnalyzer.ValidateMembers<object>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<object>(knownMembers, false);
 
             Assert.IsFalse(result);
         }
@@ -229,7 +225,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var knownMembers = new Dictionary<string, int> { { "Equals", 2 }, { "NoneExistingMethod", 1 }, { "GetHashCode", 2 }, { "GetType", 1 }, { "ToString", 1 }, { "ReferenceEquals", 1 } };
 
-            var result = CoverageAnalyzer.ValidateMembers<object>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<object>(knownMembers, false);
 
             Assert.IsFalse(result);
         }

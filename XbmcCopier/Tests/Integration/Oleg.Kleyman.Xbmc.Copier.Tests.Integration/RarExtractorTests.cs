@@ -25,7 +25,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             Extractor extractor = new RarExtractor(ConfigSettings);
             string destination = @"C:\testUnrar\";
             Directory.CreateDirectory(destination);
-            extractor.Extract(@"..\..\..\..\..\Common\Test\testFile.Rar", destination);
+            extractor.Extract(@"..\..\..\..\..\..\Common\Test\testFile.Rar", destination);
             Assert.IsTrue(File.Exists(destination + "testFile.txt"));
             Directory.Delete(destination, true);
         }
