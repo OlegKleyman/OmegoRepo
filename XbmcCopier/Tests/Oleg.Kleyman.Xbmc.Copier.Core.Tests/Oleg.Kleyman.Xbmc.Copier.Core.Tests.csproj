@@ -36,6 +36,7 @@
       <HintPath>..\..\..\Common\Lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,8 +45,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XbmcCopierConfigurationElementTests.cs" />
+    <Compile Include="FilterConfigurationElementCollectionTests.cs" />
+    <Compile Include="FilterConfigurationElementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XbmcCopierConfigurationSectionTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
+      <Project>{E5860385-4532-4BDA-B835-ED7073BCEA31}</Project>
+      <Name>Oleg.Kleyman.Tests.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Src\Oleg.Kleyman.Xbmc.Copier.Core\Oleg.Kleyman.Xbmc.Copier.Core.csproj">
+      <Project>{FB57E4D2-D4A3-40DC-918F-58AEF6D3E275}</Project>
+      <Name>Oleg.Kleyman.Xbmc.Copier.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
