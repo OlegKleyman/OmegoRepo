@@ -1,47 +1,32 @@
-using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Oleg.Kleyman.Core.Linq;
 
 namespace Oleg.Kleyman.Core
 {
-    public class ConfigurationElementCollection<T> : ConfigurationElementCollection where T : ConfigurationElement
+    public class ConfigurationElementCollection<T> : SingleValueConfigurationElementCollection<T> where T : ConfigurationElement, IConfigurationElement
     {
-        public ConfigurationElementCollection(IEnumerable<T> elements) : this()
-        {
-            if(elements == null)
-            {
-                const string elementsParamName = "elements";
-                throw new ArgumentNullException(elementsParamName);
-            }
-            AddElements(elements);
-            
-        }
-
-        private void AddElements(IEnumerable<T> elements)
-        {
-            elements.ForEach(BaseAdd);
-        }
-
-        private ConfigurationElementCollection() { }
-
-        #region Overrides of ConfigurationElementCollection
-
-        protected override ConfigurationElement CreateNewElement()
-        {
-            return (ConfigurationElement)Activator.CreateInstance(typeof(T), true);
-        }
+        /// <summary>
+        /// Constructions ConfigurationElementCollection with a range of ConfigurationElements.
+        /// </summary>
+        /// <param name="elements">ConfigurationElements to create the ConfigurationElementCollection object with.</param>
+        public ConfigurationElementCollection(IEnumerable<T> elements) : base(elements) { }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return element.GetHashCode();
+            return ((T)element).Key;
         }
 
-        #endregion
-
-        public T this[int index]
+        /// <summary>
+        /// Gets ConfigurationElement in the collection by key.
+        /// </summary>
+        /// <param name="key">The key of the ConfigurationElement</param>
+        /// <returns>Returns ConfigurationElement with the key specified in the argument.</returns>
+        public new T this[string key]
         {
-            get { return (T)BaseGet(index); }
+            get
+            {
+                return (T)BaseGet(key);
+            }
         }
     }
 }

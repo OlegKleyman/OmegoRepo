@@ -1,4 +1,7 @@
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using NUnit.Framework;
 
 namespace Oleg.Kleyman.Core.Tests
@@ -13,18 +16,20 @@ namespace Oleg.Kleyman.Core.Tests
         {
             PropertyNameValues = new Dictionary<string, object>
                                      {
-                                         {"value", "test"}
+                                         {"value", "test"},
+                                         {"key", "someKey"}
                                      };
         }
 
         [Test]
         public void ConstructorTest()
         {
-            var element = new SingleValueConfigurationElement(PropertyNameValues);
-            var configCollection = new ConfigurationElementCollection<SingleValueConfigurationElement>(new[] { element });
+            var element = new MockConfigurationElement(PropertyNameValues);
+            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] { element });
             Assert.AreEqual(1, configCollection.Count);
-            
-            Assert.Pass();
+            Assert.IsInstanceOf<MockConfigurationElement>(configCollection[0]);
+            Assert.AreEqual("test", (configCollection[0]).Value);
+            Assert.AreEqual("someKey", (configCollection[0]).Key);
         }
     }
 }

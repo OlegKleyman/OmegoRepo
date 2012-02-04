@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Net.Configuration;
 using NUnit.Framework;
 
 namespace Oleg.Kleyman.Core.Tests
 {
     [TestFixture]
-    public class SingleValueConfigurationElementTests
+    public class SingleValueConfigurationElementCollectionTests
     {
         private IDictionary<string, object> PropertyNameValues { get; set; }
 
@@ -21,7 +22,11 @@ namespace Oleg.Kleyman.Core.Tests
         public void ConstructorTest()
         {
             var element = new SingleValueConfigurationElement(PropertyNameValues);
-            Assert.AreEqual("test", element.Value);
+            
+            var configCollection = new SingleValueConfigurationElementCollection<SingleValueConfigurationElement>(new[] { element });
+            Assert.AreEqual(1, configCollection.Count);
+            Assert.IsInstanceOf<SingleValueConfigurationElement>(configCollection[0]);
+            Assert.AreEqual("test", configCollection[0].Value);
         }
     }
 }

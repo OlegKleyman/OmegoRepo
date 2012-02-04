@@ -46,6 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationElementCollectionTests.cs" />
+    <Compile Include="MockConfigurationElement.cs" />
+    <Compile Include="SingletonTests.cs" />
+    <Compile Include="SingleValueConfigurationElementCollectionTests.cs" />
     <Compile Include="EnumerableTests.cs" />
     <Compile Include="GenericComparerTests.cs" />
     <Compile Include="MockObject.cs" />

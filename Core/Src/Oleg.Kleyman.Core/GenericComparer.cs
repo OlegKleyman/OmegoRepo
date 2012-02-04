@@ -29,9 +29,12 @@ namespace Oleg.Kleyman.Core
         /// <param name="x">The first object to compare.</param>
         /// <param name="y">The second object to compare.</param>
         /// <returns>Boolean that specifies whether the two arguments used are equal.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown when either of the arguments is null.</exception>
+        /// <example>
         /// var comparer = new GenericComparer&lt;int&gt;((x, y) => x == y);
         /// var valuesAreEqual = comparer.Equals(5, 5);
         /// Debug.WriteLine(valuesAreEqual); //writes true to the debug window
+        /// </example>
         public override bool Equals(T x, T y)
         {
             if (x == null)

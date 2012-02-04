@@ -41,7 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationElementBase.cs" />
     <Compile Include="ConfigurationElementCollection.cs" />
+    <Compile Include="IConfigurationElement.cs" />
+    <Compile Include="Singleton.cs" />
+    <Compile Include="SingleValueConfigurationElementCollection.cs" />
     <Compile Include="GenericComparer.cs" />
     <Compile Include="Linq\Enumerable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
