@@ -11,5 +11,13 @@ namespace Oleg.Kleyman.Core.Linq
         {
             return source.Distinct(new GenericComparer<TSource>(comparer));
         }
+
+        public static void ForEach<T>(this IEnumerable<T> target, Action<T> action)
+        {
+            foreach (T item in target)
+            {
+                action(item);
+            }
+        }
     }
 }

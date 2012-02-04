@@ -45,8 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FilterConfigurationElementCollectionTests.cs" />
-    <Compile Include="FilterConfigurationElementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XbmcCopierConfigurationSectionTests.cs" />
   </ItemGroup>
