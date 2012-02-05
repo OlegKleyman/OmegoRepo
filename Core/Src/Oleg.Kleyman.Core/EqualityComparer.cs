@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Oleg.Kleyman.Core
 {
@@ -14,11 +11,6 @@ namespace Oleg.Kleyman.Core
         private const string CANNOT_BE_NULL = "Cannot be null";
 
         /// <summary>
-        /// Gets or sets the comparer handler to use for compare operations.
-        /// </summary>
-        public Func<T, T, bool> CompareHandler { get; set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="compareHandler">Handler to handle the comparison of objects.</param>
@@ -26,6 +18,11 @@ namespace Oleg.Kleyman.Core
         {
             CompareHandler = compareHandler;
         }
+
+        /// <summary>
+        /// Gets or sets the comparer handler to use for compare operations.
+        /// </summary>
+        public Func<T, T, bool> CompareHandler { get; set; }
 
         /// <summary>
         /// Determines if two arguments are equal.
@@ -52,7 +49,7 @@ namespace Oleg.Kleyman.Core
                 const string yParamName = "y";
                 throw new ArgumentNullException(yParamName, CANNOT_BE_NULL);
             }
-            
+
             ValidateState();
 
             return CompareHandler(x, y);

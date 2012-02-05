@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Net.Configuration;
 using NUnit.Framework;
+using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Core.Tests
 {
@@ -22,8 +22,9 @@ namespace Oleg.Kleyman.Core.Tests
         public void ConstructorTest()
         {
             var element = new SingleValueConfigurationElement(PropertyNameValues);
-            
-            var configCollection = new SingleValueConfigurationElementCollection<SingleValueConfigurationElement>(new[] { element });
+
+            var configCollection =
+                new SingleValueConfigurationElementCollection<SingleValueConfigurationElement>(new[] {element});
             Assert.AreEqual(1, configCollection.Count);
             Assert.IsInstanceOf<SingleValueConfigurationElement>(configCollection[0]);
             Assert.AreEqual("test", configCollection[0].Value);

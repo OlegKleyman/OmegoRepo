@@ -1,5 +1,3 @@
-using System;
-
 namespace Oleg.Kleyman.Core
 {
     /// <summary>
@@ -9,16 +7,16 @@ namespace Oleg.Kleyman.Core
     {
         private static readonly Singleton __instance;
 
-        private Singleton()
-        {
-        }
-
         /// <summary>
         /// Default static constructor.
         /// </summary>
         static Singleton()
         {
             __instance = new Singleton();
+        }
+
+        private Singleton()
+        {
         }
 
         /// <summary>

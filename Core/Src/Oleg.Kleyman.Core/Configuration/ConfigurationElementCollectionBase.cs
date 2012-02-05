@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Configuration;
 using Oleg.Kleyman.Core.Linq;
 
-namespace Oleg.Kleyman.Core
+namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
     /// Represents a collection that holds ConfigurationElements.
     /// </summary>
     /// <typeparam name="T">The type of the ConfigurationElement.</typeparam>
-    public abstract class ConfigurationElementCollectionBase<T> : ConfigurationElementCollection where T : ConfigurationElement
+    public abstract class ConfigurationElementCollectionBase<T> : ConfigurationElementCollection
+        where T : ConfigurationElement
     {
         /// <summary>
         /// Constructions ConfigurationElementCollection with a range of ConfigurationElements.
@@ -17,23 +18,19 @@ namespace Oleg.Kleyman.Core
         /// <param name="elements">ConfigurationElements to create the ConfigurationElementCollection object with.</param>
         protected ConfigurationElementCollectionBase(IEnumerable<T> elements) : this()
         {
-            if(elements == null)
+            if (elements == null)
             {
                 const string elementsParamName = "elements";
                 throw new ArgumentNullException(elementsParamName);
             }
             AddElements(elements);
-            
         }
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        protected ConfigurationElementCollectionBase() { }
-
-        private void AddElements(IEnumerable<T> elements)
+        protected ConfigurationElementCollectionBase()
         {
-            elements.ForEach(BaseAdd);
         }
 
         /// <summary>
@@ -43,7 +40,12 @@ namespace Oleg.Kleyman.Core
         /// <returns>Returns the ConfigurationElement at the desired index.</returns>
         public T this[int index]
         {
-            get { return (T)BaseGet(index); }
+            get { return (T) BaseGet(index); }
+        }
+
+        private void AddElements(IEnumerable<T> elements)
+        {
+            elements.ForEach(BaseAdd);
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace Oleg.Kleyman.Core
         /// <returns>Returns an instance of a ConfigurationElement.</returns>
         protected override ConfigurationElement CreateNewElement()
         {
-            return (ConfigurationElement)Activator.CreateInstance(typeof(T), true);
+            return (ConfigurationElement) Activator.CreateInstance(typeof (T), true);
         }
     }
 }

@@ -1,9 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Oleg.Kleyman.Xbmc.Copier.Core" GeneratedClassName="Settings">
+
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)"
+              GeneratedClassNamespace="Oleg.Kleyman.Xbmc.Copier.Core" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="UnrarPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Program Files\WinRAR\unrar.exe</Value>
+      <Value Profile="(Default)">
+        C:\Program Files\WinRAR\unrar.exe
+      </Value>
     </Setting>
     <Setting Name="MoviesPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\Videos\Movies</Value>

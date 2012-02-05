@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Configuration;
 
-namespace Oleg.Kleyman.Core
+namespace Oleg.Kleyman.Core.Configuration
 {
-    public class SingleValueConfigurationElementCollection<T> : ConfigurationElementCollectionBase<T> where T : ConfigurationElement
+    public class SingleValueConfigurationElementCollection<T> : ConfigurationElementCollectionBase<T>
+        where T : ConfigurationElement
     {
         /// <summary>
         /// Constructions ConfigurationElementCollection with a range of ConfigurationElements.

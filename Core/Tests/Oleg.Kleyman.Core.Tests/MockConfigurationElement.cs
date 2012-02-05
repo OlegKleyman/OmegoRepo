@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Configuration;
+using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Core.Tests
 {
@@ -12,14 +13,18 @@ namespace Oleg.Kleyman.Core.Tests
         {
         }
 
-        [ConfigurationProperty(VALUE_CONFIG_ATTRIBUTE_NAME, IsDefaultCollection = false, IsKey = false, IsRequired = true)]
-        public string Value { get { return (string)base[VALUE_CONFIG_ATTRIBUTE_NAME]; } }
+        [ConfigurationProperty(VALUE_CONFIG_ATTRIBUTE_NAME, IsDefaultCollection = false, IsKey = false,
+            IsRequired = true)]
+        public string Value
+        {
+            get { return (string) base[VALUE_CONFIG_ATTRIBUTE_NAME]; }
+        }
 
         #region Implementation of IConfigurationElement
 
         public string Key
         {
-            get { return (string)base[KEY_CONFIG_ATTRIBUTE_NAME]; }
+            get { return (string) base[KEY_CONFIG_ATTRIBUTE_NAME]; }
         }
 
         #endregion

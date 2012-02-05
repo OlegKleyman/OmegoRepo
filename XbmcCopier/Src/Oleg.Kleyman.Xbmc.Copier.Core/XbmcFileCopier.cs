@@ -7,11 +7,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
     public class XbmcFileCopier : FileCopier
     {
-        public Release Release { get; set; }
-        public string FileName { get; set; }
-        public string DownloadPath { get; set; }
-        protected ISettingsProvider ConfigSettings { get; set; }
-
         public XbmcFileCopier(ISettingsProvider settings, Release release, string fileName, string downloadPath)
         {
             Release = release;
@@ -19,6 +14,11 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             DownloadPath = downloadPath;
             ConfigSettings = settings;
         }
+
+        public Release Release { get; set; }
+        public string FileName { get; set; }
+        public string DownloadPath { get; set; }
+        protected ISettingsProvider ConfigSettings { get; set; }
 
         public override void Copy()
         {
@@ -33,7 +33,9 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 case ReleaseType.Other:
                     goto default;
                 default:
-                    throw new ApplicationException(string.Format("Release type of {0} is not supported.", Enum.GetName(Release.ReleaseType.GetType(), Release.ReleaseType)));
+                    throw new ApplicationException(string.Format("Release type of {0} is not supported.",
+                                                                 Enum.GetName(Release.ReleaseType.GetType(),
+                                                                              Release.ReleaseType)));
             }
         }
 
@@ -44,8 +46,8 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 Directory.CreateDirectory(ConfigSettings.MoviesPath + Release.Name);
             }
 
-            var compressedMovieFiles = GetFiles(new[] { ".rar" });
-            if(compressedMovieFiles.Any())
+            IEnumerable<FileInfo> compressedMovieFiles = GetFiles(new[] {".rar"});
+            if (compressedMovieFiles.Any())
             {
                 ExtractFiles(compressedMovieFiles, ConfigSettings.MoviesPath + Release.Name);
             }
@@ -58,7 +60,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         private void ExtractFiles(IEnumerable<FileInfo> compressedMovieFiles, string destinationPath)
         {
             var extractor = new RarExtractor(ConfigSettings);
-            foreach (var compressedMovieFile in compressedMovieFiles)
+            foreach (FileInfo compressedMovieFile in compressedMovieFiles)
             {
                 extractor.Extract(compressedMovieFile.FullName, destinationPath);
             }
@@ -73,7 +75,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
             if (string.IsNullOrEmpty(FileName))
             {
-                var tvFiles = GetFiles(new[] { ".mkv", ".avi", ".wmv" });
+                IEnumerable<FileInfo> tvFiles = GetFiles(new[] {".mkv", ".avi", ".wmv"});
 
                 if (tvFiles.Any())
                 {
@@ -81,7 +83,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 }
                 else
                 {
-                    tvFiles = GetFiles(new[] { ".rar"});
+                    tvFiles = GetFiles(new[] {".rar"});
                     ExtractFiles(tvFiles, ConfigSettings.TvPath + Release.Name);
                 }
             }
@@ -94,7 +96,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         private void CopySingleFile(string destination)
         {
             Directory.SetCurrentDirectory(DownloadPath);
-            if(!destination.EndsWith("\\"))
+            if (!destination.EndsWith("\\"))
             {
                 destination += "\\";
             }
@@ -103,7 +105,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private void CopyFiles(IEnumerable<FileInfo> files, string destination)
         {
-            foreach (var file in files)
+            foreach (FileInfo file in files)
             {
                 File.Copy(file.FullName, destination + Release.Name + @"\" + file.Name);
             }
@@ -112,7 +114,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         private IEnumerable<FileInfo> GetFiles(IEnumerable<string> extentions)
         {
             var sourceDirectory = new DirectoryInfo(DownloadPath);
-            var files = sourceDirectory.GetFiles();
+            FileInfo[] files = sourceDirectory.GetFiles();
 
             files = (from extention in extentions
                      from file in files

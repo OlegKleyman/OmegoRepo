@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Oleg.Kleyman.Core.Linq;
 
-namespace Oleg.Kleyman.Core
+namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
     /// Represents a configuration element.
@@ -31,7 +31,7 @@ namespace Oleg.Kleyman.Core
         /// <param name="values">The property names and values to create.</param>
         protected void CreatePropertiesWithValue(IEnumerable<KeyValuePair<string, object>> values)
         {
-            if(values == null)
+            if (values == null)
             {
                 return;
             }

@@ -1,33 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
     public class RarExtractor : Extractor
     {
-        protected string UnrarPath { get; private set; }
-        protected ISettingsProvider ConfigSettings { get; private set; }
-
-        public RarExtractor(ISettingsProvider settings)
+        public RarExtractor(ISettingsProvider settings) : this(settings.UnrarPath)
         {
             ConfigSettings = settings;
-            UnrarPath = settings.UnrarPath;
         }
 
         public RarExtractor(string unrarPath)
         {
-            UnrarPath = unrarPath;
+            UnrarPath = unrarPath.Trim();
         }
+
+        protected string UnrarPath { get; private set; }
+        protected ISettingsProvider ConfigSettings { get; private set; }
 
         public override void Extract(string target, string destination)
         {
-            var currentDirectoryPath = Directory.GetCurrentDirectory();
+            string currentDirectoryPath = Directory.GetCurrentDirectory();
             var file = new FileInfo(target);
-            if(!Directory.Exists(destination))
+            if (!Directory.Exists(destination))
             {
                 Directory.CreateDirectory(destination);
             }
@@ -39,8 +35,8 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 throw new ApplicationException(string.Format(cannotFindUnrarFileMessage, UnrarPath));
             }
 
-            var process = Process.Start(UnrarPath, string.Format("e -y \"{0}\"", file.FullName));
-            if(process == null)
+            Process process = Process.Start(UnrarPath, string.Format("e -y \"{0}\"", file.FullName));
+            if (process == null)
             {
                 const string unableToOpenUnrarFileAtLocationMessage = "Unable to open unrar file at location {0}";
                 throw new ApplicationException(string.Format(unableToOpenUnrarFileAtLocationMessage, UnrarPath));

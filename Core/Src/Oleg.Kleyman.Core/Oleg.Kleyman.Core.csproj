@@ -34,23 +34,18 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigurationElementBase.cs" />
-    <Compile Include="ConfigurationElementCollection.cs" />
-    <Compile Include="IConfigurationElement.cs" />
+    <Compile Include="Configuration\ConfigurationElementBase.cs" />
+    <Compile Include="Configuration\ConfigurationElementCollection.cs" />
+    <Compile Include="Configuration\IConfigurationElement.cs" />
     <Compile Include="Singleton.cs" />
-    <Compile Include="SingleValueConfigurationElementCollection.cs" />
+    <Compile Include="Configuration\SingleValueConfigurationElementCollection.cs" />
     <Compile Include="EqualityComparer.cs" />
     <Compile Include="Linq\Enumerable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SingleValueConfigurationElement.cs" />
-    <Compile Include="ConfigurationElementCollectionBase.cs" />
+    <Compile Include="Configuration\SingleValueConfigurationElement.cs" />
+    <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

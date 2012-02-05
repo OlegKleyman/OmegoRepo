@@ -1,6 +1,6 @@
 using System.Configuration;
 
-namespace Oleg.Kleyman.Core
+namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
     /// Provides property that returns the unique key for a ConfigurationElement.

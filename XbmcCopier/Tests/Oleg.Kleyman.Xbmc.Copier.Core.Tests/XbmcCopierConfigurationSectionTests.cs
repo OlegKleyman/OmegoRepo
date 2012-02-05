@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
 {
@@ -12,7 +8,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
         [TestFixtureSetUp]
         public void Setup()
         {
-
         }
 
         [Test]
@@ -25,7 +20,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
         [Test]
         public void SettingsTest()
         {
-            var settings = XbmcCopierConfigurationSection.Settings;
+            ISettingsProvider settings = XbmcCopierConfigurationSection.Settings;
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Oleg.Kleyman.Core.Tests
 {
@@ -12,13 +8,12 @@ namespace Oleg.Kleyman.Core.Tests
         [TestFixtureSetUp]
         public void Setup()
         {
-            
         }
 
         [Test]
         public void InstanceTest()
         {
-            var instance = Singleton.Instance;
+            Singleton instance = Singleton.Instance;
             Assert.IsNotNull(instance);
             Assert.IsInstanceOf<Singleton>(instance);
         }
@@ -26,8 +21,8 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void IsSingletonTest()
         {
-            var instance1 = Singleton.Instance;
-            var instance2 = Singleton.Instance;
+            Singleton instance1 = Singleton.Instance;
+            Singleton instance2 = Singleton.Instance;
             Assert.AreEqual(instance1, instance2);
         }
     }

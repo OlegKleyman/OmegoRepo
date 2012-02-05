@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using NUnit.Framework;
 using Oleg.Kleyman.Xbmc.Copier.Core;
 
@@ -31,4 +27,3 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
         }
     }
 }
-
