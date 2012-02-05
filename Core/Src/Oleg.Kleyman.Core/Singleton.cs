@@ -2,6 +2,9 @@ using System;
 
 namespace Oleg.Kleyman.Core
 {
+    /// <summary>
+    /// Represents a singleton object.
+    /// </summary>
     public class Singleton
     {
         private static readonly Singleton __instance;
@@ -10,6 +13,9 @@ namespace Oleg.Kleyman.Core
         {
         }
 
+        /// <summary>
+        /// Default static constructor.
+        /// </summary>
         static Singleton()
         {
             __instance = new Singleton();

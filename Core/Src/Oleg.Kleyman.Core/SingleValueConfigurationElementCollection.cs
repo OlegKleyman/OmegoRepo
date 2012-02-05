@@ -1,51 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Oleg.Kleyman.Core.Linq;
 
 namespace Oleg.Kleyman.Core
 {
-    public class SingleValueConfigurationElementCollection<T> : ConfigurationElementCollection where T : ConfigurationElement
+    public class SingleValueConfigurationElementCollection<T> : ConfigurationElementCollectionBase<T> where T : ConfigurationElement
     {
         /// <summary>
         /// Constructions ConfigurationElementCollection with a range of ConfigurationElements.
         /// </summary>
         /// <param name="elements">ConfigurationElements to create the ConfigurationElementCollection object with.</param>
-        public SingleValueConfigurationElementCollection(IEnumerable<T> elements) : this()
+        public SingleValueConfigurationElementCollection(IEnumerable<T> elements) : base(elements)
         {
-            if(elements == null)
-            {
-                const string elementsParamName = "elements";
-                throw new ArgumentNullException(elementsParamName);
-            }
-            AddElements(elements);
-            
         }
-
-        private void AddElements(IEnumerable<T> elements)
-        {
-            elements.ForEach(BaseAdd);
-        }
-
-        private SingleValueConfigurationElementCollection() { }
 
         #region Overrides of ConfigurationElementCollection
 
-        protected override ConfigurationElement CreateNewElement()
-        {
-            return (ConfigurationElement)Activator.CreateInstance(typeof(T), true);
-        }
-
+        /// <summary>
+        /// Gets the key of the specified element.
+        /// </summary>
+        /// <param name="element">The element to get the key of.</param>
+        /// <returns>Returns the same singleton object irrelevent of the argument used.</returns>
         protected override object GetElementKey(ConfigurationElement element)
         {
             return Singleton.Instance;
         }
 
         #endregion
-
-        public T this[int index]
-        {
-            get { return (T)BaseGet(index); }
-        }
     }
 }

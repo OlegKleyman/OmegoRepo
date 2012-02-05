@@ -21,7 +21,7 @@ namespace Oleg.Kleyman.Core
         ///                                 {"value", "test"},
         ///                                 {"key", "someKey"}
         ///                              };
-        /// var elementCollection = new SingleValueConfigurationElement(propertyNameValues);
+        /// var element = new SingleValueConfigurationElement(propertyNameValues);
         /// //use object
         /// </example>
         public SingleValueConfigurationElement(IEnumerable<KeyValuePair<string, object>> values) : base(values)

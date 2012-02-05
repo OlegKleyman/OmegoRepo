@@ -9,7 +9,7 @@ namespace Oleg.Kleyman.Core.Linq
     {
         public static IEnumerable<TSource> Distinct<TSource>(this IEnumerable<TSource> source, Func<TSource, TSource, bool> comparer)
         {
-            return source.Distinct(new GenericComparer<TSource>(comparer));
+            return source.Distinct(new EqualityComparer<TSource>(comparer));
         }
 
         public static void ForEach<T>(this IEnumerable<T> target, Action<T> action)

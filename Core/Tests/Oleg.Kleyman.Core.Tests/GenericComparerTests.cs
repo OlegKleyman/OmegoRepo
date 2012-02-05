@@ -35,7 +35,7 @@ namespace Oleg.Kleyman.Core.Tests
                                           { "CompareHandler", 1}
                                       };
 
-            var coverageAnalyzer = new CoverageAnalyzer(typeof(GenericComparer<>));
+            var coverageAnalyzer = new CoverageAnalyzer(typeof(EqualityComparer<>));
 
             var result = coverageAnalyzer.ValidateMembers(knownMembers);
             if (!result)
@@ -50,14 +50,14 @@ namespace Oleg.Kleyman.Core.Tests
         public void ConstructorTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => true);
-            var comparer = new GenericComparer<double>(compareHandler);
+            var comparer = new EqualityComparer<double>(compareHandler);
             Assert.AreEqual(compareHandler, comparer.CompareHandler);
         }
 
         [Test]
         public void GetHashCodeIntTest()
         {
-            var comparer = new GenericComparer<int>(null);
+            var comparer = new EqualityComparer<int>(null);
             var result = comparer.GetHashCode(1);
             Assert.AreEqual(1, result);
         }
@@ -65,7 +65,7 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void GetHashCodeDoubleTest()
         {
-            var comparer = new GenericComparer<double>(null);
+            var comparer = new EqualityComparer<double>(null);
             var result = comparer.GetHashCode(1.12);
             Assert.AreEqual(558479977, result);
         }
@@ -73,7 +73,7 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void GetHashCodeReferenceTest()
         {
-            var comparer = new GenericComparer<object>(null);
+            var comparer = new EqualityComparer<object>(null);
             var result = comparer.GetHashCode(new MockObject());
             Assert.AreEqual(1337, result);
         }
@@ -82,7 +82,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void EqualsResultsAreEqualTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
-            var comparer = new GenericComparer<double>(compareHandler);
+            var comparer = new EqualityComparer<double>(compareHandler);
             var result = comparer.Equals(3.9999, 3.9999);
             Assert.IsTrue(result);
         }
@@ -91,7 +91,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void EqualsResultsAreNotEqualTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
-            var comparer = new GenericComparer<double>(compareHandler);
+            var comparer = new EqualityComparer<double>(compareHandler);
             var result = comparer.Equals(3.9999, 3.9998);
             Assert.IsFalse(result);
         }
@@ -100,7 +100,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void EqualsNegativeResultsAreEqualTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
-            var comparer = new GenericComparer<double>(compareHandler);
+            var comparer = new EqualityComparer<double>(compareHandler);
             var result = comparer.Equals(-3.9999, -3.9999);
             Assert.IsTrue(result);
         }
@@ -109,7 +109,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void EqualsNegativeResultsAreNotEqualTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
-            var comparer = new GenericComparer<double>(compareHandler);
+            var comparer = new EqualityComparer<double>(compareHandler);
             var result = comparer.Equals(-3.9999, -3.9998);
             Assert.IsFalse(result);
         }
@@ -118,7 +118,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void EqualsNegativePositiveResultsAreNotEqualTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
-            var comparer = new GenericComparer<double>(compareHandler);
+            var comparer = new EqualityComparer<double>(compareHandler);
             var result = comparer.Equals(-3.9999, 3.9999);
             Assert.IsFalse(result);
         }
@@ -130,7 +130,7 @@ namespace Oleg.Kleyman.Core.Tests
                            MatchType = MessageMatch.Exact)]
         public void EqualsFirstArgumentNullExceptionTest()
         {
-            var comparer = new GenericComparer<object>(null);
+            var comparer = new EqualityComparer<object>(null);
             comparer.Equals(null, 3.9999);
         }
 
@@ -141,7 +141,7 @@ namespace Oleg.Kleyman.Core.Tests
                            MatchType = MessageMatch.Exact)]
         public void EqualsSecondArgumentNullExceptionTest()
         {
-            var comparer = new GenericComparer<object>(null);
+            var comparer = new EqualityComparer<object>(null);
             comparer.Equals(3.9999, null);
         }
 
@@ -152,7 +152,7 @@ namespace Oleg.Kleyman.Core.Tests
                            MatchType = MessageMatch.Exact)]
         public void EqualsComparerNullTest()
         {
-            var comparer = new GenericComparer<object>(null);
+            var comparer = new EqualityComparer<object>(null);
             comparer.Equals(3.9999, 3.9999);
         }
     }
