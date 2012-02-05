@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,14 @@ namespace Oleg.Kleyman.Core.Linq
         public static void ForEach<T>(this IEnumerable<T> target, Action<T> action)
         {
             foreach (T item in target)
+            {
+                action(item);
+            }
+        }
+
+        public static void ForEach(this IEnumerable target, Action<object> action)
+        {
+            foreach (var item in target)
             {
                 action(item);
             }

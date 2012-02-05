@@ -13,7 +13,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
         [Test]
         public void ConstructorTest()
         {
-            var configElementCollection = new XbmcCopierConfigurationSection();
             Assert.Pass();
         }
 
@@ -21,6 +20,8 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
         public void SettingsTest()
         {
             ISettingsProvider settings = XbmcCopierConfigurationSection.Settings;
+
+            
         }
     }
 }

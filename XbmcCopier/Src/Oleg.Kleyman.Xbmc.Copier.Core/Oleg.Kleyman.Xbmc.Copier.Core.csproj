@@ -60,6 +60,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+      <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
+      <Name>Oleg.Kleyman.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

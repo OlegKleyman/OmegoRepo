@@ -1,4 +1,6 @@
-﻿namespace Oleg.Kleyman.Xbmc.Copier.Core
+﻿using System.Collections.Generic;
+
+namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
     public class DefaultSettings : ISettingsProvider
     {
@@ -17,6 +19,11 @@
         public string TvPath
         {
             get { return Settings.Default.TvPath; }
+        }
+
+        public ICollection<string> Filters
+        {
+            get { throw new System.NotImplementedException(); }
         }
 
         #endregion

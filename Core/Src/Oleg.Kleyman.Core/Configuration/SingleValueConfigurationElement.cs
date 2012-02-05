@@ -28,6 +28,14 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <remarks>Needed for runtime to initialize configuration.</remarks>
+        private SingleValueConfigurationElement() : base()
+        {
+            
+        }
+        /// <summary>
         /// Gets the value the value attribute.
         /// </summary>
         [ConfigurationProperty(VALUE_CONFIG_ATTRIBUTE_NAME, IsDefaultCollection = false, IsKey = false,
