@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
@@ -6,10 +7,10 @@ using Oleg.Kleyman.Core.Linq;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
-    public class XbmcCopierConfigurationSection : ConfigurationSection, ISettingsProvider
+    public sealed class XbmcCopierConfigurationSection : ConfigurationSection, ISettingsProvider
     {
         private readonly object _syncRoot;
-        private ICollection<string> _filters;
+        private string[] _filters;
         private static readonly XbmcCopierConfigurationSection __configurationInstance;
         private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> _filterElements;
 
@@ -23,25 +24,37 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         private const string FILTERS_PROPERTY_NAME = "filters";
         private const string FILTER_PROPERTY_NAME = "filter";
 
-        [ConfigurationProperty(UNRAR_PATH_PROPERTY_NAME)]
+        /// <summary>
+        /// Gets the unrar.exe location from the config.
+        /// </summary>
+        [ConfigurationProperty(UNRAR_PATH_PROPERTY_NAME, IsRequired = true)]
         string ISettingsProvider.UnrarPath
         {
             get { return base[UNRAR_PATH_PROPERTY_NAME] as string; }
         }
 
+        /// <summary>
+        /// Gets the TV path location from the config.
+        /// </summary>
         [ConfigurationProperty(TV_PATH_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
         string ISettingsProvider.TvPath
         {
             get { return base[TV_PATH_PROPERTY_NAME] as string; }
         }
 
+        /// <summary>
+        /// Gets the movie path location from the config.
+        /// </summary>
         [ConfigurationProperty(MOVIE_PATH_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
         string ISettingsProvider.MoviesPath
         {
             get { return base[MOVIE_PATH_PROPERTY_NAME] as string; }
         }
 
-        ICollection<string> ISettingsProvider.Filters
+        /// <summary>
+        /// Gets the filters to use from the config file.
+        /// </summary>
+        string[] ISettingsProvider.Filters
         {
             get
             {
@@ -78,14 +91,21 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 _filterElements =
                     (SingleValueConfigurationElementCollection<SingleValueConfigurationElement>)
                     base[FILTERS_PROPERTY_NAME];
+                if (_filterElements == null)
+                {
+                    _filterElements =
+                        new SingleValueConfigurationElementCollection<SingleValueConfigurationElement>(new SingleValueConfigurationElement[]{});
+                }
             }
         }
 
         private void AddFilters()
         {
-            EnsureFilterElementsAreNotNull();
-            _filters = new Collection<string>();
-            _filterElements.ForEach(element => _filters.Add(((SingleValueConfigurationElement)element).Value));
+            _filters = new string[FilterElements.Count];
+            for(int index = 0; index <FilterElements.Count;index++)
+            {
+                _filters[index] = FilterElements[index].Value;
+            }
         }
 
         static XbmcCopierConfigurationSection()
@@ -100,6 +120,9 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             return configurationSection;
         }
 
+        /// <summary>
+        /// Gets the settings for the Xbmx configuration from the config file.
+        /// </summary>
         public static ISettingsProvider Settings
         {
             get { return __configurationInstance; }

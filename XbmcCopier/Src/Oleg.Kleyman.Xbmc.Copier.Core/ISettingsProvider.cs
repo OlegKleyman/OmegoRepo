@@ -7,6 +7,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         string UnrarPath { get; }
         string MoviesPath { get; }
         string TvPath { get; }
-        ICollection<string> Filters { get; }
+        string[] Filters { get; }
     }
 }

@@ -21,7 +21,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             get { return Settings.Default.TvPath; }
         }
 
-        public ICollection<string> Filters
+        public string[] Filters
         {
             get { throw new System.NotImplementedException(); }
         }

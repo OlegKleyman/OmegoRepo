@@ -17,15 +17,15 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
         }
 
         [Test]
-        public void ConstructorTest()
+        public void SettingsTest()
         {
             var settings = XbmcCopierConfigurationSection.Settings;
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.AreEqual(2, settings.Filters.Count);
-            Assert.AreEqual("testing", settings.Filters.ElementAt(0));
-            Assert.AreEqual("second test", settings.Filters.ElementAt(1));
+            Assert.AreEqual(2, settings.Filters.Length);
+            Assert.AreEqual("testing", settings.Filters[0]);
+            Assert.AreEqual("second test", settings.Filters[1]);
         }
     }
 }
