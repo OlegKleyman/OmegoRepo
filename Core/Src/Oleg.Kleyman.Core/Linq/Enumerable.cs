@@ -15,17 +15,14 @@ namespace Oleg.Kleyman.Core.Linq
 
         public static void ForEach<T>(this IEnumerable<T> target, Action<T> action)
         {
-            foreach (T item in target)
-            {
-                action(item);
-            }
+            ForEach((IEnumerable)target, action);
         }
 
-        public static void ForEach(this IEnumerable target, Action<object> action)
+        public static void ForEach<T>(this IEnumerable target, Action<T> action)
         {
             foreach (var item in target)
             {
-                action(item);
+                action((T)item);
             }
         }
     }

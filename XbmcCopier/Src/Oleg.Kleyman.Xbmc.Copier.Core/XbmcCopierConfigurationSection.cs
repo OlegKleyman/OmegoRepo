@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.IO;
+using System.Xml;
 using Oleg.Kleyman.Core.Configuration;
 using Oleg.Kleyman.Core.Linq;
 
@@ -18,11 +20,13 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         {
             _syncRoot = new object();
         }
+
         private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
         private const string TV_PATH_PROPERTY_NAME = "tvPath";
         private const string MOVIE_PATH_PROPERTY_NAME = "moviePath";
         private const string FILTERS_PROPERTY_NAME = "filters";
         private const string FILTER_PROPERTY_NAME = "filter";
+        private const string CONFIGURATION_SECTION_NAME = "XbmcCopierConfiguration";
 
         /// <summary>
         /// Gets the unrar.exe location from the config.
@@ -93,8 +97,8 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                     base[FILTERS_PROPERTY_NAME];
                 if (_filterElements == null)
                 {
-                    _filterElements =
-                        new SingleValueConfigurationElementCollection<SingleValueConfigurationElement>(new SingleValueConfigurationElement[]{});
+                    //It should never get to this point
+                    throw new ConfigurationErrorsException("Internal configuration error: Filters null");
                 }
             }
         }
@@ -115,17 +119,50 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private static XbmcCopierConfigurationSection GetConfigurationnInstance()
         {
-            const string configurationSectionName = "XbmcCopierConfiguration";
-            var configurationSection = (XbmcCopierConfigurationSection)ConfigurationManager.GetSection(configurationSectionName);
+            var configurationSection = (XbmcCopierConfigurationSection)ConfigurationManager.GetSection(CONFIGURATION_SECTION_NAME);
             return configurationSection;
         }
 
         /// <summary>
         /// Gets the settings for the Xbmx configuration from the config file.
         /// </summary>
-        public static ISettingsProvider Settings
+        public static ISettingsProvider DefaultSettings
         {
             get { return __configurationInstance; }
+        }
+
+        public static ISettingsProvider GetSettingsByConfigurationFile(string configurationFilePath)
+        {
+            if(string.IsNullOrEmpty(configurationFilePath))
+            {
+                const string configurationFilePathParamName = "configurationFilePath";
+                throw new ArgumentNullException(configurationFilePathParamName);
+            }
+
+            if (!File.Exists(configurationFilePath))
+            {
+                
+                const string configurationFileNotFoundMessage = "Configuration file not found";
+                throw new ConfigurationErrorsException(configurationFileNotFoundMessage, configurationFilePath, 0);
+            }
+            
+            var fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = configurationFilePath;
+            
+            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            return GetSettingsByConfiguration(configuration);
+        }
+
+        public static ISettingsProvider GetSettingsByConfiguration(Configuration configuration)
+        {
+            var section = (ISettingsProvider) configuration.GetSection(CONFIGURATION_SECTION_NAME);
+            if(section == null)
+            {
+                const string xbmcCopierConfigurationSectionNotFoundMessage = "XbmcCopierConfiguration configuration section not found.";
+                throw new ConfigurationErrorsException(xbmcCopierConfigurationSectionNotFoundMessage);
+            }
+
+            return section;
         }
     }
 }

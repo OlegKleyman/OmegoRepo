@@ -19,7 +19,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
         [Test]
         public void SettingsTest()
         {
-            ISettingsProvider settings = XbmcCopierConfigurationSection.Settings;
+            ISettingsProvider settings = XbmcCopierConfigurationSection.DefaultSettings;
 
             
         }

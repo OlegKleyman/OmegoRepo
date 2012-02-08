@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Configuration;
@@ -22,6 +23,17 @@ namespace Oleg.Kleyman.Core.Tests
         public void ConstructorTest()
         {
             var element = new SingleValueConfigurationElement(PropertyNameValues);
+            Assert.AreEqual("test", element.Value);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException),
+                           ExpectedExceptionName = "System.ArgumentNullException",
+                           ExpectedMessage = "Value cannot be null.\r\nParameter name: values",
+                           MatchType = MessageMatch.Exact)]
+        public void ConstructorNullArgumentTest()
+        {
+            var element = new SingleValueConfigurationElement(null);
             Assert.AreEqual("test", element.Value);
         }
     }

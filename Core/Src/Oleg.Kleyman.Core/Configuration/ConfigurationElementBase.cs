@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using Oleg.Kleyman.Core.Linq;
@@ -15,6 +16,11 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <param name="values">The property names and values to set.</param>
         protected ConfigurationElementBase(IEnumerable<KeyValuePair<string, object>> values) : this()
         {
+            if (values == null)
+            {
+                const string valuesParamName = "values";
+                throw new ArgumentNullException(valuesParamName);
+            }
             CreatePropertiesWithValue(values);
         }
 
@@ -31,11 +37,6 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <param name="values">The property names and values to create.</param>
         protected void CreatePropertiesWithValue(IEnumerable<KeyValuePair<string, object>> values)
         {
-            if (values == null)
-            {
-                return;
-            }
-
             values.ForEach(AddPropertyWithValue);
         }
 
