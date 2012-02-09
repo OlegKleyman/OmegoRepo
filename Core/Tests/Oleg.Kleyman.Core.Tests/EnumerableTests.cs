@@ -4,9 +4,6 @@ using Oleg.Kleyman.Core.Linq;
 using Oleg.Kleyman.Tests.Core;
 using Enumerable = System.Linq.Enumerable;
 
-//test1 ui
-//test
-
 namespace Oleg.Kleyman.Core.Tests
 {
     [TestFixture]
