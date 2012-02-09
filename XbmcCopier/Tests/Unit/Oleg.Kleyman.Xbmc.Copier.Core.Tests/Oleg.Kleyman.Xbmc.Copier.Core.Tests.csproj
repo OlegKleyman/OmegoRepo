@@ -49,11 +49,11 @@
     <Compile Include="XbmcCopierConfigurationSectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
+    <ProjectReference Include="..\..\..\..\Core\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
       <Project>{E5860385-4532-4BDA-B835-ED7073BCEA31}</Project>
       <Name>Oleg.Kleyman.Tests.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Src\Oleg.Kleyman.Xbmc.Copier.Core\Oleg.Kleyman.Xbmc.Copier.Core.csproj">
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Xbmc.Copier.Core\Oleg.Kleyman.Xbmc.Copier.Core.csproj">
       <Project>{FB57E4D2-D4A3-40DC-918F-58AEF6D3E275}</Project>
       <Name>Oleg.Kleyman.Xbmc.Copier.Core</Name>
     </ProjectReference>
