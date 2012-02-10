@@ -7,12 +7,15 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
     public class ReleaseBuilder
     {
         private readonly string[] _keywords;
-        private readonly Regex _regex;
+        private readonly Regex _tvDelimeter;
+        private readonly ISettingsProvider _settings;
 
-        public ReleaseBuilder(string name)
+        public ReleaseBuilder(ISettingsProvider settings, string name)
         {
-            _regex = new Regex(@"\.S\d{2}E\d{2}\.",
-                               RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            _settings = settings;
+            const string tvDelimeter = @"\.S\d{2}E\d{2}\.";
+            const RegexOptions regexOptions = RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline;
+            _tvDelimeter = new Regex(tvDelimeter, regexOptions);
             _keywords = new[] {".720P.", ".1080P.", ".DVDRIP.", ".PAL.DVDR.", ".NTSC.DVDR.", ".XVID."};
             Name = name;
         }
@@ -38,20 +41,22 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private string GetTvName(string name)
         {
-            string[] nameSplit = _regex.Split(name);
-            name = nameSplit[0].Replace('.', ' ');
+            string[] nameSplit = _tvDelimeter.Split(name);
+            const char originalWordDelimeter = '.';
+            const char newWordDelimeter = ' ';
+            name = nameSplit[0].Replace(originalWordDelimeter, newWordDelimeter);
             return name;
         }
 
         private ReleaseType GetReleaseType()
         {
             ReleaseType type = default(ReleaseType);
-
-            if (_regex.IsMatch(Name))
+            var isTvType = _settings.TvFilters.Any(filter => filter.IsMatch(Name));
+            if(isTvType)
             {
                 type = ReleaseType.Tv;
             }
-            else if (_keywords.Any(keyword => Name.ToUpper(CultureInfo.InvariantCulture).Contains(keyword)))
+            else if (_settings.MovieFilters.Any(movieFilter => movieFilter.IsMatch(Name)))
             {
                 type = ReleaseType.Movie;
             }

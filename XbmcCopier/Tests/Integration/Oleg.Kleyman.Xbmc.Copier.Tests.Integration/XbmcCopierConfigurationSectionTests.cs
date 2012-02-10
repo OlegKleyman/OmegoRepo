@@ -24,10 +24,25 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             const string xbmcCopierValidConfigFileName = @"XbmcCopierValid.config";
             const string xbmcCopierValidNoFiltersConfigFileName = @"XbmcCopierValidNoFilters.config";
             const string xbmcCopierInvalidNoConfigurationSectionFileName = @"XbmcCopierInvalidNoConfigurationSection.config";
-            const string filePath = @"{0}\TestConfigs\{1}";
-            XbmcCopierValidConfigFilePath = string.Format(filePath, currentDirectory, xbmcCopierValidConfigFileName);
-            XbmcCopierValidNoFiltersConfigFilePath = string.Format(filePath, currentDirectory, xbmcCopierValidNoFiltersConfigFileName);
-            XbmcCopierInvalidNoConfigurationSectionFilePath = string.Format(filePath, currentDirectory, xbmcCopierInvalidNoConfigurationSectionFileName);
+            const string filePath = @"TestConfigs";
+
+            XbmcCopierValidConfigFilePath = Path.Combine(currentDirectory, filePath, xbmcCopierValidConfigFileName);
+            XbmcCopierValidNoFiltersConfigFilePath = Path.Combine(currentDirectory, filePath, xbmcCopierValidNoFiltersConfigFileName);
+            XbmcCopierInvalidNoConfigurationSectionFilePath = Path.Combine(currentDirectory, filePath, xbmcCopierInvalidNoConfigurationSectionFileName);
+        }
+
+        [Test]
+        public void DefaultSettingsTests()
+        {
+            var settings = XbmcCopierConfigurationSection.DefaultSettings;
+            Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
+            Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
+            Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
+            Assert.AreEqual(2, settings.MovieFilters.Length);
+            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.", settings.MovieFilters[0].ToString());
+            Assert.AreEqual("testing", settings.MovieFilters[1].ToString());
+            Assert.AreEqual(1, settings.TvFilters.Length);
+            Assert.AreEqual(@"\.S\d{2}E\d{2}\.", settings.TvFilters[0].ToString());
         }
 
         [Test]
@@ -37,9 +52,11 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.AreEqual(2, settings.Filters.Length);
-            Assert.AreEqual("testing", settings.Filters[0]);
-            Assert.AreEqual("second test", settings.Filters[1]);
+            Assert.AreEqual(2, settings.MovieFilters.Length);
+            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.", settings.MovieFilters[0].ToString());
+            Assert.AreEqual("testing", settings.MovieFilters[1].ToString());
+            Assert.AreEqual(1, settings.TvFilters.Length);
+            Assert.AreEqual(@"\.S\d{2}E\d{2}\.", settings.TvFilters[0].ToString());
         }
 
         [Test]
@@ -54,9 +71,11 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.AreEqual(2, settings.Filters.Length);
-            Assert.AreEqual("testing", settings.Filters[0]);
-            Assert.AreEqual("second test", settings.Filters[1]);
+            Assert.AreEqual(2, settings.MovieFilters.Length);
+            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.", settings.MovieFilters[0].ToString());
+            Assert.AreEqual("testing", settings.MovieFilters[1].ToString());
+            Assert.AreEqual(1, settings.TvFilters.Length);
+            Assert.AreEqual(@"\.S\d{2}E\d{2}\.", settings.TvFilters[0].ToString());
         }
 
         [Test]
@@ -95,13 +114,14 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
         }
 
         [Test]
-        public void DefaultSettingsNoFiltersInConfigTest()
+        public void GetSettingsByConfigurationFileNoFiltersInConfigTest()
         {
             var settings = XbmcCopierConfigurationSection.GetSettingsByConfigurationFile(XbmcCopierValidNoFiltersConfigFilePath);
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.AreEqual(0, settings.Filters.Length);
+            Assert.AreEqual(0, settings.MovieFilters.Length);
+            Assert.AreEqual(0, settings.TvFilters.Length);
         }
     }
 }

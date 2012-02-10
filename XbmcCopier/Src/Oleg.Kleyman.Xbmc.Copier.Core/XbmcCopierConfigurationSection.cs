@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 using Oleg.Kleyman.Core.Configuration;
 using Oleg.Kleyman.Core.Linq;
@@ -12,19 +13,28 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
     public sealed class XbmcCopierConfigurationSection : ConfigurationSection, ISettingsProvider
     {
         private readonly object _syncRoot;
-        private string[] _filters;
-        private static readonly XbmcCopierConfigurationSection __configurationInstance;
-        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> _filterElements;
+        private static readonly object __syncRoot;
+        private Regex[] _movieFilters;
+        private Regex[] _tvFilters;
+        private static XbmcCopierConfigurationSection __configurationInstance;
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> _movieFilterElements;
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> _tvFilterElements;
 
         private XbmcCopierConfigurationSection()
         {
             _syncRoot = new object();
         }
 
+        static XbmcCopierConfigurationSection()
+        {
+            __syncRoot = new object();
+        }
+
         private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
         private const string TV_PATH_PROPERTY_NAME = "tvPath";
         private const string MOVIE_PATH_PROPERTY_NAME = "moviePath";
-        private const string FILTERS_PROPERTY_NAME = "filters";
+        private const string MOVIE_FILTERS_PROPERTY_NAME = "movieFilters";
+        private const string TV_FILTERS_PROPERTY_NAME = "tvFilters";
         private const string FILTER_PROPERTY_NAME = "filter";
         private const string CONFIGURATION_SECTION_NAME = "XbmcCopierConfiguration";
 
@@ -56,65 +66,96 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         /// <summary>
-        /// Gets the filters to use from the config file.
+        /// Gets the movie filters to use from the config file.
         /// </summary>
-        string[] ISettingsProvider.Filters
+        Regex[] ISettingsProvider.MovieFilters
         {
             get
             {
                 lock (_syncRoot)
                 {
-                    if (_filters == null)
+                    if (_movieFilters == null)
                     {
-                        AddFilters();
+                        _movieFilters = GetFilters(ReleaseType.Movie);
                     }
                 }
 
-                return _filters;
+                return _movieFilters;
             }
         }
 
-        [ConfigurationProperty(FILTERS_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
-        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationElement>), AddItemName = FILTER_PROPERTY_NAME)]
-        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> FilterElements
+        /// <summary>
+        /// Gets the tv filters to use from the config file.
+        /// </summary>
+        Regex[] ISettingsProvider.TvFilters
         {
             get
             {
                 lock (_syncRoot)
                 {
-                    EnsureFilterElementsAreNotNull();
+                    if (_tvFilters == null)
+                    {
+                        _tvFilters = GetFilters(ReleaseType.Tv);
+                    }
                 }
-                return _filterElements;
+
+                return _tvFilters;
             }
         }
 
-        private void EnsureFilterElementsAreNotNull()
+        [ConfigurationProperty(MOVIE_FILTERS_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
+        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationElement>), AddItemName = FILTER_PROPERTY_NAME)]
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> MovieFilterElements
         {
-            if (_filterElements == null)
+            get
             {
-                _filterElements =
+                lock (_syncRoot)
+                {
+                    EnsureFilterElementsAreNotNull(ref _movieFilterElements, MOVIE_FILTERS_PROPERTY_NAME);
+                }
+                return _movieFilterElements;
+            }
+        }
+
+        [ConfigurationProperty(TV_FILTERS_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
+        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationElement>), AddItemName = FILTER_PROPERTY_NAME)]
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> TvFilterElements
+        {
+            get
+            {
+                lock (_syncRoot)
+                {
+                    EnsureFilterElementsAreNotNull(ref _tvFilterElements, TV_FILTERS_PROPERTY_NAME);
+                }
+                return _tvFilterElements;
+            }
+        }
+
+        private void EnsureFilterElementsAreNotNull(ref SingleValueConfigurationElementCollection<SingleValueConfigurationElement> filterElements, string propertyName)
+        {
+            if (filterElements == null)
+            {
+                filterElements =
                     (SingleValueConfigurationElementCollection<SingleValueConfigurationElement>)
-                    base[FILTERS_PROPERTY_NAME];
-                if (_filterElements == null)
+                    base[propertyName];
+                if (filterElements == null)
                 {
                     //It should never get to this point
-                    throw new ConfigurationErrorsException("Internal configuration error: Filters null");
+                    throw new ConfigurationErrorsException("Internal configuration error: filterElements is null");
                 }
             }
         }
 
-        private void AddFilters()
+        private Regex[] GetFilters(ReleaseType releaseType)
         {
-            _filters = new string[FilterElements.Count];
-            for(int index = 0; index <FilterElements.Count;index++)
+            var filterElements = releaseType == ReleaseType.Movie ? MovieFilterElements : TvFilterElements;
+            var filters = new Regex[filterElements.Count];
+            const RegexOptions regexOptions = RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline;
+            for(int index = 0; index < filterElements.Count;index++)
             {
-                _filters[index] = FilterElements[index].Value;
+                filters[index] = new Regex(filterElements[index].Value, regexOptions);
             }
-        }
-
-        static XbmcCopierConfigurationSection()
-        {
-            __configurationInstance = GetConfigurationnInstance();
+            return filters;
         }
 
         private static XbmcCopierConfigurationSection GetConfigurationnInstance()
@@ -124,16 +165,45 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         /// <summary>
-        /// Gets the settings for the Xbmx configuration from the config file.
+        /// Gets the default <see cref="ISettingsProvider"/> for the Xbmx configuration from the config file.
         /// </summary>
         public static ISettingsProvider DefaultSettings
         {
-            get { return __configurationInstance; }
+            get
+            {
+                lock(__syncRoot)
+                {
+                    if(__configurationInstance == null)
+                    {
+                        __configurationInstance = GetConfigurationnInstance();
+                    }
+                    
+                    return __configurationInstance;
+                }
+            }
         }
 
+        /// <summary>
+        /// Gets an <see cref="ISettingsProvider" /> settings by configuration file path.
+        /// </summary>
+        /// <param name="configurationFilePath">UNC path to the configuration file</param>
+        /// <returns>An <see cref="ISettingsProvider" /> object.</returns>
         public static ISettingsProvider GetSettingsByConfigurationFile(string configurationFilePath)
         {
-            if(string.IsNullOrEmpty(configurationFilePath))
+            ValidatePath(configurationFilePath);
+
+            var fileMap = new ExeConfigurationFileMap
+                              {
+                                  ExeConfigFilename = configurationFilePath
+                              };
+
+            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            return GetSettingsByConfiguration(configuration);
+        }
+
+        private static void ValidatePath(string configurationFilePath)
+        {
+            if (string.IsNullOrEmpty(configurationFilePath))
             {
                 const string configurationFilePathParamName = "configurationFilePath";
                 throw new ArgumentNullException(configurationFilePathParamName);
@@ -141,18 +211,16 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
             if (!File.Exists(configurationFilePath))
             {
-                
                 const string configurationFileNotFoundMessage = "Configuration file not found";
                 throw new ConfigurationErrorsException(configurationFileNotFoundMessage, configurationFilePath, 0);
             }
-            
-            var fileMap = new ExeConfigurationFileMap();
-            fileMap.ExeConfigFilename = configurationFilePath;
-            
-            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
-            return GetSettingsByConfiguration(configuration);
         }
 
+        /// <summary>
+        /// Gets an <see cref="ISettingsProvider" /> settings by <see cref="Configuration" />.
+        /// </summary>
+        /// <param name="configuration">The <see cref="Configuration" /> object containing XBMC settings</param>
+        /// <returns>An <see cref="ISettingsProvider" /> object.</returns>
         public static ISettingsProvider GetSettingsByConfiguration(Configuration configuration)
         {
             var section = (ISettingsProvider) configuration.GetSection(CONFIGURATION_SECTION_NAME);

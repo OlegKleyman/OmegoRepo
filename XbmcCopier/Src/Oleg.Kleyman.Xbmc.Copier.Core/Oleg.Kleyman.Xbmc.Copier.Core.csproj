@@ -37,7 +37,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultSettings.cs" />
     <Compile Include="Extractor.cs" />
     <Compile Include="FileCopier.cs" />
     <Compile Include="ISettingsProvider.cs" />
@@ -45,21 +44,12 @@
     <Compile Include="Release.cs" />
     <Compile Include="ReleaseBuilder.cs" />
     <Compile Include="ReleaseType.cs" />
-    <Compile Include="Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="RarExtractor.cs" />
     <Compile Include="XbmcCopierConfigurationSection.cs" />
     <Compile Include="XbmcFileCopier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">

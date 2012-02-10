@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
@@ -7,6 +8,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         string UnrarPath { get; }
         string MoviesPath { get; }
         string TvPath { get; }
-        string[] Filters { get; }
+        Regex[] MovieFilters { get; }
+        Regex[] TvFilters { get; }
     }
 }

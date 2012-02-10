@@ -7,12 +7,12 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
     [TestFixture]
     public class RarExtractorTests
     {
-        protected DefaultSettings ConfigSettings { get; set; }
+        protected ISettingsProvider ConfigSettings { get; set; }
 
         [TestFixtureSetUp]
         public void Setup()
         {
-            ConfigSettings = new DefaultSettings();
+            ConfigSettings = XbmcCopierConfigurationSection.DefaultSettings;
         }
 
         [Test]
