@@ -1,5 +1,5 @@
 using System;
-
+//test
 namespace Oleg.Kleyman.Tests.Core.Tests
 {
     public class TestClass : IComparable
