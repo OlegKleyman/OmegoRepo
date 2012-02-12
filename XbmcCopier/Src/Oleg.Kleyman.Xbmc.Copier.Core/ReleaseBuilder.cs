@@ -24,15 +24,16 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         public Release Build()
         {
-            var release = new Release(GetReleaseType());
-            release.Name = GetReleaseName(release);
+            var releaseType = GetReleaseType();
+            var releaseName = GetReleaseName(releaseType);
+            var release = new Release(releaseType, releaseName);
             return release;
         }
 
-        private string GetReleaseName(Release release)
+        private string GetReleaseName(ReleaseType releaseType)
         {
             string name = Name;
-            if (release.ReleaseType == ReleaseType.Tv)
+            if (releaseType == ReleaseType.Tv)
             {
                 name = GetTvName(name);
             }

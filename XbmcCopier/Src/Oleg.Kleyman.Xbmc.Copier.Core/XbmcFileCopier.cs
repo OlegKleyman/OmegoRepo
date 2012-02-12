@@ -7,22 +7,18 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
     public class XbmcFileCopier : FileCopier
     {
-        public XbmcFileCopier(ISettingsProvider settings, Release release, string fileName, string downloadPath)
+        public XbmcFileCopier(ISettingsProvider settings, ReleaseOutput output)
         {
-            Release = release;
-            FileName = fileName;
-            DownloadPath = downloadPath;
+            Output = output;
             ConfigSettings = settings;
         }
 
-        public Release Release { get; set; }
-        public string FileName { get; set; }
-        public string DownloadPath { get; set; }
+        public ReleaseOutput Output { get; set; }
         protected ISettingsProvider ConfigSettings { get; set; }
 
         public override void Copy()
         {
-            switch (Release.ReleaseType)
+            switch (Output.Release.ReleaseType)
             {
                 case ReleaseType.Tv:
                     CopyTvRelease();
@@ -34,33 +30,34 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                     goto default;
                 default:
                     throw new ApplicationException(string.Format("Release type of {0} is not supported.",
-                                                                 Enum.GetName(Release.ReleaseType.GetType(),
-                                                                              Release.ReleaseType)));
+                                                                 Enum.GetName(Output.Release.ReleaseType.GetType(),
+                                                                              Output.Release.ReleaseType)));
             }
         }
 
         private void CopyMovieRelease()
         {
-            if (!Directory.Exists(ConfigSettings.TvPath + Release.Name))
+            var moviePath = Path.Combine(ConfigSettings.MoviesPath, Output.Release.Name);
+            if (!Directory.Exists(moviePath))
             {
-                Directory.CreateDirectory(ConfigSettings.MoviesPath + Release.Name);
+                Directory.CreateDirectory(moviePath);
             }
 
             IEnumerable<FileInfo> compressedMovieFiles = GetFiles(new[] {".rar"});
             if (compressedMovieFiles.Any())
             {
-                ExtractFiles(compressedMovieFiles, ConfigSettings.MoviesPath + Release.Name);
+                ExtractFiles(compressedMovieFiles, moviePath);
             }
             else
             {
-                CopySingleFile(ConfigSettings.MoviesPath + Release.Name);
+                CopySingleFile(moviePath);
             }
         }
 
         private void ExtractFiles(IEnumerable<FileInfo> compressedMovieFiles, string destinationPath)
         {
             var extractor = new RarExtractor(ConfigSettings);
-            foreach (FileInfo compressedMovieFile in compressedMovieFiles)
+            foreach (var compressedMovieFile in compressedMovieFiles)
             {
                 extractor.Extract(compressedMovieFile.FullName, destinationPath);
             }
@@ -68,14 +65,14 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private void CopyTvRelease()
         {
-            if (!Directory.Exists(ConfigSettings.TvPath + Release.Name))
+            if (!Directory.Exists(ConfigSettings.TvPath + Output.Release.Name))
             {
-                Directory.CreateDirectory(ConfigSettings.TvPath + Release.Name);
+                Directory.CreateDirectory(ConfigSettings.TvPath + Output.Release.Name);
             }
 
-            if (string.IsNullOrEmpty(FileName))
+            if (string.IsNullOrEmpty(Output.FileName))
             {
-                IEnumerable<FileInfo> tvFiles = GetFiles(new[] {".mkv", ".avi", ".wmv"});
+                var tvFiles = GetFiles(new[] {".mkv", ".avi", ".wmv"});
 
                 if (tvFiles.Any())
                 {
@@ -83,38 +80,38 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 }
                 else
                 {
+                    var tvPath = Path.Combine(ConfigSettings.TvPath, Output.Release.Name);
                     tvFiles = GetFiles(new[] {".rar"});
-                    ExtractFiles(tvFiles, ConfigSettings.TvPath + Release.Name);
+                    ExtractFiles(tvFiles, tvPath);
                 }
             }
             else
             {
-                CopySingleFile(ConfigSettings.TvPath + Release.Name);
+                CopySingleFile(ConfigSettings.TvPath + Output.Release.Name);
             }
         }
 
         private void CopySingleFile(string destination)
         {
-            Directory.SetCurrentDirectory(DownloadPath);
-            if (!destination.EndsWith("\\"))
-            {
-                destination += "\\";
-            }
-            File.Copy(FileName, destination + FileName);
+            Directory.SetCurrentDirectory(Output.DownloadPath);
+            destination = Path.Combine(destination, Output.FileName);
+            File.Copy(Output.FileName, destination);
         }
 
         private void CopyFiles(IEnumerable<FileInfo> files, string destination)
         {
-            foreach (FileInfo file in files)
+            destination = Path.Combine(destination, Output.Release.Name);
+            foreach (var file in files)
             {
-                File.Copy(file.FullName, destination + Release.Name + @"\" + file.Name);
+                var fileDestination = Path.Combine(destination, file.Name);
+                File.Copy(file.FullName, fileDestination);
             }
         }
 
         private IEnumerable<FileInfo> GetFiles(IEnumerable<string> extentions)
         {
-            var sourceDirectory = new DirectoryInfo(DownloadPath);
-            FileInfo[] files = sourceDirectory.GetFiles();
+            var sourceDirectory = new DirectoryInfo(Output.DownloadPath);
+            var files = sourceDirectory.GetFiles();
 
             files = (from extention in extentions
                      from file in files
