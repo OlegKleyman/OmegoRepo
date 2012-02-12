@@ -6,16 +6,16 @@ using Oleg.Kleyman.Core.Linq;
 namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
-    /// Represents a collection that holds ConfigurationElements.
+    ///   Represents a collection that holds ConfigurationElements.
     /// </summary>
-    /// <typeparam name="T">The type of the ConfigurationElement.</typeparam>
+    /// <typeparam name="T"> The type of the ConfigurationElement. </typeparam>
     public abstract class ConfigurationElementCollectionBase<T> : ConfigurationElementCollection
         where T : ConfigurationElement
     {
         /// <summary>
-        /// Constructions ConfigurationElementCollection with a range of ConfigurationElements.
+        ///   Constructions ConfigurationElementCollection with a range of ConfigurationElements.
         /// </summary>
-        /// <param name="elements">ConfigurationElements to create the ConfigurationElementCollection object with.</param>
+        /// <param name="elements"> ConfigurationElements to create the ConfigurationElementCollection object with. </param>
         protected ConfigurationElementCollectionBase(IEnumerable<T> elements) : this()
         {
             if (elements == null)
@@ -27,17 +27,17 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        /// Default constructor
+        ///   Default constructor
         /// </summary>
         protected ConfigurationElementCollectionBase()
         {
         }
 
         /// <summary>
-        /// Gets a ConfigurationElement at the desired index.
+        ///   Gets a ConfigurationElement at the desired index.
         /// </summary>
-        /// <param name="index">The index to retrieve the ConfigurationElement at.</param>
-        /// <returns>Returns the ConfigurationElement at the desired index.</returns>
+        /// <param name="index"> The index to retrieve the ConfigurationElement at. </param>
+        /// <returns> Returns the ConfigurationElement at the desired index. </returns>
         public T this[int index]
         {
             get { return (T) BaseGet(index); }
@@ -49,9 +49,9 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        /// Creates an instance of a configuration element using the default constructor regardless of access level.
+        ///   Creates an instance of a configuration element using the default constructor regardless of access level.
         /// </summary>
-        /// <returns>Returns an instance of a ConfigurationElement.</returns>
+        /// <returns> Returns an instance of a ConfigurationElement. </returns>
         protected override ConfigurationElement CreateNewElement()
         {
             return (ConfigurationElement) Activator.CreateInstance(typeof (T), true);

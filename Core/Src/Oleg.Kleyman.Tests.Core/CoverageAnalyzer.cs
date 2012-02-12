@@ -22,16 +22,16 @@ namespace Oleg.Kleyman.Tests.Core
         public bool ValidateMethods(IDictionary<string, int> names)
         {
             ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
-            MethodInfo[] methods = _targetType.GetMethods(BINDING_FLAGS);
-            IEnumerable<MethodBase> filteredMethods = FilterProperties(methods);
-            bool allKnown = ValidateMembers(names, filteredMethods);
+            var methods = _targetType.GetMethods(BINDING_FLAGS);
+            var filteredMethods = FilterProperties(methods);
+            var allKnown = ValidateMembers(names, filteredMethods);
 
             return allKnown;
         }
 
         private static IEnumerable<MethodBase> FilterProperties(IEnumerable<MethodBase> methods)
         {
-            IEnumerable<MethodBase> filteredResult = from method in methods
+            var filteredResult = from method in methods
                                                      where !IsMemberPropertyAAcessor(method)
                                                      select method;
             return filteredResult;
@@ -60,9 +60,9 @@ namespace Oleg.Kleyman.Tests.Core
         public bool ValidateProperties(IDictionary<string, int> names)
         {
             ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
-            PropertyInfo[] properties = _targetType.GetProperties(BINDING_FLAGS);
+            var properties = _targetType.GetProperties(BINDING_FLAGS);
 
-            bool allKnown = ValidateMembers(names, properties);
+            var allKnown = ValidateMembers(names, properties);
 
             return allKnown;
         }
@@ -70,22 +70,22 @@ namespace Oleg.Kleyman.Tests.Core
         public bool ValidateMembers(IDictionary<string, int> names)
         {
             ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
-            MemberInfo[] members = _targetType.GetMembers(BINDING_FLAGS);
+            var members = _targetType.GetMembers(BINDING_FLAGS);
 
-            IEnumerable<MemberInfo> filteredMembers = (from mem in members
+            var filteredMembers = (from mem in members
                                                        where mem is PropertyInfo ||
                                                              (mem is MethodBase
                                                               && !IsMemberPropertyAAcessor((MethodBase) mem))
                                                        select mem);
 
-            bool allKnown = ValidateMembers(names, filteredMembers);
+            var allKnown = ValidateMembers(names, filteredMembers);
 
             return allKnown;
         }
 
         private bool ValidateMembers(IDictionary<string, int> names, IEnumerable<MemberInfo> members)
         {
-            bool namesIncluded = (from name in names
+            var namesIncluded = (from name in names
                                   where name.Value == members.Count(member => member.Name == name.Key)
                                   select name).Count() == names.Count;
             if (!namesIncluded)
@@ -101,7 +101,7 @@ namespace Oleg.Kleyman.Tests.Core
             ThrowArgumentNullExceptionIfObjectIsNull(names, NAMES_ARGUMENT_NAME);
             var coverageAnalyzer = new CoverageAnalyzer(typeof (T));
 
-            bool result = coverageAnalyzer.ValidateMembers(names);
+            var result = coverageAnalyzer.ValidateMembers(names);
             if (!result)
             {
                 if (assertInconclusive)

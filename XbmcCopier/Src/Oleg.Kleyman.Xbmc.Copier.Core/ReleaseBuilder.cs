@@ -1,22 +1,21 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
     public class ReleaseBuilder
     {
-        private readonly string[] _keywords;
-        private readonly Regex _tvDelimeter;
         private readonly ISettingsProvider _settings;
+        private readonly Regex _tvDelimeter;
 
         public ReleaseBuilder(ISettingsProvider settings, string name)
         {
             _settings = settings;
             const string tvDelimeter = @"\.S\d{2}E\d{2}\.";
-            const RegexOptions regexOptions = RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline;
+            const RegexOptions regexOptions =
+                RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline;
             _tvDelimeter = new Regex(tvDelimeter, regexOptions);
-            _keywords = new[] {".720P.", ".1080P.", ".DVDRIP.", ".PAL.DVDR.", ".NTSC.DVDR.", ".XVID."};
+            
             Name = name;
         }
 
@@ -32,7 +31,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private string GetReleaseName(ReleaseType releaseType)
         {
-            string name = Name;
+            var name = Name;
             if (releaseType == ReleaseType.Tv)
             {
                 name = GetTvName(name);
@@ -42,7 +41,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private string GetTvName(string name)
         {
-            string[] nameSplit = _tvDelimeter.Split(name);
+            var nameSplit = _tvDelimeter.Split(name);
             const char originalWordDelimeter = '.';
             const char newWordDelimeter = ' ';
             name = nameSplit[0].Replace(originalWordDelimeter, newWordDelimeter);
@@ -51,9 +50,9 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private ReleaseType GetReleaseType()
         {
-            ReleaseType type = default(ReleaseType);
+            var type = default(ReleaseType);
             var isTvType = _settings.TvFilters.Any(filter => filter.IsMatch(Name));
-            if(isTvType)
+            if (isTvType)
             {
                 type = ReleaseType.Tv;
             }

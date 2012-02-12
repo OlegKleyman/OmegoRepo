@@ -8,6 +8,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             FileName = fileName;
             DownloadPath = downloadPath;
         }
+
         public Release Release { get; set; }
         public string FileName { get; set; }
         public string DownloadPath { get; set; }

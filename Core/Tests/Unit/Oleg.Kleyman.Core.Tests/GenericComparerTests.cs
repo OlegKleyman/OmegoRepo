@@ -8,14 +8,13 @@ namespace Oleg.Kleyman.Core.Tests
     [TestFixture]
     public class GenericComparerTests
     {
-        private const string PARAMETER_NAME_Y = "y";
         private const string EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME = "System.ArgumentNullException";
         private const string EXPECTED_INVALID_OPERATION_EXCEPTION_NAME = "System.InvalidOperationException";
-        private const string PARAMETER_NAME_X = "x";
         private const string COMPARER_NAME = "ComparerHandler ";
-        private const string CANNOT_BE_NULL_EXCEPTION_MESSAGE = "Cannot be null";
+        private const string CANNOT_BE_NULL_EXCEPTION_MESSAGE = "Value cannot be null.";
         private const string PARAMETER_NAME_EXCEPTION_MESSAGE = "\r\nParameter name: ";
-
+        private const string PARAMETER_NAME_TARGET = "target";
+        
         [TestFixtureSetUp]
         public void Setup()
         {
@@ -62,14 +61,14 @@ namespace Oleg.Kleyman.Core.Tests
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException),
+        [ExpectedException(typeof(ArgumentNullException),
             ExpectedExceptionName = EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME,
-            ExpectedMessage = CANNOT_BE_NULL_EXCEPTION_MESSAGE + PARAMETER_NAME_EXCEPTION_MESSAGE + PARAMETER_NAME_X,
+            ExpectedMessage = CANNOT_BE_NULL_EXCEPTION_MESSAGE + PARAMETER_NAME_EXCEPTION_MESSAGE + PARAMETER_NAME_TARGET,
             MatchType = MessageMatch.Exact)]
-        public void EqualsFirstArgumentNullExceptionTest()
+        public void GetHashCodeArgumentNullExceptionTest()
         {
             var comparer = new EqualityComparer<object>(null);
-            comparer.Equals(null, 3.9999);
+            comparer.GetHashCode(null);
         }
 
         [Test]
@@ -115,17 +114,6 @@ namespace Oleg.Kleyman.Core.Tests
             var comparer = new EqualityComparer<double>(compareHandler);
             bool result = comparer.Equals(3.9999, 3.9998);
             Assert.IsFalse(result);
-        }
-
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException),
-            ExpectedExceptionName = EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME,
-            ExpectedMessage = CANNOT_BE_NULL_EXCEPTION_MESSAGE + PARAMETER_NAME_EXCEPTION_MESSAGE + PARAMETER_NAME_Y,
-            MatchType = MessageMatch.Exact)]
-        public void EqualsSecondArgumentNullExceptionTest()
-        {
-            var comparer = new EqualityComparer<object>(null);
-            comparer.Equals(3.9999, null);
         }
 
         [Test]

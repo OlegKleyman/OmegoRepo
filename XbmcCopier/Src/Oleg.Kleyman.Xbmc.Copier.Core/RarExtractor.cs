@@ -21,7 +21,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         public override void Extract(string target, string destination)
         {
-            string currentDirectoryPath = Directory.GetCurrentDirectory();
+            var currentDirectoryPath = Directory.GetCurrentDirectory();
             var file = new FileInfo(target);
             if (!Directory.Exists(destination))
             {
@@ -35,7 +35,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 throw new ApplicationException(string.Format(cannotFindUnrarFileMessage, UnrarPath));
             }
 
-            Process process = Process.Start(UnrarPath, string.Format("e -y \"{0}\"", file.FullName));
+            var process = Process.Start(UnrarPath, string.Format("e -y \"{0}\"", file.FullName));
             if (process == null)
             {
                 const string unableToOpenUnrarFileAtLocationMessage = "Unable to open unrar file at location {0}";

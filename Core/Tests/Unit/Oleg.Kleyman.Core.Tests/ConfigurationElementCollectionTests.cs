@@ -34,7 +34,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void IntIndexPropertyTest()
         {
             var element = new MockConfigurationElement(PropertyNameValues);
-            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] { element });
+            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] {element});
             Assert.AreEqual(1, configCollection.Count);
             Assert.IsInstanceOf<MockConfigurationElement>(configCollection[0]);
             Assert.AreEqual("test", (configCollection[0]).Value);
@@ -45,7 +45,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void StringIndexPropertyTest()
         {
             var element = new MockConfigurationElement(PropertyNameValues);
-            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] { element });
+            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] {element});
             Assert.AreEqual(1, configCollection.Count);
             Assert.IsInstanceOf<MockConfigurationElement>(configCollection["someKey"]);
             Assert.AreEqual("test", (configCollection["someKey"]).Value);

@@ -24,7 +24,7 @@ namespace Oleg.Kleyman.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (Enumerable));
 
-            bool result = coverageAnalyzer.ValidateMembers(knownMembers);
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
             if (!result)
             {
                 const string membersNotCoveredMessage = "All members not covered";
@@ -36,8 +36,8 @@ namespace Oleg.Kleyman.Core.Tests
         public void DistinctTest()
         {
             var values = new[] {"Test1", "Test2", "Test3", "Test4", "Test2", "Test5", "Test3", "Test2"};
-            IEnumerable<string> distinctValues = values.Distinct((x, y) => x == y);
-            string[] indexedValues = Enumerable.ToArray(distinctValues);
+            var distinctValues = values.Distinct((x, y) => x == y);
+            var indexedValues = Enumerable.ToArray(distinctValues);
             Assert.AreEqual(5, indexedValues.Length);
             Assert.AreEqual("Test1", indexedValues[0]);
             Assert.AreEqual("Test2", indexedValues[1]);

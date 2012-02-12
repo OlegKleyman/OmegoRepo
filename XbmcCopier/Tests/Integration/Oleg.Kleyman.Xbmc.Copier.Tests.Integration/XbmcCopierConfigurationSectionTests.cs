@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using NUnit.Framework;
 using Oleg.Kleyman.Xbmc.Copier.Core;
 
@@ -20,40 +16,82 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
         [TestFixtureSetUp]
         public void Setup()
         {
-            var currentDirectory = Directory.GetCurrentDirectory();
+            string currentDirectory = Directory.GetCurrentDirectory();
             const string xbmcCopierValidConfigFileName = @"XbmcCopierValid.config";
             const string xbmcCopierValidNoFiltersConfigFileName = @"XbmcCopierValidNoFilters.config";
-            const string xbmcCopierInvalidNoConfigurationSectionFileName = @"XbmcCopierInvalidNoConfigurationSection.config";
+            const string xbmcCopierInvalidNoConfigurationSectionFileName =
+                @"XbmcCopierInvalidNoConfigurationSection.config";
             const string filePath = @"TestConfigs";
 
             XbmcCopierValidConfigFilePath = Path.Combine(currentDirectory, filePath, xbmcCopierValidConfigFileName);
-            XbmcCopierValidNoFiltersConfigFilePath = Path.Combine(currentDirectory, filePath, xbmcCopierValidNoFiltersConfigFileName);
-            XbmcCopierInvalidNoConfigurationSectionFilePath = Path.Combine(currentDirectory, filePath, xbmcCopierInvalidNoConfigurationSectionFileName);
+            XbmcCopierValidNoFiltersConfigFilePath = Path.Combine(currentDirectory, filePath,
+                                                                  xbmcCopierValidNoFiltersConfigFileName);
+            XbmcCopierInvalidNoConfigurationSectionFilePath = Path.Combine(currentDirectory, filePath,
+                                                                           xbmcCopierInvalidNoConfigurationSectionFileName);
         }
 
         [Test]
         public void DefaultSettingsTests()
         {
-            var settings = XbmcCopierConfigurationSection.DefaultSettings;
+            ISettingsProvider settings = XbmcCopierConfigurationSection.DefaultSettings;
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
             Assert.AreEqual(2, settings.MovieFilters.Length);
-            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.", settings.MovieFilters[0].ToString());
+            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.",
+                            settings.MovieFilters[0].ToString());
             Assert.AreEqual("testing", settings.MovieFilters[1].ToString());
             Assert.AreEqual(1, settings.TvFilters.Length);
             Assert.AreEqual(@"\.S\d{2}E\d{2}\.", settings.TvFilters[0].ToString());
         }
 
         [Test]
+        [ExpectedException(ExpectedException = typeof (ConfigurationErrorsException),
+            ExpectedExceptionName = "System.Configuration.ConfigurationErrorsException",
+            ExpectedMessage = "XbmcCopierConfiguration configuration section not found.",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationConfigurationSectionNotFoundTest()
+        {
+            var fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = XbmcCopierInvalidNoConfigurationSectionFilePath;
+
+            Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap,
+                                                                                          ConfigurationUserLevel.None);
+
+            XbmcCopierConfigurationSection.GetSettingsByConfiguration(configuration);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof (ConfigurationErrorsException),
+            ExpectedExceptionName = "System.Configuration.ConfigurationErrorsException",
+            ExpectedMessage = "Configuration file not found (testFile.config)",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationFileFileDoesNotExistTest()
+        {
+            XbmcCopierConfigurationSection.GetSettingsByConfigurationFile("testFile.config");
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException),
+            ExpectedExceptionName = "System.ArgumentNullException",
+            ExpectedMessage = "Value cannot be null.\r\nParameter name: configurationFilePath",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationFilePathIsNullTest()
+        {
+            XbmcCopierConfigurationSection.GetSettingsByConfigurationFile(null);
+        }
+
+        [Test]
         public void GetByConfigurationFileTest()
         {
-            var settings = XbmcCopierConfigurationSection.GetSettingsByConfigurationFile(XbmcCopierValidConfigFilePath);
+            ISettingsProvider settings =
+                XbmcCopierConfigurationSection.GetSettingsByConfigurationFile(XbmcCopierValidConfigFilePath);
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
             Assert.AreEqual(2, settings.MovieFilters.Length);
-            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.", settings.MovieFilters[0].ToString());
+            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.",
+                            settings.MovieFilters[0].ToString());
             Assert.AreEqual("testing", settings.MovieFilters[1].ToString());
             Assert.AreEqual(1, settings.TvFilters.Length);
             Assert.AreEqual(@"\.S\d{2}E\d{2}\.", settings.TvFilters[0].ToString());
@@ -65,58 +103,26 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             var fileMap = new ExeConfigurationFileMap();
             fileMap.ExeConfigFilename = XbmcCopierValidConfigFilePath;
 
-            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap,
+                                                                                          ConfigurationUserLevel.None);
 
-            var settings = XbmcCopierConfigurationSection.GetSettingsByConfiguration(configuration);
+            ISettingsProvider settings = XbmcCopierConfigurationSection.GetSettingsByConfiguration(configuration);
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
             Assert.AreEqual(2, settings.MovieFilters.Length);
-            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.", settings.MovieFilters[0].ToString());
+            Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.",
+                            settings.MovieFilters[0].ToString());
             Assert.AreEqual("testing", settings.MovieFilters[1].ToString());
             Assert.AreEqual(1, settings.TvFilters.Length);
             Assert.AreEqual(@"\.S\d{2}E\d{2}\.", settings.TvFilters[0].ToString());
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException),
-                           ExpectedExceptionName = "System.ArgumentNullException",
-                           ExpectedMessage = "Value cannot be null.\r\nParameter name: configurationFilePath",
-                           MatchType = MessageMatch.Exact)]
-        public void GetByConfigurationFilePathIsNullTest()
-        {
-            XbmcCopierConfigurationSection.GetSettingsByConfigurationFile(null);
-        }
-
-        [Test]
-        [ExpectedException(ExpectedException = typeof(ConfigurationErrorsException),
-                          ExpectedExceptionName = "System.Configuration.ConfigurationErrorsException",
-                          ExpectedMessage = "Configuration file not found (testFile.config)",
-                          MatchType = MessageMatch.Exact)]
-        public void GetByConfigurationFileFileDoesNotExistTest()
-        {
-            XbmcCopierConfigurationSection.GetSettingsByConfigurationFile("testFile.config");
-        }
-
-        [Test]
-        [ExpectedException(ExpectedException = typeof(ConfigurationErrorsException),
-                          ExpectedExceptionName = "System.Configuration.ConfigurationErrorsException",
-                          ExpectedMessage = "XbmcCopierConfiguration configuration section not found.",
-                          MatchType = MessageMatch.Exact)]
-        public void GetByConfigurationConfigurationSectionNotFoundTest()
-        {
-            var fileMap = new ExeConfigurationFileMap();
-            fileMap.ExeConfigFilename = XbmcCopierInvalidNoConfigurationSectionFilePath;
-
-            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
-
-            XbmcCopierConfigurationSection.GetSettingsByConfiguration(configuration);
-        }
-
-        [Test]
         public void GetSettingsByConfigurationFileNoFiltersInConfigTest()
         {
-            var settings = XbmcCopierConfigurationSection.GetSettingsByConfigurationFile(XbmcCopierValidNoFiltersConfigFilePath);
+            ISettingsProvider settings =
+                XbmcCopierConfigurationSection.GetSettingsByConfigurationFile(XbmcCopierValidNoFiltersConfigFilePath);
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);

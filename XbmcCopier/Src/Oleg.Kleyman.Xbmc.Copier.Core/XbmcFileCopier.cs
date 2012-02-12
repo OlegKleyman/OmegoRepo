@@ -43,10 +43,14 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 Directory.CreateDirectory(moviePath);
             }
 
-            IEnumerable<FileInfo> compressedMovieFiles = GetFiles(new[] {".rar"});
+            var compressedMovieFiles = GetFiles(new[] {".rar"});
+// ReSharper disable PossibleMultipleEnumeration
             if (compressedMovieFiles.Any())
+// ReSharper restore PossibleMultipleEnumeration
             {
+// ReSharper disable PossibleMultipleEnumeration
                 ExtractFiles(compressedMovieFiles, moviePath);
+// ReSharper restore PossibleMultipleEnumeration
             }
             else
             {
@@ -74,9 +78,13 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             {
                 var tvFiles = GetFiles(new[] {".mkv", ".avi", ".wmv"});
 
+// ReSharper disable PossibleMultipleEnumeration
                 if (tvFiles.Any())
+// ReSharper restore PossibleMultipleEnumeration
                 {
+// ReSharper disable PossibleMultipleEnumeration
                     CopyFiles(tvFiles, ConfigSettings.TvPath);
+// ReSharper restore PossibleMultipleEnumeration
                 }
                 else
                 {

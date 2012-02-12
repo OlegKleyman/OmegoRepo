@@ -20,6 +20,16 @@ namespace Oleg.Kleyman.Core.Tests
         }
 
         [Test]
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException),
+            ExpectedExceptionName = "System.ArgumentNullException",
+            ExpectedMessage = "Value cannot be null.\r\nParameter name: elements",
+            MatchType = MessageMatch.Exact)]
+        public void ConstructorNullArgumentTest()
+        {
+            new SingleValueConfigurationElementCollection<SingleValueConfigurationElement>(null);
+        }
+
+        [Test]
         public void ConstructorTest()
         {
             var element = new SingleValueConfigurationElement(PropertyNameValues);
@@ -29,16 +39,6 @@ namespace Oleg.Kleyman.Core.Tests
             Assert.AreEqual(1, configCollection.Count);
             Assert.IsInstanceOf<SingleValueConfigurationElement>(configCollection[0]);
             Assert.AreEqual("test", configCollection[0].Value);
-        }
-
-        [Test]
-        [ExpectedException(ExpectedException=typeof(ArgumentNullException),
-                           ExpectedExceptionName = "System.ArgumentNullException",
-                           ExpectedMessage = "Value cannot be null.\r\nParameter name: elements",
-                           MatchType = MessageMatch.Exact)]
-        public void ConstructorNullArgumentTest()
-        {
-            new SingleValueConfigurationElementCollection<SingleValueConfigurationElement>(null);
         }
     }
 }

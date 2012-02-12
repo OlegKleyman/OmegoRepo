@@ -6,14 +6,14 @@ using Oleg.Kleyman.Core.Linq;
 namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
-    /// Represents a configuration element.
+    ///   Represents a configuration element.
     /// </summary>
     public abstract class ConfigurationElementBase : ConfigurationElement
     {
         /// <summary>
-        /// Creates filter element based on keys and values of an IDictionary.
+        ///   Creates filter element based on keys and values of an IDictionary.
         /// </summary>
-        /// <param name="values">The property names and values to set.</param>
+        /// <param name="values"> The property names and values to set. </param>
         protected ConfigurationElementBase(IEnumerable<KeyValuePair<string, object>> values) : this()
         {
             if (values == null)
@@ -25,16 +25,16 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        /// Default constructor. Does nothing
+        ///   Default constructor. Does nothing
         /// </summary>
         protected ConfigurationElementBase()
         {
         }
 
         /// <summary>
-        /// Creates a range of properties.
+        ///   Creates a range of properties.
         /// </summary>
-        /// <param name="values">The property names and values to create.</param>
+        /// <param name="values"> The property names and values to create. </param>
         protected void CreatePropertiesWithValue(IEnumerable<KeyValuePair<string, object>> values)
         {
             values.ForEach(AddPropertyWithValue);

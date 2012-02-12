@@ -19,14 +19,14 @@ namespace Oleg.Kleyman.Xbmc.Copier
                 writer.WriteLine();
             }
 
-            string downloadPath = args[0];
-            string torrentName = args[1];
-            string fileName = args.Length == 3 ? args[2] : null;
+            var downloadPath = args[0];
+            var torrentName = args[1];
+            var fileName = args.Length == 3 ? args[2] : null;
 
 
-            string releaseName = torrentName;
+            var releaseName = torrentName;
             var builder = new ReleaseBuilder(XbmcCopierConfigurationSection.DefaultSettings, releaseName);
-            Release release = builder.Build();
+            var release = builder.Build();
             var output = new ReleaseOutput(release, fileName, downloadPath);
             var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings, output);
             if (release.ReleaseType == ReleaseType.Tv || release.ReleaseType == ReleaseType.Movie)
