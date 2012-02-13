@@ -1,4 +1,4 @@
-﻿namespace Oleg.Kleyman.Xbmc.Copier.Core
+namespace Oleg.Kleyman.Core
 {
     public abstract class Extractor
     {

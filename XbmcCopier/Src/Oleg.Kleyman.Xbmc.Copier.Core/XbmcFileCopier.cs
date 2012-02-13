@@ -2,48 +2,51 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Oleg.Kleyman.Core;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
-    public class XbmcFileCopier : FileCopier
+    public sealed class XbmcFileCopier
     {
-        public XbmcFileCopier(ISettingsProvider settings, ReleaseOutput output)
+        public XbmcFileCopier(ISettingsProvider settings, Extractor extractor, IFileSystem fileSystem)
         {
-            Output = output;
             ConfigSettings = settings;
+            Extractor = extractor;
+            FileSystem = fileSystem;
         }
 
-        public ReleaseOutput Output { get; set; }
-        protected ISettingsProvider ConfigSettings { get; set; }
+        private Extractor Extractor { get; set; }
+        private ISettingsProvider ConfigSettings { get; set; }
+        private IFileSystem FileSystem { get; set; }
 
-        public override void Copy()
+        public void Copy(ReleaseOutput output)
         {
-            switch (Output.Release.ReleaseType)
+            switch (output.Release.ReleaseType)
             {
                 case ReleaseType.Tv:
-                    CopyTvRelease();
+                    CopyTvRelease(output);
                     break;
                 case ReleaseType.Movie:
-                    CopyMovieRelease();
+                    CopyMovieRelease(output);
                     break;
                 case ReleaseType.Other:
                     goto default;
                 default:
                     throw new ApplicationException(string.Format("Release type of {0} is not supported.",
-                                                                 Enum.GetName(Output.Release.ReleaseType.GetType(),
-                                                                              Output.Release.ReleaseType)));
+                                                                 Enum.GetName(output.Release.ReleaseType.GetType(),
+                                                                              output.Release.ReleaseType)));
             }
         }
 
-        private void CopyMovieRelease()
+        private void CopyMovieRelease(ReleaseOutput output)
         {
-            var moviePath = Path.Combine(ConfigSettings.MoviesPath, Output.Release.Name);
+            var moviePath = Path.Combine(ConfigSettings.MoviesPath, output.Release.Name);
             if (!Directory.Exists(moviePath))
             {
                 Directory.CreateDirectory(moviePath);
             }
 
-            var compressedMovieFiles = GetFiles(new[] {".rar"});
+            var compressedMovieFiles = GetFiles(new[] {".rar"}, output);
 // ReSharper disable PossibleMultipleEnumeration
             if (compressedMovieFiles.Any())
 // ReSharper restore PossibleMultipleEnumeration
@@ -54,77 +57,71 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             }
             else
             {
-                CopySingleFile(moviePath);
+                CopySingleFile(moviePath, output);
             }
         }
 
         private void ExtractFiles(IEnumerable<FileInfo> compressedMovieFiles, string destinationPath)
         {
-            var extractor = new RarExtractor(ConfigSettings);
             foreach (var compressedMovieFile in compressedMovieFiles)
             {
-                extractor.Extract(compressedMovieFile.FullName, destinationPath);
+                Extractor.Extract(compressedMovieFile.FullName, destinationPath);
             }
         }
 
-        private void CopyTvRelease()
+        private void CopyTvRelease(ReleaseOutput output)
         {
-            if (!Directory.Exists(ConfigSettings.TvPath + Output.Release.Name))
+            if (!Directory.Exists(ConfigSettings.TvPath + output.Release.Name))
             {
-                Directory.CreateDirectory(ConfigSettings.TvPath + Output.Release.Name);
+                Directory.CreateDirectory(ConfigSettings.TvPath + output.Release.Name);
             }
 
-            if (string.IsNullOrEmpty(Output.FileName))
+            if (string.IsNullOrEmpty(output.FileName))
             {
-                var tvFiles = GetFiles(new[] {".mkv", ".avi", ".wmv"});
+                var tvFiles = GetFiles(new[] {".mkv", ".avi", ".wmv"}, output);
 
 // ReSharper disable PossibleMultipleEnumeration
                 if (tvFiles.Any())
 // ReSharper restore PossibleMultipleEnumeration
                 {
 // ReSharper disable PossibleMultipleEnumeration
-                    CopyFiles(tvFiles, ConfigSettings.TvPath);
+                    CopyFiles(tvFiles, ConfigSettings.TvPath, output);
 // ReSharper restore PossibleMultipleEnumeration
                 }
                 else
                 {
-                    var tvPath = Path.Combine(ConfigSettings.TvPath, Output.Release.Name);
-                    tvFiles = GetFiles(new[] {".rar"});
+                    var tvPath = Path.Combine(ConfigSettings.TvPath, output.Release.Name);
+                    tvFiles = GetFiles(new[] {".rar"}, output);
                     ExtractFiles(tvFiles, tvPath);
                 }
             }
             else
             {
-                CopySingleFile(ConfigSettings.TvPath + Output.Release.Name);
+                CopySingleFile(ConfigSettings.TvPath + output.Release.Name, output);
             }
         }
 
-        private void CopySingleFile(string destination)
+        private void CopySingleFile(string destination, ReleaseOutput output)
         {
-            Directory.SetCurrentDirectory(Output.DownloadPath);
-            destination = Path.Combine(destination, Output.FileName);
-            File.Copy(Output.FileName, destination);
+            var sourceFilePath = Path.Combine(output.DownloadPath, output.FileName);
+            destination = Path.Combine(destination, output.FileName);
+            FileSystem.CopyFile(sourceFilePath, destination);
         }
 
-        private void CopyFiles(IEnumerable<FileInfo> files, string destination)
+        private void CopyFiles(IEnumerable<FileInfo> files, string destination, ReleaseOutput output)
         {
-            destination = Path.Combine(destination, Output.Release.Name);
+            destination = Path.Combine(destination, output.Release.Name);
             foreach (var file in files)
             {
                 var fileDestination = Path.Combine(destination, file.Name);
-                File.Copy(file.FullName, fileDestination);
+                FileSystem.CopyFile(file.FullName, fileDestination);
             }
         }
 
-        private IEnumerable<FileInfo> GetFiles(IEnumerable<string> extentions)
+        private IEnumerable<FileInfo> GetFiles(IEnumerable<string> extentions, ReleaseOutput output)
         {
-            var sourceDirectory = new DirectoryInfo(Output.DownloadPath);
-            var files = sourceDirectory.GetFiles();
-
-            files = (from extention in extentions
-                     from file in files
-                     where file.Name.EndsWith(extention)
-                     select file).ToArray();
+            var files = FileSystem.GetFilesByExtensions(output.DownloadPath, extentions);
+            
             return files;
         }
     }

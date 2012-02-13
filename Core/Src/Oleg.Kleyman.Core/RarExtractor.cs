@@ -1,23 +1,17 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 
-namespace Oleg.Kleyman.Xbmc.Copier.Core
+namespace Oleg.Kleyman.Core
 {
     public class RarExtractor : Extractor
     {
-        public RarExtractor(ISettingsProvider settings) : this(settings.UnrarPath)
-        {
-            ConfigSettings = settings;
-        }
-
         public RarExtractor(string unrarPath)
         {
             UnrarPath = unrarPath.Trim();
         }
 
         protected string UnrarPath { get; private set; }
-        protected ISettingsProvider ConfigSettings { get; private set; }
 
         public override void Extract(string target, string destination)
         {

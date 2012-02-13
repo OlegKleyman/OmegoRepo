@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1EE005F8-D012-4DC2-B3C0-257B73F19DF7}</ProjectGuid>
+    <ProjectGuid>{DF64518E-4A2B-4DF7-9D99-D0650C7D06DF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oleg.Kleyman.Xbmc.Copier.Tests.Integration</RootNamespace>
-    <AssemblyName>Oleg.Kleyman.Xbmc.Copier.Tests.Integration</AssemblyName>
+    <RootNamespace>Oleg.Kleyman.Core.Tests.Integration</RootNamespace>
+    <AssemblyName>Oleg.Kleyman.Core.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,59 +30,36 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.0.12017, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Common\Lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSystemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XbmcCopierConfigurationSectionTests.cs" />
+    <Compile Include="RarExtractorTests.cs" />
+    <Compile Include="ReflectiveStringTypeConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Core\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
       <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
       <Name>Oleg.Kleyman.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Core\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
       <Project>{E5860385-4532-4BDA-B835-ED7073BCEA31}</Project>
       <Name>Oleg.Kleyman.Tests.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Xbmc.Copier.Core\Oleg.Kleyman.Xbmc.Copier.Core.csproj">
-      <Project>{FB57E4D2-D4A3-40DC-918F-58AEF6D3E275}</Project>
-      <Name>Oleg.Kleyman.Xbmc.Copier.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="TestConfigs\XbmcCopierInvalidNoConfigurationSection.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestConfigs\XbmcCopierValidNoFilters.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestConfigs\XbmcCopierValid.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

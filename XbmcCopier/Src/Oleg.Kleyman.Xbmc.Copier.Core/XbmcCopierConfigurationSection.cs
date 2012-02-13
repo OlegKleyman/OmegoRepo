@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Text.RegularExpressions;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
@@ -11,10 +13,12 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
         private const string TV_PATH_PROPERTY_NAME = "tvPath";
         private const string MOVIE_PATH_PROPERTY_NAME = "moviePath";
+        private const string FILE_SYSTEM_PROPERTY_NAME = "fileSystem";
         private const string MOVIE_FILTERS_PROPERTY_NAME = "movieFilters";
         private const string TV_FILTERS_PROPERTY_NAME = "tvFilters";
         private const string FILTER_PROPERTY_NAME = "filter";
         private const string CONFIGURATION_SECTION_NAME = "XbmcCopierConfiguration";
+        private const string FILE_SYSTEM_PROPERTY_DEFAULT_VALUE = "Oleg.Kleyman.Core.FileSystem";
         private static readonly object __syncRoot;
         private static XbmcCopierConfigurationSection __configurationInstance;
         private readonly object _syncRoot;
@@ -147,6 +151,16 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
                 return _tvFilters;
             }
+        }
+
+        /// <summary>
+        ///   Gets the <see cref="FileSystem" /> from the config file.
+        /// </summary>
+        [TypeConverter(typeof(ReflectiveStringTypeConverter))]
+        [ConfigurationProperty(FILE_SYSTEM_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false, DefaultValue = FILE_SYSTEM_PROPERTY_DEFAULT_VALUE)]
+        IFileSystem ISettingsProvider.FileSystem
+        {
+            get { return base[FILE_SYSTEM_PROPERTY_NAME] as IFileSystem; }
         }
 
         #endregion

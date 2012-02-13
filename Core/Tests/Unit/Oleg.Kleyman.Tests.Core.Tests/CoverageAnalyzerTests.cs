@@ -20,7 +20,8 @@ namespace Oleg.Kleyman.Tests.Core.Tests
             TestObject = new object();
         }
 
-        public override void CheckCoverage()
+        [Test]
+        public void CheckCoverage()
         {
             var knownMembers = new Dictionary<string, int>
                                    {

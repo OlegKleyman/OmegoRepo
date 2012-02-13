@@ -39,6 +39,11 @@
     <Compile Include="Configuration\ConfigurationElementBase.cs" />
     <Compile Include="Configuration\ConfigurationElementCollection.cs" />
     <Compile Include="Configuration\IConfigurationElement.cs" />
+    <Compile Include="Extractor.cs" />
+    <Compile Include="FileSystem.cs" />
+    <Compile Include="ReflectiveStringTypeConverter.cs" />
+    <Compile Include="IFileSystem.cs" />
+    <Compile Include="RarExtractor.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Configuration\SingleValueConfigurationElementCollection.cs" />
     <Compile Include="EqualityComparer.cs" />

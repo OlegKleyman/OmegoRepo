@@ -113,6 +113,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+      <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
+      <Name>Oleg.Kleyman.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Oleg.Kleyman.Xbmc.Copier.Core\Oleg.Kleyman.Xbmc.Copier.Core.csproj">
       <Project>{FB57E4D2-D4A3-40DC-918F-58AEF6D3E275}</Project>
       <Name>Oleg.Kleyman.Xbmc.Copier.Core</Name>

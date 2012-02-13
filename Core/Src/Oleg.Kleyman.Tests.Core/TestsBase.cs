@@ -6,8 +6,5 @@ namespace Oleg.Kleyman.Tests.Core
     {
         [TestFixtureSetUp]
         public abstract void Setup();
-
-        [Test]
-        public abstract void CheckCoverage();
     }
 }

@@ -1,28 +1,25 @@
-﻿using System.IO;
+using System.IO;
 using NUnit.Framework;
-using Oleg.Kleyman.Xbmc.Copier.Core;
 
-namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
+namespace Oleg.Kleyman.Core.Tests.Integration
 {
     [TestFixture]
     public class RarExtractorTests
     {
-        protected ISettingsProvider ConfigSettings { get; set; }
-
         [TestFixtureSetUp]
         public void Setup()
         {
-            ConfigSettings = XbmcCopierConfigurationSection.DefaultSettings;
+
         }
 
         [Test]
         public void ExtractTest()
         {
-            Extractor extractor = new RarExtractor(ConfigSettings);
+            Extractor extractor = new RarExtractor(@"C:\Program Files\WinRAR\unrar.exe");
             string destination = @"C:\testUnrar\";
             Directory.CreateDirectory(destination);
             extractor.Extract(@"..\..\..\..\..\..\Common\Test\testFile.Rar", destination);
-            Assert.IsTrue(File.Exists(destination + "testFile.txt"));
+            Assert.IsTrue(File.Exists(Path.Combine(destination, "testFile.txt")));
             Directory.Delete(destination, true);
         }
     }

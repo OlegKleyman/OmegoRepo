@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Xbmc.Copier.Core;
 
 namespace Oleg.Kleyman.Xbmc.Copier
@@ -28,10 +29,10 @@ namespace Oleg.Kleyman.Xbmc.Copier
             var builder = new ReleaseBuilder(XbmcCopierConfigurationSection.DefaultSettings, releaseName);
             var release = builder.Build();
             var output = new ReleaseOutput(release, fileName, downloadPath);
-            var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings, output);
+            var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings, new RarExtractor(XbmcCopierConfigurationSection.DefaultSettings.UnrarPath), new FileSystem());
             if (release.ReleaseType == ReleaseType.Tv || release.ReleaseType == ReleaseType.Movie)
             {
-                copier.Copy();
+                copier.Copy(output);
             }
         }
     }
