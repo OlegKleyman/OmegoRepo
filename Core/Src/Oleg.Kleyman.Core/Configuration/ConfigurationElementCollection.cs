@@ -11,11 +11,11 @@ namespace Oleg.Kleyman.Core.Configuration
         where T : ConfigurationElement, IConfigurationElement
     {
         /// <summary>
-        ///   Constructions ConfigurationElementCollection with a range of ConfigurationElements.
+        ///   Constructs a ConfigurationElementCollection with a range of ConfigurationElements.
         /// </summary>
         /// <param name="elements"> ConfigurationElements to create the ConfigurationElementCollection object with. </param>
         /// <example>
-        ///   var propertyNameValues = new Dictionary&lt;string, object&gt; { {"value", "test"}, {"key", "someKey"} }; var element = new SingleValueConfigurationElement(propertyNameValues); var collection = new ConfigurationElementCollection&lt;SingleValueConfigurationElement&gt;(new[] { element }); //use object
+        ///   var propertyNameValues = new Dictionary&lt;string, object&gt; { {"value", "test"}, {"key", "someKey"} }; var element = new SingleValueConfigurationSection(propertyNameValues); var collection = new ConfigurationElementCollection&lt;SingleValueConfigurationSection&gt;(new[] { element }); //use object
         /// </example>
         public ConfigurationElementCollection(IEnumerable<T> elements) : base(elements)
         {

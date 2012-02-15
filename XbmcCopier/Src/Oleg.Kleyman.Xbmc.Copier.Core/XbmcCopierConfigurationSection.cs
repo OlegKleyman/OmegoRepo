@@ -1,30 +1,26 @@
 using System;
-using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Text.RegularExpressions;
-using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
-    public sealed class XbmcCopierConfigurationSection : ConfigurationSection, ISettingsProvider
+    public sealed class XbmcCopierConfigurationSection : ConfigurationSectionBase, ISettingsProvider
     {
         private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
         private const string TV_PATH_PROPERTY_NAME = "tvPath";
         private const string MOVIE_PATH_PROPERTY_NAME = "moviePath";
-        private const string FILE_SYSTEM_PROPERTY_NAME = "fileSystem";
         private const string MOVIE_FILTERS_PROPERTY_NAME = "movieFilters";
         private const string TV_FILTERS_PROPERTY_NAME = "tvFilters";
         private const string FILTER_PROPERTY_NAME = "filter";
         private const string CONFIGURATION_SECTION_NAME = "XbmcCopierConfiguration";
-        private const string FILE_SYSTEM_PROPERTY_DEFAULT_VALUE = "Oleg.Kleyman.Core.FileSystem";
         private static readonly object __syncRoot;
-        private static XbmcCopierConfigurationSection __configurationInstance;
+        private static ISettingsProvider __singletonSettingsInstance;
         private readonly object _syncRoot;
-        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> _movieFilterElements;
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationSection> _movieFilterElements;
         private Regex[] _movieFilters;
-        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> _tvFilterElements;
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationSection> _tvFilterElements;
         private Regex[] _tvFilters;
 
         static XbmcCopierConfigurationSection()
@@ -38,9 +34,9 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         [ConfigurationProperty(MOVIE_FILTERS_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
-        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationElement>),
+        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationSection>),
             AddItemName = FILTER_PROPERTY_NAME)]
-        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> MovieFilterElements
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationSection> MovieFilterElements
         {
             get
             {
@@ -53,9 +49,9 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         [ConfigurationProperty(TV_FILTERS_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
-        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationElement>),
+        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationSection>),
             AddItemName = FILTER_PROPERTY_NAME)]
-        private SingleValueConfigurationElementCollection<SingleValueConfigurationElement> TvFilterElements
+        private SingleValueConfigurationElementCollection<SingleValueConfigurationSection> TvFilterElements
         {
             get
             {
@@ -76,12 +72,12 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             {
                 lock (__syncRoot)
                 {
-                    if (__configurationInstance == null)
+                    if (__singletonSettingsInstance == null)
                     {
-                        __configurationInstance = GetConfigurationnInstance();
+                        __singletonSettingsInstance = GetSettingsByConfiguration(ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None));
                     }
 
-                    return __configurationInstance;
+                    return __singletonSettingsInstance;
                 }
             }
         }
@@ -153,31 +149,22 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             }
         }
 
-        /// <summary>
-        ///   Gets the <see cref="FileSystem" /> from the config file.
-        /// </summary>
-        [TypeConverter(typeof(ReflectiveStringTypeConverter))]
-        [ConfigurationProperty(FILE_SYSTEM_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false, DefaultValue = FILE_SYSTEM_PROPERTY_DEFAULT_VALUE)]
-        IFileSystem ISettingsProvider.FileSystem
-        {
-            get { return base[FILE_SYSTEM_PROPERTY_NAME] as IFileSystem; }
-        }
-
         #endregion
 
         private void EnsureFilterElementsAreNotNull(
-            ref SingleValueConfigurationElementCollection<SingleValueConfigurationElement> filterElements,
+            ref SingleValueConfigurationElementCollection<SingleValueConfigurationSection> filterElements,
             string propertyName)
         {
             if (filterElements == null)
             {
                 filterElements =
-                    (SingleValueConfigurationElementCollection<SingleValueConfigurationElement>)
+                    (SingleValueConfigurationElementCollection<SingleValueConfigurationSection>)
                     base[propertyName];
                 if (filterElements == null)
                 {
                     //It should never get to this point
-                    throw new ConfigurationErrorsException("Internal configuration error: filterElements is null");
+                    const string internalConfigurationErrorMessage = "Internal configuration error: filterElements is null";
+                    throw new ConfigurationErrorsException(internalConfigurationErrorMessage);
                 }
             }
         }
@@ -193,13 +180,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 filters[index] = new Regex(filterElements[index].Value, regexOptions);
             }
             return filters;
-        }
-
-        private static XbmcCopierConfigurationSection GetConfigurationnInstance()
-        {
-            var configurationSection =
-                (XbmcCopierConfigurationSection)ConfigurationManager.GetSection(CONFIGURATION_SECTION_NAME);
-            return configurationSection;
         }
 
         /// <summary>

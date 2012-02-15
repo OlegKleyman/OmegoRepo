@@ -6,15 +6,15 @@ using Oleg.Kleyman.Core.Linq;
 namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
-    ///   Represents a configuration element.
+    ///   Represents a configuration section.
     /// </summary>
-    public abstract class ConfigurationElementBase : ConfigurationElement
+    public abstract class ConfigurationSectionBase : ConfigurationSection
     {
         /// <summary>
-        ///   Creates filter element based on keys and values of an IDictionary.
+        ///   Creates configuration section based on keys and values of an IDictionary.
         /// </summary>
         /// <param name="values"> The property names and values to set. </param>
-        protected ConfigurationElementBase(IEnumerable<KeyValuePair<string, object>> values) : this()
+        protected ConfigurationSectionBase(IEnumerable<KeyValuePair<string, object>> values) : this()
         {
             if (values == null)
             {
@@ -27,7 +27,7 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <summary>
         ///   Default constructor. Does nothing
         /// </summary>
-        protected ConfigurationElementBase()
+        protected ConfigurationSectionBase()
         {
         }
 

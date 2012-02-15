@@ -6,9 +6,38 @@ namespace Oleg.Kleyman.Core
 {
     public class RarExtractor : Extractor
     {
+        private static object __syncRoot;
+        private static RarExtractor __defaultRarExtractor;
+        public IRarExtractorSettings Settings { get; private set; }
+
+        static RarExtractor()
+        {
+            __syncRoot = new object();
+        }
+
+        public static RarExtractor Default
+        {
+            get
+            {
+                lock(__syncRoot)
+                {
+                    if (__defaultRarExtractor == null)
+                    {
+                        __defaultRarExtractor = new RarExtractor(RarExtractorConfigurationSection.Default);
+                    }
+                }
+
+                return __defaultRarExtractor;
+            }
+        }
         public RarExtractor(string unrarPath)
         {
             UnrarPath = unrarPath.Trim();
+        }
+
+        private RarExtractor(IRarExtractorSettings settings)
+        {
+            Settings = settings;
         }
 
         protected string UnrarPath { get; private set; }

@@ -36,11 +36,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigurationElementBase.cs" />
+    <Compile Include="Configuration\ConfigurationSectionBase.cs" />
     <Compile Include="Configuration\ConfigurationElementCollection.cs" />
     <Compile Include="Configuration\IConfigurationElement.cs" />
     <Compile Include="Extractor.cs" />
     <Compile Include="FileSystem.cs" />
+    <Compile Include="IRarExtractorSettings.cs" />
+    <Compile Include="RarExtractorConfigurationSection.cs" />
     <Compile Include="ReflectiveStringTypeConverter.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="RarExtractor.cs" />
@@ -49,7 +51,7 @@
     <Compile Include="EqualityComparer.cs" />
     <Compile Include="Linq\Enumerable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Configuration\SingleValueConfigurationElement.cs" />
+    <Compile Include="Configuration\SingleValueConfigurationSection.cs" />
     <Compile Include="Configuration\ConfigurationElementCollectionBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

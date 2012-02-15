@@ -26,14 +26,14 @@ namespace Oleg.Kleyman.Core.Tests
             MatchType = MessageMatch.Exact)]
         public void ConstructorNullArgumentTest()
         {
-            var element = new SingleValueConfigurationElement(null);
+            var element = new SingleValueConfigurationSection(null);
             Assert.AreEqual("test", element.Value);
         }
 
         [Test]
         public void ConstructorTest()
         {
-            var element = new SingleValueConfigurationElement(PropertyNameValues);
+            var element = new SingleValueConfigurationSection(PropertyNameValues);
             Assert.AreEqual("test", element.Value);
         }
     }

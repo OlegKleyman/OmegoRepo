@@ -4,12 +4,12 @@ using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Core.Tests
 {
-    public class MockConfigurationElement : ConfigurationElementBase, IConfigurationElement
+    public class MockConfigurationSection : ConfigurationSectionBase, IConfigurationElement
     {
         private const string VALUE_CONFIG_ATTRIBUTE_NAME = "value";
         private const string KEY_CONFIG_ATTRIBUTE_NAME = "key";
 
-        public MockConfigurationElement(IEnumerable<KeyValuePair<string, object>> values) : base(values)
+        public MockConfigurationSection(IEnumerable<KeyValuePair<string, object>> values) : base(values)
         {
         }
 

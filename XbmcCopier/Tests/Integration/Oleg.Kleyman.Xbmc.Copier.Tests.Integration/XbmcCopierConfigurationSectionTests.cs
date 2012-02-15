@@ -38,7 +38,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.IsInstanceOf(typeof (FileSystem), settings.FileSystem);
             Assert.AreEqual(2, settings.MovieFilters.Length);
             Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.",
                             settings.MovieFilters[0].ToString());
@@ -91,7 +90,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.IsInstanceOf(typeof(FileSystem), settings.FileSystem);
             Assert.AreEqual(2, settings.MovieFilters.Length);
             Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.",
                             settings.MovieFilters[0].ToString());
@@ -113,7 +111,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.IsInstanceOf(typeof(FileSystem), settings.FileSystem);
             Assert.AreEqual(2, settings.MovieFilters.Length);
             Assert.AreEqual(@"\.720P\.|\.1080P\.|\.DVDRIP\.|\.PAL\.DVDR\.|\.NTSC\.DVDR\.|\.XVID\.",
                             settings.MovieFilters[0].ToString());
@@ -130,7 +127,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
-            Assert.IsInstanceOf(typeof(FileSystem), settings.FileSystem);
             Assert.AreEqual(0, settings.MovieFilters.Length);
             Assert.AreEqual(0, settings.TvFilters.Length);
         }

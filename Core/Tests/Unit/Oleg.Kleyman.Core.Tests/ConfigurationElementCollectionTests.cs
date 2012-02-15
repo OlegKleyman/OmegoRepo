@@ -22,10 +22,10 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void ConstructorTest()
         {
-            var element = new MockConfigurationElement(PropertyNameValues);
-            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] {element});
+            var element = new MockConfigurationSection(PropertyNameValues);
+            var configCollection = new ConfigurationElementCollection<MockConfigurationSection>(new[] {element});
             Assert.AreEqual(1, configCollection.Count);
-            Assert.IsInstanceOf<MockConfigurationElement>(configCollection[0]);
+            Assert.IsInstanceOf<MockConfigurationSection>(configCollection[0]);
             Assert.AreEqual("test", (configCollection[0]).Value);
             Assert.AreEqual("someKey", (configCollection[0]).Key);
         }
@@ -33,10 +33,10 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void IntIndexPropertyTest()
         {
-            var element = new MockConfigurationElement(PropertyNameValues);
-            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] {element});
+            var element = new MockConfigurationSection(PropertyNameValues);
+            var configCollection = new ConfigurationElementCollection<MockConfigurationSection>(new[] {element});
             Assert.AreEqual(1, configCollection.Count);
-            Assert.IsInstanceOf<MockConfigurationElement>(configCollection[0]);
+            Assert.IsInstanceOf<MockConfigurationSection>(configCollection[0]);
             Assert.AreEqual("test", (configCollection[0]).Value);
             Assert.AreEqual("someKey", (configCollection[0]).Key);
         }
@@ -44,10 +44,10 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void StringIndexPropertyTest()
         {
-            var element = new MockConfigurationElement(PropertyNameValues);
-            var configCollection = new ConfigurationElementCollection<MockConfigurationElement>(new[] {element});
+            var element = new MockConfigurationSection(PropertyNameValues);
+            var configCollection = new ConfigurationElementCollection<MockConfigurationSection>(new[] {element});
             Assert.AreEqual(1, configCollection.Count);
-            Assert.IsInstanceOf<MockConfigurationElement>(configCollection["someKey"]);
+            Assert.IsInstanceOf<MockConfigurationSection>(configCollection["someKey"]);
             Assert.AreEqual("test", (configCollection["someKey"]).Value);
             Assert.AreEqual("someKey", (configCollection["someKey"]).Key);
         }

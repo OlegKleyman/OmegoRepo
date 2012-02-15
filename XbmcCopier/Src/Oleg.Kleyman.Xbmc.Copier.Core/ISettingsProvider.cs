@@ -10,6 +10,5 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         string TvPath { get; }
         Regex[] MovieFilters { get; }
         Regex[] TvFilters { get; }
-        IFileSystem FileSystem { get; }
     }
 }
