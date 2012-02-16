@@ -64,13 +64,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="TestConfigs\XbmcCopierInvalidNoConfigurationSection.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="TestConfigs\XbmcCopierValidNoFilters.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestConfigs\XbmcCopierValid.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

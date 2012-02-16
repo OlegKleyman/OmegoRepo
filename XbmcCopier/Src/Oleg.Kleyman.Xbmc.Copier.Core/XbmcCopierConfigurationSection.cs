@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Text.RegularExpressions;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
@@ -74,12 +75,18 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 {
                     if (__singletonSettingsInstance == null)
                     {
-                        __singletonSettingsInstance = GetSettingsByConfiguration(ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None));
+                        __singletonSettingsInstance = GetConfigurationSection();
                     }
 
                     return __singletonSettingsInstance;
                 }
             }
+        }
+
+        private static ISettingsProvider GetConfigurationSection()
+        {
+            var factory = new ConfigurationSectionFactory<XbmcCopierConfigurationSection>();
+            return factory.GetConfigurationBySectionName(CONFIGURATION_SECTION_NAME);
         }
 
         #region ISettingsProvider Members
@@ -180,58 +187,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 filters[index] = new Regex(filterElements[index].Value, regexOptions);
             }
             return filters;
-        }
-
-        /// <summary>
-        ///   Gets an <see cref="ISettingsProvider" /> settings by configuration file path.
-        /// </summary>
-        /// <param name="configurationFilePath"> UNC path to the configuration file </param>
-        /// <returns> An <see cref="ISettingsProvider" /> object. </returns>
-        public static ISettingsProvider GetSettingsByConfigurationFile(string configurationFilePath)
-        {
-            ValidatePath(configurationFilePath);
-
-            var fileMap = new ExeConfigurationFileMap
-                              {
-                                  ExeConfigFilename = configurationFilePath
-                              };
-
-            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap,
-                                                                                          ConfigurationUserLevel.None);
-            return GetSettingsByConfiguration(configuration);
-        }
-
-        private static void ValidatePath(string configurationFilePath)
-        {
-            if (string.IsNullOrEmpty(configurationFilePath))
-            {
-                const string configurationFilePathParamName = "configurationFilePath";
-                throw new ArgumentNullException(configurationFilePathParamName);
-            }
-
-            if (!File.Exists(configurationFilePath))
-            {
-                const string configurationFileNotFoundMessage = "Configuration file not found";
-                throw new ConfigurationErrorsException(configurationFileNotFoundMessage, configurationFilePath, 0);
-            }
-        }
-
-        /// <summary>
-        ///   Gets an <see cref="ISettingsProvider" /> settings by <see cref="Configuration" /> .
-        /// </summary>
-        /// <param name="configuration"> The <see cref="Configuration" /> object containing XBMC settings </param>
-        /// <returns> An <see cref="ISettingsProvider" /> object. </returns>
-        public static ISettingsProvider GetSettingsByConfiguration(Configuration configuration)
-        {
-            var section = (ISettingsProvider)configuration.GetSection(CONFIGURATION_SECTION_NAME);
-            if (section == null)
-            {
-                const string xbmcCopierConfigurationSectionNotFoundMessage =
-                    "XbmcCopierConfiguration configuration section not found.";
-                throw new ConfigurationErrorsException(xbmcCopierConfigurationSectionNotFoundMessage);
-            }
-
-            return section;
         }
     }
 }

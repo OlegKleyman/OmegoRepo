@@ -36,8 +36,7 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <summary>
         ///   Gets the value the value attribute.
         /// </summary>
-        [ConfigurationProperty(VALUE_CONFIG_ATTRIBUTE_NAME, IsDefaultCollection = false, IsKey = false,
-            IsRequired = false)]
+        [ConfigurationProperty(VALUE_CONFIG_ATTRIBUTE_NAME, IsDefaultCollection = false, IsKey = false, IsRequired = false)]
         public virtual string Value
         {
             get { return (string) base[VALUE_CONFIG_ATTRIBUTE_NAME]; }

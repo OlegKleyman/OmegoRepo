@@ -34,15 +34,17 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationSectionFactory.cs" />
     <Compile Include="Configuration\ConfigurationSectionBase.cs" />
     <Compile Include="Configuration\ConfigurationElementCollection.cs" />
     <Compile Include="Configuration\IConfigurationElement.cs" />
     <Compile Include="Extractor.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="IRarExtractorSettings.cs" />
-    <Compile Include="RarExtractorConfigurationSection.cs" />
+    <Compile Include="Configuration\RarExtractorConfigurationSection.cs" />
     <Compile Include="ReflectiveStringTypeConverter.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="RarExtractor.cs" />

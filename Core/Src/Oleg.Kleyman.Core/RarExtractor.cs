@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Core
 {

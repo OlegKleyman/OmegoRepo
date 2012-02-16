@@ -1,0 +1,98 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+using Oleg.Kleyman.Core.Configuration;
+
+namespace Oleg.Kleyman.Core.Tests.Integration
+{
+    [TestFixture]
+    public class ConfigurationSectionFactoryTests
+    {
+        private const string SECTION_NAME = "rarExtractorConfiguration";
+        private string ValidConfigFilePath { get; set; }
+        private string InvalidNoConfigurationSectionFilePath { get; set; }
+        private ConfigurationSectionFactory<RarExtractorConfigurationSection> ConfigurationSectionFactory { get; set; }
+        [TestFixtureSetUp]
+        public void Setup()
+        {
+            string currentDirectory = Directory.GetCurrentDirectory();
+            const string xbmcCopierValidConfigFileName = @"valid.config";
+            const string xbmcCopierInvalidNoConfigurationSectionFileName =
+                @"InvalidNoConfigurationSection.config";
+            const string filePath = @"TestConfigs";
+
+            ValidConfigFilePath = Path.Combine(currentDirectory, filePath, xbmcCopierValidConfigFileName);
+            InvalidNoConfigurationSectionFilePath = Path.Combine(currentDirectory, filePath,
+                                                                           xbmcCopierInvalidNoConfigurationSectionFileName);
+            ConfigurationSectionFactory = new ConfigurationSectionFactory<RarExtractorConfigurationSection>();
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ConfigurationErrorsException),
+            ExpectedExceptionName = "System.Configuration.ConfigurationErrorsException",
+            ExpectedMessage = "rarExtractorConfiguration configuration section not found.",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationConfigurationSectionNotFoundTest()
+        {
+            var fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = InvalidNoConfigurationSectionFilePath;
+
+            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+
+            ConfigurationSectionFactory.GetSettingsByConfiguration(configuration, SECTION_NAME);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ConfigurationErrorsException),
+            ExpectedExceptionName = "System.Configuration.ConfigurationErrorsException",
+            ExpectedMessage = "Configuration file not found (testFile.config)",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationFileFileDoesNotExistTest()
+        {
+            ConfigurationSectionFactory.GetSettingsByConfigurationFile("testFile.config", null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException),
+            ExpectedExceptionName = "System.ArgumentNullException",
+            ExpectedMessage = "Value cannot be null.\r\nParameter name: configurationFilePath",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationFilePathIsNullTest()
+        {
+            ConfigurationSectionFactory.GetSettingsByConfigurationFile(null, null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException),
+            ExpectedExceptionName = "System.ArgumentNullException",
+            ExpectedMessage = "Value cannot be null.\r\nParameter name: sectionName",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationSectionNameIsNullTest()
+        {
+            ConfigurationSectionFactory.GetSettingsByConfigurationFile(InvalidNoConfigurationSectionFilePath, null);
+        }
+
+        [Test]
+        public void GetByConfigurationFileTest()
+        {
+            var settings = (IRarExtractorSettings)ConfigurationSectionFactory.GetSettingsByConfigurationFile(ValidConfigFilePath, SECTION_NAME);
+            Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
+        }
+
+        [Test]
+        public void GetByConfigurationTest()
+        {
+            var fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = ValidConfigFilePath;
+
+            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+
+            var settings = (IRarExtractorSettings)ConfigurationSectionFactory.GetSettingsByConfiguration(configuration, SECTION_NAME);
+            Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
+        }
+    }
+}
