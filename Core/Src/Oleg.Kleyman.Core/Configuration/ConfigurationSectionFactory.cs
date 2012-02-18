@@ -14,14 +14,9 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
         public T GetSettingsByConfigurationFile(string configurationFilePath, string sectionName)
         {
-            ValidatePath(configurationFilePath);
-
-
-            if (string.IsNullOrEmpty(sectionName))
-            {
-                const string sectionNameParamName = "sectionName";
-                throw new ArgumentNullException(sectionNameParamName);
-            }
+            ThrowExceptionOnInvalidPathArgument(configurationFilePath);
+            
+            ThrowExceptionOnInvalidArguments(sectionName);
             
             var fileMap = new ExeConfigurationFileMap
                               {
@@ -29,10 +24,10 @@ namespace Oleg.Kleyman.Core.Configuration
                               };
 
             var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
-            return GetSettingsByConfiguration(configuration, sectionName);
+            return GetConfigurationSectionByConfiguration(configuration, sectionName);
         }
 
-        private static void ValidatePath(string configurationFilePath)
+        private static void ThrowExceptionOnInvalidPathArgument(string configurationFilePath)
         {
             if (string.IsNullOrEmpty(configurationFilePath))
             {
@@ -53,29 +48,52 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <param name="configuration"> The <see cref="Oleg.Kleyman.Core.Configuration" /> object containing the <see cref="System.Configuration.ConfigurationSection"/> to load.</param>
         /// <param name="sectionName">The name of the configuration section to load.</param>
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
-        public T GetSettingsByConfiguration(System.Configuration.Configuration configuration, string sectionName)
+        public T GetConfigurationSectionByConfiguration(System.Configuration.Configuration configuration, string sectionName)
         {
-            if (configuration == null)
-            {
-                const string sectionNameParamName = "configuration";
-                throw new ArgumentNullException(sectionNameParamName);
-            }
-
-            if (string.IsNullOrEmpty(sectionName))
-            {
-                const string sectionNameParamName = "sectionName";
-                throw new ArgumentNullException(sectionNameParamName);
-            }
+            ThrowExceptionOnInvalidArguments(configuration, sectionName);
 
             var section = configuration.GetSection(sectionName);
 
-            if (section == null)
-            {
-                var xbmcCopierConfigurationSectionNotFoundMessage = string.Format("{0} configuration section not found.", sectionName);
-                throw new ConfigurationErrorsException(xbmcCopierConfigurationSectionNotFoundMessage);
-            }
+            ThrowExceptionOnConfigurationSectionNull(sectionName, section);
 
             return (T)section;
+        }
+
+        private static void ThrowExceptionOnInvalidArguments(System.Configuration.Configuration configuration, string sectionName)
+        {
+            if (configuration == null)
+            {
+                const string configurationParamName = "configuration";
+                throw new ArgumentNullException(configurationParamName);
+            }
+
+            ThrowExceptionOnInvalidArguments(sectionName);
+        }
+
+        private static void ThrowExceptionOnInvalidArguments(string sectionName)
+        {
+            const string sectionNameParamName = "sectionName";
+
+            if (sectionName == null)
+            {
+                throw new ArgumentNullException(sectionNameParamName);
+            }
+
+            if (sectionName == string.Empty)
+            {
+                const string argumentCannotBeAnEmptyStringMessage = "Cannot be an empty string.";
+                throw new ArgumentException(argumentCannotBeAnEmptyStringMessage, sectionNameParamName);
+            }
+        }
+
+        private static void ThrowExceptionOnConfigurationSectionNull(string sectionName, ConfigurationSection section)
+        {
+            if (section == null)
+            {
+                var xbmcCopierConfigurationSectionNotFoundMessage = string.Format("{0} configuration section not found.",
+                                                                                  sectionName);
+                throw new ConfigurationErrorsException(xbmcCopierConfigurationSectionNotFoundMessage);
+            }
         }
 
         /// <summary>
@@ -85,18 +103,10 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
         public T GetConfigurationBySectionName(string sectionName)
         {
-            if (string.IsNullOrEmpty(sectionName))
-            {
-                const string sectionNameParamName = "sectionName";
-                throw new ArgumentNullException(sectionNameParamName);
-            }
+            ThrowExceptionOnInvalidArguments(sectionName);
 
             var section = ConfigurationManager.GetSection(sectionName);
-            if (section == null)
-            {
-                var xbmcCopierConfigurationSectionNotFoundMessage = string.Format("{0} configuration section not found.", sectionName);
-                throw new ConfigurationErrorsException(xbmcCopierConfigurationSectionNotFoundMessage);
-            }
+            ThrowExceptionOnConfigurationSectionNull(sectionName, section as ConfigurationSection);
 
             return (T)ConfigurationManager.GetSection(sectionName);
         }

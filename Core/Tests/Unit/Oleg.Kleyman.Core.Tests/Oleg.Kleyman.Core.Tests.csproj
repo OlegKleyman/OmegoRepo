@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="ConfigurationElementCollectionTests.cs" />
     <Compile Include="MockConfigurationSection.cs" />
+    <Compile Include="RarExtractorConfigurationSectionTests.cs" />
     <Compile Include="SingletonTests.cs" />
     <Compile Include="SingleValueConfigurationElementCollectionTests.cs" />
     <Compile Include="EnumerableTests.cs" />

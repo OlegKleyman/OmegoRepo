@@ -43,7 +43,32 @@ namespace Oleg.Kleyman.Core.Tests.Integration
 
             var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
 
-            ConfigurationSectionFactory.GetSettingsByConfiguration(configuration, SECTION_NAME);
+            ConfigurationSectionFactory.GetConfigurationSectionByConfiguration(configuration, SECTION_NAME);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException),
+            ExpectedExceptionName = "System.ArgumentNullException",
+            ExpectedMessage = "Value cannot be null.\r\nParameter name: configuration",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationConfigurationSectionConfigurationNullTest()
+        {
+            ConfigurationSectionFactory.GetConfigurationSectionByConfiguration(null, SECTION_NAME);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException),
+            ExpectedExceptionName = "System.ArgumentException",
+            ExpectedMessage = "Cannot be an empty string.\r\nParameter name: sectionName",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationConfigurationSectionArgumentEmptyTest()
+        {
+
+            var fileMap = new ExeConfigurationFileMap();
+            fileMap.ExeConfigFilename = InvalidNoConfigurationSectionFilePath;
+
+            var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            ConfigurationSectionFactory.GetConfigurationSectionByConfiguration(configuration, string.Empty);
         }
 
         [Test]
@@ -91,7 +116,7 @@ namespace Oleg.Kleyman.Core.Tests.Integration
 
             var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
 
-            var settings = (IRarExtractorSettings)ConfigurationSectionFactory.GetSettingsByConfiguration(configuration, SECTION_NAME);
+            var settings = (IRarExtractorSettings)ConfigurationSectionFactory.GetConfigurationSectionByConfiguration(configuration, SECTION_NAME);
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
         }
     }

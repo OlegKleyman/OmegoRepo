@@ -40,5 +40,12 @@ namespace Oleg.Kleyman.Core.Tests
             Assert.IsInstanceOf<SingleValueConfigurationSection>(configCollection[0]);
             Assert.AreEqual("test", configCollection[0].Value);
         }
+
+        [Test]
+        public void PrivateConstructorTest()
+        {
+            var configCollection = (SingleValueConfigurationElementCollection<SingleValueConfigurationSection>)Activator.CreateInstance(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationSection>), true);
+            Assert.AreEqual(0, configCollection.Count);
+        }
     }
 }
