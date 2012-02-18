@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using Microsoft.CSharp.RuntimeBinder;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Configuration;
 
@@ -46,6 +48,17 @@ namespace Oleg.Kleyman.Core.Tests
         {
             var configCollection = (SingleValueConfigurationElementCollection<SingleValueConfigurationSection>)Activator.CreateInstance(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationSection>), true);
             Assert.AreEqual(0, configCollection.Count);
+        }
+
+        [Test]
+        public void CreateNewElementTest()
+        {
+            var configCollection =
+                new SingleValueConfigurationElementCollection<SingleValueConfigurationSection>(new SingleValueConfigurationSection[] { });
+            var createNewElementMethod = configCollection.GetType().GetMethod("CreateNewElement", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
+            var element = createNewElementMethod.Invoke(configCollection, null);
+            Assert.IsInstanceOf<SingleValueConfigurationSection>(element);
+            Assert.AreEqual(string.Empty, ((SingleValueConfigurationSection)element).Value);
         }
     }
 }

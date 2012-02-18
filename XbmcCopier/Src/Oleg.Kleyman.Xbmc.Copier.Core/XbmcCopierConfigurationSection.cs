@@ -167,12 +167,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 filterElements =
                     (SingleValueConfigurationElementCollection<SingleValueConfigurationSection>)
                     base[propertyName];
-                if (filterElements == null)
-                {
-                    //It should never get to this point
-                    const string internalConfigurationErrorMessage = "Internal configuration error: filterElements is null";
-                    throw new ConfigurationErrorsException(internalConfigurationErrorMessage);
-                }
             }
         }
 
