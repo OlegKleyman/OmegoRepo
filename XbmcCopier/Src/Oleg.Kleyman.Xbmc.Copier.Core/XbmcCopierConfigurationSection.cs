@@ -1,8 +1,5 @@
-using System;
 using System.Configuration;
-using System.IO;
 using System.Text.RegularExpressions;
-using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
@@ -35,7 +32,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         [ConfigurationProperty(MOVIE_FILTERS_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
-        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationSection>),
+        [ConfigurationCollection(typeof (SingleValueConfigurationElementCollection<SingleValueConfigurationSection>),
             AddItemName = FILTER_PROPERTY_NAME)]
         private SingleValueConfigurationElementCollection<SingleValueConfigurationSection> MovieFilterElements
         {
@@ -50,7 +47,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         [ConfigurationProperty(TV_FILTERS_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
-        [ConfigurationCollection(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationSection>),
+        [ConfigurationCollection(typeof (SingleValueConfigurationElementCollection<SingleValueConfigurationSection>),
             AddItemName = FILTER_PROPERTY_NAME)]
         private SingleValueConfigurationElementCollection<SingleValueConfigurationSection> TvFilterElements
         {
@@ -81,12 +78,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                     return __singletonSettingsInstance;
                 }
             }
-        }
-
-        private static ISettingsProvider GetConfigurationSection()
-        {
-            var factory = new ConfigurationSectionFactory<XbmcCopierConfigurationSection>();
-            return factory.GetConfigurationBySectionName(CONFIGURATION_SECTION_NAME);
         }
 
         #region ISettingsProvider Members
@@ -157,6 +148,12 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         #endregion
+
+        private static ISettingsProvider GetConfigurationSection()
+        {
+            var factory = new ConfigurationSectionFactory<XbmcCopierConfigurationSection>();
+            return factory.GetConfigurationBySectionName(CONFIGURATION_SECTION_NAME);
+        }
 
         private void EnsureFilterElementsAreNotNull(
             ref SingleValueConfigurationElementCollection<SingleValueConfigurationSection> filterElements,

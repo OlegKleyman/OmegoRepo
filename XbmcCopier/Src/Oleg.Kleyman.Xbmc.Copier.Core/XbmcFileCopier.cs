@@ -121,7 +121,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         private IEnumerable<FileInfo> GetFiles(IEnumerable<string> extentions, ReleaseOutput output)
         {
             var files = FileSystem.GetFilesByExtensions(output.DownloadPath, extentions);
-            
+
             return files;
         }
     }

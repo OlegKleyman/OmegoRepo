@@ -1,8 +1,5 @@
-﻿using System;
-using System.Configuration;
-using System.IO;
+﻿using System.IO;
 using NUnit.Framework;
-using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Core.Configuration;
 using Oleg.Kleyman.Tests.Core;
 using Oleg.Kleyman.Xbmc.Copier.Core;
@@ -14,10 +11,10 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
     {
         private const string CONFIGURATION_SECTION_NAME = "XbmcCopierConfiguration";
         private string XbmcCopierValidNoFiltersConfigFilePath { get; set; }
-        
+
         public override void Setup()
         {
-            string currentDirectory = Directory.GetCurrentDirectory();
+            var currentDirectory = Directory.GetCurrentDirectory();
             const string xbmcCopierValidNoFiltersConfigFileName = @"XbmcCopierValidNoFilters.config";
             const string filePath = @"TestConfigs";
 
@@ -44,7 +41,10 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
         public void GetSettingsByConfigurationFileNoFiltersInConfigTest()
         {
             var factory = new ConfigurationSectionFactory<XbmcCopierConfigurationSection>();
-            var settings = (ISettingsProvider) factory.GetSettingsByConfigurationFile(XbmcCopierValidNoFiltersConfigFilePath, CONFIGURATION_SECTION_NAME);
+            var settings =
+                (ISettingsProvider)
+                factory.GetSettingsByConfigurationFile(XbmcCopierValidNoFiltersConfigFilePath,
+                                                       CONFIGURATION_SECTION_NAME);
             Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);

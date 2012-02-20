@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Oleg.Kleyman.Core;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {

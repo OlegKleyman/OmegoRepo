@@ -15,7 +15,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             const RegexOptions regexOptions =
                 RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Singleline;
             _tvDelimeter = new Regex(tvDelimeter, regexOptions);
-            
+
             Name = name;
         }
 

@@ -12,7 +12,7 @@ namespace Oleg.Kleyman.Xbmc.Copier
             {
                 writer.WriteLine("============================");
                 writer.WriteLine(string.Format("Length: {0}", args.Length));
-                foreach (string arg in args)
+                foreach (var arg in args)
                 {
                     writer.WriteLine(arg);
                 }
@@ -29,7 +29,9 @@ namespace Oleg.Kleyman.Xbmc.Copier
             var builder = new ReleaseBuilder(XbmcCopierConfigurationSection.DefaultSettings, releaseName);
             var release = builder.Build();
             var output = new ReleaseOutput(release, fileName, downloadPath);
-            var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings, new RarExtractor(XbmcCopierConfigurationSection.DefaultSettings.UnrarPath), new FileSystem());
+            var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings,
+                                            new RarExtractor(XbmcCopierConfigurationSection.DefaultSettings.UnrarPath),
+                                            new FileSystem());
             if (release.ReleaseType == ReleaseType.Tv || release.ReleaseType == ReleaseType.Movie)
             {
                 copier.Copy(output);
