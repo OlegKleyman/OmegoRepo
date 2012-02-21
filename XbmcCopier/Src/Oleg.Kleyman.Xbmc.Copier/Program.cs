@@ -30,8 +30,9 @@ namespace Oleg.Kleyman.Xbmc.Copier
             var release = builder.Build();
             var output = new ReleaseOutput(release, fileName, downloadPath);
             var fileSystem = new FileSystem();
+            var processManager = new ProcessManager();
             var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings,
-                                            new RarExtractor(XbmcCopierConfigurationSection.DefaultSettings.UnrarPath, fileSystem), fileSystem);
+                                            new RarExtractor(XbmcCopierConfigurationSection.DefaultSettings.UnrarPath, fileSystem, processManager), fileSystem);
             if (release.ReleaseType == ReleaseType.Tv || release.ReleaseType == ReleaseType.Movie)
             {
                 copier.Copy(output);
