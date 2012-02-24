@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Microsoft.CSharp.RuntimeBinder;
+using Moq;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Configuration;
 
@@ -11,6 +11,7 @@ namespace Oleg.Kleyman.Core.Tests
     public class SingleValueConfigurationElementCollectionTests
     {
         private IDictionary<string, object> PropertyNameValues { get; set; }
+        protected Mock<SingleValueConfigurationElementCollection<SingleValueConfigurationSection>> MockSingleValueConfigurationElementCollection { get; set; }
 
         [TestFixtureSetUp]
         public void Setup()
@@ -19,6 +20,7 @@ namespace Oleg.Kleyman.Core.Tests
                                      {
                                          {"value", "test"}
                                      };
+            MockSingleValueConfigurationElementCollection = new Mock<SingleValueConfigurationElementCollection<SingleValueConfigurationSection>>();
         }
 
         [Test]
@@ -44,21 +46,10 @@ namespace Oleg.Kleyman.Core.Tests
         }
 
         [Test]
-        public void PrivateConstructorTest()
+        public void DefaultConstructorTest()
         {
-            var configCollection = (SingleValueConfigurationElementCollection<SingleValueConfigurationSection>)Activator.CreateInstance(typeof(SingleValueConfigurationElementCollection<SingleValueConfigurationSection>), true);
-            Assert.AreEqual(0, configCollection.Count);
-        }
-
-        [Test]
-        public void CreateNewElementTest()
-        {
-            var configCollection =
-                new SingleValueConfigurationElementCollection<SingleValueConfigurationSection>(new SingleValueConfigurationSection[] { });
-            var createNewElementMethod = configCollection.GetType().GetMethod("CreateNewElement", BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[0], null);
-            var element = createNewElementMethod.Invoke(configCollection, null);
-            Assert.IsInstanceOf<SingleValueConfigurationSection>(element);
-            Assert.AreEqual(string.Empty, ((SingleValueConfigurationSection)element).Value);
+            var result = MockSingleValueConfigurationElementCollection.Object;
+            Assert.AreEqual(0, result.Count);
         }
     }
 }

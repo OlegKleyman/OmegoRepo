@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Moq;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Configuration;
 
@@ -11,6 +10,7 @@ namespace Oleg.Kleyman.Core.Tests
     public class RarExtractorConfigurationSectionTests
     {
         private IDictionary<string, object> PropertyNameValues { get; set; }
+        protected Mock<RarExtractorConfigurationSection> MockRarExtractorConfigurationSection { get; set; }
 
         [TestFixtureSetUp]
         public void Setup()
@@ -19,10 +19,11 @@ namespace Oleg.Kleyman.Core.Tests
                                      {
                                          {"unrarPath", "test"}
                                      };
+            MockRarExtractorConfigurationSection = new Mock<RarExtractorConfigurationSection>();
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(ArgumentNullException),
+        [ExpectedException(ExpectedException = typeof (ArgumentNullException),
             ExpectedExceptionName = "System.ArgumentNullException",
             ExpectedMessage = "Value cannot be null.\r\nParameter name: values",
             MatchType = MessageMatch.Exact)]
@@ -38,7 +39,14 @@ namespace Oleg.Kleyman.Core.Tests
 
             Assert.AreEqual(1, configurationSection.ElementInformation.Properties.Count);
             Assert.AreEqual("test", configurationSection.Value);
-            Assert.AreEqual("test", ((IRarExtractorSettings)configurationSection).UnrarPath);
+            Assert.AreEqual("test", ((IRarExtractorSettings) configurationSection).UnrarPath);
+        }
+
+        [Test]
+        public void DefaultConstructorTest()
+        {
+            var result = MockRarExtractorConfigurationSection.Object;
+            Assert.AreEqual(null, result.Value);
         }
     }
 }

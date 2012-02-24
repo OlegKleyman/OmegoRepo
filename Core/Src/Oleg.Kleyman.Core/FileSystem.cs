@@ -6,6 +6,8 @@ namespace Oleg.Kleyman.Core
 {
     public class FileSystem : IFileSystem
     {
+        #region IFileSystem Members
+
         public FileInfo CopyFile(string sourceFilePath, string destinationFilePath)
         {
             File.Copy(sourceFilePath, destinationFilePath);
@@ -31,5 +33,32 @@ namespace Oleg.Kleyman.Core
 
             return files.ToArray();
         }
+
+        public bool FileExists(string path)
+        {
+            return File.Exists(path);
+        }
+
+        public bool DirectoryExists(string path)
+        {
+            return Directory.Exists(path);
+        }
+
+        public void CreateDirectory(string path)
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        public IFile GetFileByPath(string path)
+        {
+            return new FileDetails(path);
+        }
+
+        public FileSystemInfo GetDirectory(string path)
+        {
+            return new DirectoryInfo(path);
+        }
+
+        #endregion
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
-using Oleg.Kleyman.Core.Linq;
 using Oleg.Kleyman.Tests.Core;
-using Enumerable = System.Linq.Enumerable;
+using Enumerable = Oleg.Kleyman.Core.Linq.Enumerable;
 
 namespace Oleg.Kleyman.Core.Tests
 {
@@ -36,8 +36,8 @@ namespace Oleg.Kleyman.Core.Tests
         public void DistinctTest()
         {
             var values = new[] {"Test1", "Test2", "Test3", "Test4", "Test2", "Test5", "Test3", "Test2"};
-            var distinctValues = values.Distinct((x, y) => x == y);
-            var indexedValues = Enumerable.ToArray(distinctValues);
+            var distinctValues = Enumerable.Distinct(values, (x, y) => x == y);
+            var indexedValues = System.Linq.Enumerable.ToArray(distinctValues);
             Assert.AreEqual(5, indexedValues.Length);
             Assert.AreEqual("Test1", indexedValues[0]);
             Assert.AreEqual("Test2", indexedValues[1]);

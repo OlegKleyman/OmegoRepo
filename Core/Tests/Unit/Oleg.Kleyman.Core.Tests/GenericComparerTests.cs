@@ -14,7 +14,7 @@ namespace Oleg.Kleyman.Core.Tests
         private const string CANNOT_BE_NULL_EXCEPTION_MESSAGE = "Value cannot be null.";
         private const string PARAMETER_NAME_EXCEPTION_MESSAGE = "\r\nParameter name: ";
         private const string PARAMETER_NAME_TARGET = "target";
-        
+
         [TestFixtureSetUp]
         public void Setup()
         {
@@ -33,7 +33,7 @@ namespace Oleg.Kleyman.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (EqualityComparer<>));
 
-            bool result = coverageAnalyzer.ValidateMembers(knownMembers);
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
             if (!result)
             {
                 const string membersNotCoveredMessage = "All members not covered";
@@ -61,22 +61,11 @@ namespace Oleg.Kleyman.Core.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException),
-            ExpectedExceptionName = EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME,
-            ExpectedMessage = CANNOT_BE_NULL_EXCEPTION_MESSAGE + PARAMETER_NAME_EXCEPTION_MESSAGE + PARAMETER_NAME_TARGET,
-            MatchType = MessageMatch.Exact)]
-        public void GetHashCodeArgumentNullExceptionTest()
-        {
-            var comparer = new EqualityComparer<object>(null);
-            comparer.GetHashCode(null);
-        }
-
-        [Test]
         public void EqualsNegativePositiveResultsAreNotEqualTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
             var comparer = new EqualityComparer<double>(compareHandler);
-            bool result = comparer.Equals(-3.9999, 3.9999);
+            var result = comparer.Equals(-3.9999, 3.9999);
             Assert.IsFalse(result);
         }
 
@@ -85,7 +74,7 @@ namespace Oleg.Kleyman.Core.Tests
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
             var comparer = new EqualityComparer<double>(compareHandler);
-            bool result = comparer.Equals(-3.9999, -3.9999);
+            var result = comparer.Equals(-3.9999, -3.9999);
             Assert.IsTrue(result);
         }
 
@@ -94,7 +83,7 @@ namespace Oleg.Kleyman.Core.Tests
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
             var comparer = new EqualityComparer<double>(compareHandler);
-            bool result = comparer.Equals(-3.9999, -3.9998);
+            var result = comparer.Equals(-3.9999, -3.9998);
             Assert.IsFalse(result);
         }
 
@@ -103,7 +92,7 @@ namespace Oleg.Kleyman.Core.Tests
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
             var comparer = new EqualityComparer<double>(compareHandler);
-            bool result = comparer.Equals(3.9999, 3.9999);
+            var result = comparer.Equals(3.9999, 3.9999);
             Assert.IsTrue(result);
         }
 
@@ -112,15 +101,27 @@ namespace Oleg.Kleyman.Core.Tests
         {
             var compareHandler = new Func<double, double, bool>((x, y) => Math.Abs(x - y) < double.Epsilon);
             var comparer = new EqualityComparer<double>(compareHandler);
-            bool result = comparer.Equals(3.9999, 3.9998);
+            var result = comparer.Equals(3.9999, 3.9998);
             Assert.IsFalse(result);
+        }
+
+        [Test]
+        [ExpectedException(typeof (ArgumentNullException),
+            ExpectedExceptionName = EXPECTED_ARGUMENT_NULL_EXCEPTION_NAME,
+            ExpectedMessage =
+                CANNOT_BE_NULL_EXCEPTION_MESSAGE + PARAMETER_NAME_EXCEPTION_MESSAGE + PARAMETER_NAME_TARGET,
+            MatchType = MessageMatch.Exact)]
+        public void GetHashCodeArgumentNullExceptionTest()
+        {
+            var comparer = new EqualityComparer<object>(null);
+            comparer.GetHashCode(null);
         }
 
         [Test]
         public void GetHashCodeDoubleTest()
         {
             var comparer = new EqualityComparer<double>(null);
-            int result = comparer.GetHashCode(1.12);
+            var result = comparer.GetHashCode(1.12);
             Assert.AreEqual(558479977, result);
         }
 
@@ -128,7 +129,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void GetHashCodeIntTest()
         {
             var comparer = new EqualityComparer<int>(null);
-            int result = comparer.GetHashCode(1);
+            var result = comparer.GetHashCode(1);
             Assert.AreEqual(1, result);
         }
 
@@ -136,7 +137,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void GetHashCodeReferenceTest()
         {
             var comparer = new EqualityComparer<object>(null);
-            int result = comparer.GetHashCode(new MockObject());
+            var result = comparer.GetHashCode(new MockObject());
             Assert.AreEqual(1337, result);
         }
     }

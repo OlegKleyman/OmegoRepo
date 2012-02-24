@@ -61,7 +61,7 @@ namespace Oleg.Kleyman.Core
         public override int GetHashCode(T target)
         {
 // ReSharper disable CompareNonConstrainedGenericWithNull
-            if(target == null)
+            if (target == null)
 // ReSharper restore CompareNonConstrainedGenericWithNull
             {
                 const string targetParamName = "target";

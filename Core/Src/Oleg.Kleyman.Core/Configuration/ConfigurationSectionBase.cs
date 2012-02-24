@@ -16,7 +16,6 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <param name="values"> The property names and values to set. </param>
         protected ConfigurationSectionBase(IEnumerable<KeyValuePair<string, object>> values) : this()
         {
-           // base.Properties.Clear();
             if (values == null)
             {
                 const string valuesParamName = "values";

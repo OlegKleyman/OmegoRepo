@@ -20,9 +20,7 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <remarks>
         ///   Needed for runtime to initialize configuration.
         /// </remarks>
-// ReSharper disable UnusedMember.Local
-        private SingleValueConfigurationElementCollection()
-// ReSharper restore UnusedMember.Local
+        protected SingleValueConfigurationElementCollection()
         {
         }
 

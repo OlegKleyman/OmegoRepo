@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using Oleg.Kleyman.Core.Configuration;
@@ -7,68 +6,114 @@ namespace Oleg.Kleyman.Core
 {
     public class RarExtractor : Extractor
     {
-        private static object __syncRoot;
+        private static readonly object __syncRoot;
         private static RarExtractor __defaultRarExtractor;
+        public IFileSystem FileSystem { get; private set; }
         public IRarExtractorSettings Settings { get; private set; }
+        protected IProcessManager ProcessManager { get; private set; }
+        private readonly ProcessStartInfo _processInfo;
 
         static RarExtractor()
         {
             __syncRoot = new object();
         }
 
+        public RarExtractor(string unrarPath, IFileSystem fileSystem, IProcessManager processManager) : this(new RarExtractorSettings(unrarPath), fileSystem, processManager)
+        {
+        }
+
+        public RarExtractor(IRarExtractorSettings settings, IFileSystem fileSystem, IProcessManager processManager)
+        {
+            Settings = settings;
+            FileSystem = fileSystem;
+            ProcessManager = processManager;
+            _processInfo = new ProcessStartInfo(settings.UnrarPath)
+                               {
+                                   CreateNoWindow = true,
+                                   UseShellExecute = false,
+                                   WindowStyle = ProcessWindowStyle.Hidden
+                               };
+        }
+
+        private class RarExtractorSettings : IRarExtractorSettings
+        {
+            public RarExtractorSettings(string unrarPath)
+            {
+                UnrarPath = unrarPath;
+            }
+
+            #region Implementation of IRarExtractorSettings
+
+            public string UnrarPath
+            {
+                get; private set;
+            }
+
+            #endregion
+        }
+
         public static RarExtractor Default
         {
             get
             {
-                lock(__syncRoot)
+                lock (__syncRoot)
                 {
                     if (__defaultRarExtractor == null)
                     {
-                        __defaultRarExtractor = new RarExtractor(RarExtractorConfigurationSection.Default);
+                        __defaultRarExtractor = new RarExtractor(RarExtractorConfigurationSection.Default, new FileSystem(), new ProcessManager());
                     }
                 }
 
                 return __defaultRarExtractor;
             }
         }
-        public RarExtractor(string unrarPath)
+
+        public override FileSystemInfo Extract(string target, string destination)
         {
-            UnrarPath = unrarPath.Trim();
+            var file = FileSystem.GetFileByPath(target);
+
+            ThrowFileNotFoundExceptionOnIfFileIsMissing();
+
+            CreateDirectoryIfDoesNotExist(destination);
+
+            ExtractArchive(destination, file);
+            return FileSystem.GetDirectory(destination);
         }
 
-        public RarExtractor(IRarExtractorSettings settings)
+        private void ExtractArchive(string destination, IFile file)
         {
-            Settings = settings;
-        }
+            var process = StartProcess(destination, file);
 
-        protected string UnrarPath { get; private set; }
-
-        public override void Extract(string target, string destination)
-        {
-            var currentDirectoryPath = Directory.GetCurrentDirectory();
-            var file = new FileInfo(target);
-            if (!Directory.Exists(destination))
-            {
-                Directory.CreateDirectory(destination);
-            }
-            if (!File.Exists(UnrarPath))
-            {
-                const string cannotFindUnrarFileMessage = "Unable to find unrar file at location {0}";
-                throw new FileNotFoundException(string.Format(cannotFindUnrarFileMessage, UnrarPath));
-            }
-
-            var processInfo = new ProcessStartInfo(UnrarPath, string.Format("e -y \"{0}\"", file.FullName));
-            processInfo.WorkingDirectory = destination;
-            processInfo.CreateNoWindow = true;
-            processInfo.UseShellExecute = false;
-            
-            var process = Process.Start(processInfo);
-
-            if(!process.HasExited)
+            if (!process.HasExited)
             {
                 process.PriorityClass = ProcessPriorityClass.BelowNormal;
             }
             process.WaitForExit();
+        }
+
+        private IProcess StartProcess(string destination, IFile file)
+        {
+            _processInfo.Arguments = string.Format("e -y \"{0}\"", file.FullName);
+            _processInfo.WorkingDirectory = destination;
+            var process = ProcessManager.Start(_processInfo);
+            return process;
+        }
+
+        private void ThrowFileNotFoundExceptionOnIfFileIsMissing()
+        {
+            if (!FileSystem.FileExists(Settings.UnrarPath))
+            {
+                const string cannotFindUnrarFileMessage = "Unable to find unrar file at location {0}";
+                throw new FileNotFoundException(string.Format(cannotFindUnrarFileMessage, Settings.UnrarPath));
+            }
+        }
+
+        private void CreateDirectoryIfDoesNotExist(string destination)
+        {
+            if (!FileSystem.DirectoryExists(destination))
+            {
+                FileSystem.CreateDirectory(destination);
+            }
         }
     }
 }

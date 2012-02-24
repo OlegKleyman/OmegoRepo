@@ -20,6 +20,17 @@ namespace Oleg.Kleyman.Tests.Core.Tests
             TestObject = new object();
         }
 
+        public void ArgumentNullExceptionHandler(Exception exception)
+        {
+            if (exception.GetType() != typeof (ArgumentNullException))
+            {
+                const string invalidExceptionType = "This handler can only be used with an ArgumentNullException";
+                throw new InvalidOperationException(invalidExceptionType);
+            }
+            var argumentNullException = (ArgumentNullException) exception;
+            Assert.AreEqual("names", argumentNullException.ParamName);
+        }
+
         [Test]
         public void CheckCoverage()
         {
@@ -32,17 +43,6 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                    };
 
             CoverageAnalyzer.ValidateMembersNoCoverage<CoverageAnalyzer>(knownMembers, true);
-        }
-
-        public void ArgumentNullExceptionHandler(Exception exception)
-        {
-            if (exception.GetType() != typeof (ArgumentNullException))
-            {
-                const string invalidExceptionType = "This handler can only be used with an ArgumentNullException";
-                throw new InvalidOperationException(invalidExceptionType);
-            }
-            var argumentNullException = (ArgumentNullException) exception;
-            Assert.AreEqual("names", argumentNullException.ParamName);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClass));
 
-            bool result = coverageAnalyzer.ValidateMembers(knownMembers);
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
             Assert.IsTrue(result);
         }
 
@@ -80,7 +80,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMembers(null);
+            var result = coverageAnalyzer.ValidateMembers(null);
             Assert.IsFalse(result);
         }
 
@@ -99,7 +99,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMembers(knownMembers);
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
             Assert.IsFalse(result);
         }
 
@@ -117,7 +117,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMembers(knownMembers);
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
             Assert.IsFalse(result);
         }
 
@@ -129,7 +129,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMembers(knownMembers);
+            var result = coverageAnalyzer.ValidateMembers(knownMembers);
             Assert.IsFalse(result);
         }
 
@@ -146,7 +146,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                        {"ReferenceEquals", 1}
                                    };
 
-            bool result = CoverageAnalyzer.ValidateMembersNoCoverage<object>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<object>(knownMembers, false);
 
             Assert.IsFalse(result);
         }
@@ -163,7 +163,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                        {"ReferenceEquals", 1}
                                    };
 
-            bool result = CoverageAnalyzer.ValidateMembersNoCoverage<object>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<object>(knownMembers, false);
 
             Assert.IsFalse(result);
         }
@@ -179,7 +179,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                        {"Baz", 1},
                                        {"Qux", 1}
                                    };
-            bool result = CoverageAnalyzer.ValidateMembersNoCoverage<TestClass>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<TestClass>(knownMembers, false);
             Assert.IsFalse(result);
         }
 
@@ -195,7 +195,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
                                        {"Qux", 1},
                                        {"CompareTo", 1}
                                    };
-            bool result = CoverageAnalyzer.ValidateMembersNoCoverage<TestClass>(knownMembers, false);
+            var result = CoverageAnalyzer.ValidateMembersNoCoverage<TestClass>(knownMembers, false);
             Assert.IsTrue(result);
         }
 
@@ -206,7 +206,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClass));
 
-            bool result = coverageAnalyzer.ValidateMethods(knownMethods);
+            var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsTrue(result);
         }
 
@@ -220,7 +220,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMethods(null);
+            var result = coverageAnalyzer.ValidateMethods(null);
             Assert.IsFalse(result);
         }
 
@@ -239,7 +239,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMethods(knownMethods);
+            var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsFalse(result);
         }
 
@@ -257,7 +257,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMethods(knownMethods);
+            var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsFalse(result);
         }
 
@@ -269,7 +269,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMethods(knownMethods);
+            var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsFalse(result);
         }
 
@@ -280,7 +280,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClassTwo));
 
-            bool result = coverageAnalyzer.ValidateMethods(knownMethods);
+            var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsTrue(result);
         }
 
@@ -298,7 +298,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateMethods(knownMethods);
+            var result = coverageAnalyzer.ValidateMethods(knownMethods);
             Assert.IsTrue(result);
         }
 
@@ -309,7 +309,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClassTwo));
 
-            bool result = coverageAnalyzer.ValidateProperties(knownProperties);
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsTrue(result);
         }
 
@@ -320,7 +320,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClass));
 
-            bool result = coverageAnalyzer.ValidateProperties(knownProperties);
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsFalse(result);
         }
 
@@ -331,7 +331,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClass));
 
-            bool result = coverageAnalyzer.ValidateProperties(knownProperties);
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsFalse(result);
         }
 
@@ -342,7 +342,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClass));
 
-            bool result = coverageAnalyzer.ValidateProperties(knownProperties);
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
 
             Assert.IsFalse(result);
         }
@@ -354,7 +354,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClass));
 
-            bool result = coverageAnalyzer.ValidateProperties(knownProperties);
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsTrue(result);
         }
 
@@ -368,7 +368,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var coverageAnalyzer = new CoverageAnalyzer(typeof (object));
 
-            bool result = coverageAnalyzer.ValidateProperties(null);
+            var result = coverageAnalyzer.ValidateProperties(null);
             Assert.IsFalse(result);
         }
 
@@ -379,7 +379,7 @@ namespace Oleg.Kleyman.Tests.Core.Tests
 
             var coverageAnalyzer = new CoverageAnalyzer(typeof (TestClassTwo));
 
-            bool result = coverageAnalyzer.ValidateProperties(knownProperties);
+            var result = coverageAnalyzer.ValidateProperties(knownProperties);
             Assert.IsTrue(result);
         }
     }

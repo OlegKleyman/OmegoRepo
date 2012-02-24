@@ -10,14 +10,14 @@ namespace Oleg.Kleyman.Core.Configuration
         ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by file path.
         /// </summary>
         /// <param name="configurationFilePath"> UNC path to the configuration file </param>
-        /// <param name="sectionName">The name of the configuration section to load.</param>
+        /// <param name="sectionName"> The name of the configuration section to load. </param>
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
         public T GetSettingsByConfigurationFile(string configurationFilePath, string sectionName)
         {
             ThrowExceptionOnInvalidPathArgument(configurationFilePath);
-            
+
             ThrowExceptionOnInvalidArguments(sectionName);
-            
+
             var fileMap = new ExeConfigurationFileMap
                               {
                                   ExeConfigFilename = configurationFilePath
@@ -45,10 +45,12 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <summary>
         ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
         /// </summary>
-        /// <param name="configuration"> The <see cref="Oleg.Kleyman.Core.Configuration" /> object containing the <see cref="System.Configuration.ConfigurationSection"/> to load.</param>
-        /// <param name="sectionName">The name of the configuration section to load.</param>
+        /// <param name="configuration"> The <see cref="Oleg.Kleyman.Core.Configuration" /> object containing the <see
+        ///    cref="System.Configuration.ConfigurationSection" /> to load. </param>
+        /// <param name="sectionName"> The name of the configuration section to load. </param>
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
-        public T GetConfigurationSectionByConfiguration(System.Configuration.Configuration configuration, string sectionName)
+        public T GetConfigurationSectionByConfiguration(System.Configuration.Configuration configuration,
+                                                        string sectionName)
         {
             ThrowExceptionOnInvalidArguments(configuration, sectionName);
 
@@ -56,10 +58,11 @@ namespace Oleg.Kleyman.Core.Configuration
 
             ThrowExceptionOnConfigurationSectionNull(sectionName, section);
 
-            return (T)section;
+            return (T) section;
         }
 
-        private static void ThrowExceptionOnInvalidArguments(System.Configuration.Configuration configuration, string sectionName)
+        private static void ThrowExceptionOnInvalidArguments(System.Configuration.Configuration configuration,
+                                                             string sectionName)
         {
             if (configuration == null)
             {
@@ -90,8 +93,9 @@ namespace Oleg.Kleyman.Core.Configuration
         {
             if (section == null)
             {
-                var xbmcCopierConfigurationSectionNotFoundMessage = string.Format("{0} configuration section not found.",
-                                                                                  sectionName);
+                var xbmcCopierConfigurationSectionNotFoundMessage = string.Format(
+                    "{0} configuration section not found.",
+                    sectionName);
                 throw new ConfigurationErrorsException(xbmcCopierConfigurationSectionNotFoundMessage);
             }
         }
@@ -99,7 +103,7 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <summary>
         ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
         /// </summary>
-        /// <param name="sectionName">The name of the configuration section to load.</param>
+        /// <param name="sectionName"> The name of the configuration section to load. </param>
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
         public T GetConfigurationBySectionName(string sectionName)
         {
@@ -108,7 +112,7 @@ namespace Oleg.Kleyman.Core.Configuration
             var section = ConfigurationManager.GetSection(sectionName);
             ThrowExceptionOnConfigurationSectionNull(sectionName, section as ConfigurationSection);
 
-            return (T)ConfigurationManager.GetSection(sectionName);
+            return (T) ConfigurationManager.GetSection(sectionName);
         }
     }
 }

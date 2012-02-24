@@ -13,7 +13,7 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void InstanceTest()
         {
-            Singleton instance = Singleton.Instance;
+            var instance = Singleton.Instance;
             Assert.IsNotNull(instance);
             Assert.IsInstanceOf<Singleton>(instance);
         }
@@ -21,8 +21,8 @@ namespace Oleg.Kleyman.Core.Tests
         [Test]
         public void IsSingletonTest()
         {
-            Singleton instance1 = Singleton.Instance;
-            Singleton instance2 = Singleton.Instance;
+            var instance1 = Singleton.Instance;
+            var instance2 = Singleton.Instance;
             Assert.AreEqual(instance1, instance2);
         }
     }

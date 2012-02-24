@@ -52,7 +52,7 @@ namespace Oleg.Kleyman.Core.Configuration
         ///   Creates an instance of a configuration element using the default constructor regardless of access level.
         /// </summary>
         /// <remarks>
-        /// Use wisely. This method can be dangerous when misused.
+        ///   Use wisely. This method can be dangerous when misused.
         /// </remarks>
         /// <returns> Returns an instance of a ConfigurationElement. </returns>
         protected override ConfigurationElement CreateNewElement()

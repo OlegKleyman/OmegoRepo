@@ -32,8 +32,8 @@ namespace Oleg.Kleyman.Tests.Core
         private static IEnumerable<MethodBase> FilterProperties(IEnumerable<MethodBase> methods)
         {
             var filteredResult = from method in methods
-                                                     where !IsMemberPropertyAAcessor(method)
-                                                     select method;
+                                 where !IsMemberPropertyAAcessor(method)
+                                 select method;
             return filteredResult;
         }
 
@@ -73,10 +73,10 @@ namespace Oleg.Kleyman.Tests.Core
             var members = _targetType.GetMembers(BINDING_FLAGS);
 
             var filteredMembers = (from mem in members
-                                                       where mem is PropertyInfo ||
-                                                             (mem is MethodBase
-                                                              && !IsMemberPropertyAAcessor((MethodBase) mem))
-                                                       select mem);
+                                   where mem is PropertyInfo ||
+                                         (mem is MethodBase
+                                          && !IsMemberPropertyAAcessor((MethodBase) mem))
+                                   select mem);
 
             var allKnown = ValidateMembers(names, filteredMembers);
 
@@ -86,8 +86,8 @@ namespace Oleg.Kleyman.Tests.Core
         private bool ValidateMembers(IDictionary<string, int> names, IEnumerable<MemberInfo> members)
         {
             var namesIncluded = (from name in names
-                                  where name.Value == members.Count(member => member.Name == name.Key)
-                                  select name).Count() == names.Count;
+                                 where name.Value == members.Count(member => member.Name == name.Key)
+                                 select name).Count() == names.Count;
             if (!namesIncluded)
             {
                 return false;
