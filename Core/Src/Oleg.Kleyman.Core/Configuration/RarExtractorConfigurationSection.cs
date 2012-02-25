@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Oleg.Kleyman.Core.Configuration
 {
-    public class RarExtractorConfigurationSection : SingleValueConfigurationSection, IRarExtractorSettings
+    public sealed class RarExtractorConfigurationSection : SingleValueConfigurationSection, IRarExtractorSettings
     {
         private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
         private static IRarExtractorSettings __defaultSettings;
@@ -14,7 +14,7 @@ namespace Oleg.Kleyman.Core.Configuration
             __syncLock = new object();
         }
 
-        protected RarExtractorConfigurationSection()
+        private RarExtractorConfigurationSection()
         {
         }
 

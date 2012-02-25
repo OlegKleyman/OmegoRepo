@@ -1,41 +1,41 @@
+using System;
 using System.IO;
 
 namespace Oleg.Kleyman.Tests.Core
 {
     public class MockDirectory : FileSystemInfo
     {
-        private readonly string _path;
+        private string _name;
 
         public MockDirectory(string path)
         {
-            _path = path;
+            FullPath = path;
         }
 
         #region Overrides of FileSystemInfo
 
         public override void Delete()
         {
-            throw new System.NotImplementedException();
+
         }
 
         public override string Name
         {
-            get { throw new System.NotImplementedException(); }
+            get { return _name ?? (_name = GetDirectoryName()); }
+        }
+
+        private string GetDirectoryName()
+        {
+            var candidates = FullPath.Split(new[] {'\\'}, StringSplitOptions.RemoveEmptyEntries);
+            return candidates[candidates.GetUpperBound(0)];
         }
 
         public override bool Exists
         {
-            get { throw new System.NotImplementedException(); }
+            get { return true; }
         }
 
         #endregion
 
-        public override string FullName
-        {
-            get
-            {
-                return _path;
-            }
-        }
     }
 }

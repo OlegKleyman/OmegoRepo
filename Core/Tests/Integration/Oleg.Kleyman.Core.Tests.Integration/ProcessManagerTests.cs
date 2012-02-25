@@ -20,9 +20,10 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         public void StartTest()
         {
             var processManager = new ProcessManager();
-            var processInfo = new ProcessStartInfo(@"..\..\..\..\..\..\Common\Test\test.bat")
+            var processInfo = new ProcessStartInfo("cmd")
                                   {
-                                      CreateNoWindow = true
+                                      CreateNoWindow = true,
+                                      WindowStyle = ProcessWindowStyle.Hidden
                                   };
             var process = processManager.Start(processInfo);
             Assert.IsInstanceOf<SystemProcess>(process);

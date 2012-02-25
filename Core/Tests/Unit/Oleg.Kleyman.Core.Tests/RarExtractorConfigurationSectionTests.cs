@@ -10,7 +10,6 @@ namespace Oleg.Kleyman.Core.Tests
     public class RarExtractorConfigurationSectionTests
     {
         private IDictionary<string, object> PropertyNameValues { get; set; }
-        protected Mock<RarExtractorConfigurationSection> MockRarExtractorConfigurationSection { get; set; }
 
         [TestFixtureSetUp]
         public void Setup()
@@ -19,7 +18,6 @@ namespace Oleg.Kleyman.Core.Tests
                                      {
                                          {"unrarPath", "test"}
                                      };
-            MockRarExtractorConfigurationSection = new Mock<RarExtractorConfigurationSection>();
         }
 
         [Test]
@@ -40,13 +38,6 @@ namespace Oleg.Kleyman.Core.Tests
             Assert.AreEqual(1, configurationSection.ElementInformation.Properties.Count);
             Assert.AreEqual("test", configurationSection.Value);
             Assert.AreEqual("test", ((IRarExtractorSettings) configurationSection).UnrarPath);
-        }
-
-        [Test]
-        public void DefaultConstructorTest()
-        {
-            var result = MockRarExtractorConfigurationSection.Object;
-            Assert.AreEqual(null, result.Value);
         }
     }
 }

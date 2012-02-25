@@ -41,7 +41,7 @@ namespace Oleg.Kleyman.Core.Tests
 
             #region ExtractUnrarFileNotFoundTest
 
-            _fileSystem.Setup(x => x.FileExists(@"C:\Program Files\WinRAR\InvalidFile.exe")).Throws(new FileNotFoundException(string.Format(@"Unable to find unrar file at location C:\Program Files\WinRAR\InvalidFile.exe")));
+            _fileSystem.Setup(x => x.FileExists(@"C:\Program Files\WinRAR\InvalidFile.exe")).Returns(false);
 
             #endregion
 

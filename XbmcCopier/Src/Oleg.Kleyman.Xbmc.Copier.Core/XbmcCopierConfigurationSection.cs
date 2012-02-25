@@ -83,15 +83,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         #region ISettingsProvider Members
 
         /// <summary>
-        ///   Gets the unrar.exe location from the config.
-        /// </summary>
-        [ConfigurationProperty(UNRAR_PATH_PROPERTY_NAME, IsRequired = true)]
-        string ISettingsProvider.UnrarPath
-        {
-            get { return base[UNRAR_PATH_PROPERTY_NAME] as string; }
-        }
-
-        /// <summary>
         ///   Gets the TV path location from the config.
         /// </summary>
         [ConfigurationProperty(TV_PATH_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
