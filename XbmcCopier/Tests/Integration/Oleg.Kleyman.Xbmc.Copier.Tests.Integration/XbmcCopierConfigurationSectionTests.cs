@@ -26,7 +26,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
         public void DefaultSettingsTests()
         {
             var settings = XbmcCopierConfigurationSection.DefaultSettings;
-            Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
             Assert.AreEqual(2, settings.MovieFilters.Length);
@@ -45,7 +44,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration
                 (ISettingsProvider)
                 factory.GetSettingsByConfigurationFile(XbmcCopierValidNoFiltersConfigFilePath,
                                                        CONFIGURATION_SECTION_NAME);
-            Assert.AreEqual(@"C:\Program Files\WinRAR\unrar.exe", settings.UnrarPath);
             Assert.AreEqual(@"C:\Videos\Movies", settings.MoviesPath);
             Assert.AreEqual(@"C:\Videos\Tv", settings.TvPath);
             Assert.AreEqual(0, settings.MovieFilters.Length);
