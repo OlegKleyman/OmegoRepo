@@ -42,6 +42,7 @@
     <Compile Include="Configuration\ConfigurationElementCollection.cs" />
     <Compile Include="Configuration\IConfigurationElement.cs" />
     <Compile Include="Extractor.cs" />
+    <Compile Include="FileCopier.cs" />
     <Compile Include="FileDetails.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="IFile.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="IProcessManager.cs" />
     <Compile Include="IRarExtractorSettings.cs" />
     <Compile Include="Configuration\RarExtractorConfigurationSection.cs" />
+    <Compile Include="Output.cs" />
     <Compile Include="SystemProcess.cs" />
     <Compile Include="ProcessManager.cs" />
     <Compile Include="ReflectiveStringTypeConverter.cs" />

@@ -28,10 +28,9 @@ namespace Oleg.Kleyman.Xbmc.Copier
             var releaseName = torrentName;
             var builder = new ReleaseBuilder(XbmcCopierConfigurationSection.DefaultSettings, releaseName);
             var release = builder.Build();
-            var output = new ReleaseOutput(release, fileName, downloadPath);
+            var output = new ReleaseOutput(fileName, downloadPath, release);
             var fileSystem = new FileSystem();
-            var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings,
-                                            RarExtractor.Default, fileSystem);
+            var copier = new XbmcFileCopier(XbmcCopierConfigurationSection.DefaultSettings, new XbmcFileCopierDependencies(RarExtractor.Default, fileSystem));
             if (release.ReleaseType == ReleaseType.Tv || release.ReleaseType == ReleaseType.Movie)
             {
                 copier.Copy(output);

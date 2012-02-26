@@ -6,35 +6,68 @@ using Oleg.Kleyman.Core;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
-    public sealed class XbmcFileCopier
+    public sealed class XbmcFileCopier : FileCopier
     {
-        public XbmcFileCopier(ISettingsProvider settings, Extractor extractor, IFileSystem fileSystem)
+        public XbmcFileCopier(ISettingsProvider settings, XbmcFileCopierDependencies xbmcFileCopierDependencies)
         {
             ConfigSettings = settings;
-            Extractor = extractor;
-            FileSystem = fileSystem;
+            Dependencies = xbmcFileCopierDependencies;
         }
 
-        private Extractor Extractor { get; set; }
+        public XbmcFileCopierDependencies Dependencies { get; set; }
         private ISettingsProvider ConfigSettings { get; set; }
-        private IFileSystem FileSystem { get; set; }
 
-        public void Copy(ReleaseOutput output)
+
+        public override Output Copy(Output output)
         {
-            switch (output.Release.ReleaseType)
+            ThrowInvalidArgumentExceptionIfOutputIsInvalidType(output);
+            var releaseOutput = (ReleaseOutput) output;
+            
+            switch (releaseOutput.Release.ReleaseType)
             {
                 case ReleaseType.Tv:
-                    CopyTvRelease(output);
+                    CopyTvRelease(releaseOutput);
                     break;
                 case ReleaseType.Movie:
-                    CopyMovieRelease(output);
+                    CopyMovieRelease(releaseOutput);
                     break;
                 case ReleaseType.Other:
                     goto default;
                 default:
                     throw new ApplicationException(string.Format("Release type of {0} is not supported.",
-                                                                 Enum.GetName(output.Release.ReleaseType.GetType(),
-                                                                              output.Release.ReleaseType)));
+                                                                 Enum.GetName(releaseOutput.Release.ReleaseType.GetType(),
+                                                                              releaseOutput.Release.ReleaseType)));
+            }
+
+            var copiedOutput = GetOutput(releaseOutput);
+            return null;
+        }
+
+        private Output GetOutput(ReleaseOutput releaseOutput)
+        {
+            if(releaseOutput.Release.ReleaseType ==  ReleaseType.Tv)
+            {
+                var targetDirectory = Path.Combine(ConfigSettings.TvPath, releaseOutput.Release.Name);
+                if(!string.IsNullOrEmpty(releaseOutput.FileName))
+                {
+                    var fileExists = Dependencies.FileSystem.FileExists(Path.Combine(targetDirectory, releaseOutput.FileName));
+                    if(fileExists)
+                    {
+                        return new Output(releaseOutput.FileName, targetDirectory);
+                    }
+                }
+            }
+            //TODO: Finish
+            return null;
+        }
+
+        private void ThrowInvalidArgumentExceptionIfOutputIsInvalidType(object output)
+        {
+            if(!(output is ReleaseOutput))
+            {
+                const string mustBeOfTypeReleaseoutputMessage = "Must be of type ReleaseOutput";
+                const string outputName = "output";
+                throw new ArgumentException(mustBeOfTypeReleaseoutputMessage, outputName);
             }
         }
 
@@ -65,17 +98,18 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         {
             foreach (var compressedMovieFile in compressedMovieFiles)
             {
-                Extractor.Extract(compressedMovieFile.FullName, destinationPath);
+                Dependencies.Extractor.Extract(compressedMovieFile.FullName, destinationPath);
             }
         }
 
         private void CopyTvRelease(ReleaseOutput output)
         {
-            if (!Directory.Exists(ConfigSettings.TvPath + output.Release.Name))
+            if (!Dependencies.FileSystem.DirectoryExists(ConfigSettings.TvPath + output.Release.Name))
             {
-                Directory.CreateDirectory(ConfigSettings.TvPath + output.Release.Name);
+                Dependencies.FileSystem.CreateDirectory(ConfigSettings.TvPath + output.Release.Name);
             }
 
+            var destination = Path.Combine(ConfigSettings.TvPath, output.Release.Name);
             if (string.IsNullOrEmpty(output.FileName))
             {
                 var tvFiles = GetFiles(new[] {".mkv", ".avi", ".wmv"}, output);
@@ -90,22 +124,21 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                 }
                 else
                 {
-                    var tvPath = Path.Combine(ConfigSettings.TvPath, output.Release.Name);
                     tvFiles = GetFiles(new[] {".rar"}, output);
-                    ExtractFiles(tvFiles, tvPath);
+                    ExtractFiles(tvFiles, destination);
                 }
             }
             else
             {
-                CopySingleFile(ConfigSettings.TvPath + output.Release.Name, output);
+                CopySingleFile(destination, output);
             }
         }
 
         private void CopySingleFile(string destination, ReleaseOutput output)
         {
-            var sourceFilePath = Path.Combine(output.DownloadPath, output.FileName);
+            var sourceFilePath = Path.Combine(output.TargetDirectory, output.FileName);
             destination = Path.Combine(destination, output.FileName);
-            FileSystem.CopyFile(sourceFilePath, destination);
+            Dependencies.FileSystem.CopyFile(sourceFilePath, destination);
         }
 
         private void CopyFiles(IEnumerable<FileInfo> files, string destination, ReleaseOutput output)
@@ -114,13 +147,13 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             foreach (var file in files)
             {
                 var fileDestination = Path.Combine(destination, file.Name);
-                FileSystem.CopyFile(file.FullName, fileDestination);
+                Dependencies.FileSystem.CopyFile(file.FullName, fileDestination);
             }
         }
 
         private IEnumerable<FileInfo> GetFiles(IEnumerable<string> extentions, ReleaseOutput output)
         {
-            var files = FileSystem.GetFilesByExtensions(output.DownloadPath, extentions);
+            var files = Dependencies.FileSystem.GetFilesByExtensions(output.TargetDirectory, extentions);
 
             return files;
         }

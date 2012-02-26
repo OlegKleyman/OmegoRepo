@@ -1,16 +1,16 @@
+using Oleg.Kleyman.Core;
+
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
-    public class ReleaseOutput
+    public class ReleaseOutput : Output
     {
-        public ReleaseOutput(Release release, string fileName, string downloadPath)
+        public ReleaseOutput(string fileName, string targetDirectory, Release release) : base(fileName, targetDirectory)
         {
             Release = release;
             FileName = fileName;
-            DownloadPath = downloadPath;
+            TargetDirectory = targetDirectory;
         }
 
         public Release Release { get; set; }
-        public string FileName { get; set; }
-        public string DownloadPath { get; set; }
     }
 }

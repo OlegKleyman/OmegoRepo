@@ -48,6 +48,7 @@
     <Compile Include="ReleaseType.cs" />
     <Compile Include="XbmcCopierConfigurationSection.cs" />
     <Compile Include="XbmcFileCopier.cs" />
+    <Compile Include="XbmcFileCopierDependencies.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

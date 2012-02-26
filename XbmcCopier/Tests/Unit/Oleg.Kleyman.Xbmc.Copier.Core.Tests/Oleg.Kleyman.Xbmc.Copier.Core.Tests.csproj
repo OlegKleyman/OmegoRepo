@@ -43,10 +43,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReleaseBuilderTests.cs" />
     <Compile Include="ReleaseOutputTests.cs" />
     <Compile Include="ReleaseTests.cs" />
+    <Compile Include="TestSettings.cs" />
+    <Compile Include="XbmcFileCopierTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Core\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+      <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
+      <Name>Oleg.Kleyman.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Core\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
       <Project>{E5860385-4532-4BDA-B835-ED7073BCEA31}</Project>
       <Name>Oleg.Kleyman.Tests.Core</Name>
