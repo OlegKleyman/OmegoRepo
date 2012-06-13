@@ -3,7 +3,7 @@ namespace Oleg.Kleyman.Winrar.Interop
     /// <summary>
     /// Mode in which archive is to be opened for processing.
     /// </summary>
-    public enum OpenMode
+    public enum OpenMode : uint
     {
         /// <summary>
         /// Open archive for listing contents only

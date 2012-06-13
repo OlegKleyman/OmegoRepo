@@ -1,6 +1,6 @@
 namespace Oleg.Kleyman.Winrar.Interop
 {
-    internal enum RarStatus : uint
+    public enum RarStatus : uint
     {
         Success = 0,
         EndOfArchive = 10,

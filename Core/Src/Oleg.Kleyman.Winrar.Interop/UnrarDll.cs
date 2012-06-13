@@ -19,6 +19,13 @@ namespace Oleg.Kleyman.Winrar.Interop
         private static extern int RARProcessFileW(IntPtr hArcData, int operation,
             [MarshalAs(UnmanagedType.LPWStr)] string destPath,
             [MarshalAs(UnmanagedType.LPWStr)]string destName);
+        [DllImport(@"C:\test\unrar.dll")]
+        private static extern void RARSetCallback(IntPtr hArcData, CallbackProc callback, IntPtr userData);
+
+        void IUnrar.RARSetCallback(IntPtr hArcData, CallbackProc callback, IntPtr userData)
+        {
+            RARSetCallback(hArcData, callback, userData);
+        }
 
         int IUnrar.RARProcessFileW(IntPtr handle, int operation, string destPath, string destName)
         {

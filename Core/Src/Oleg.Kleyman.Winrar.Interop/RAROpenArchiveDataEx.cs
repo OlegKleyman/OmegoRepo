@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 
 namespace Oleg.Kleyman.Winrar.Interop
@@ -16,7 +17,7 @@ namespace Oleg.Kleyman.Winrar.Interop
         public string ArcName;
         [MarshalAs(UnmanagedType.LPWStr)]
         public string ArcNameW;
-        public uint OpenMode;
+        public OpenMode OpenMode;
         public uint OpenResult;
         [MarshalAs(UnmanagedType.LPStr)]
         public string CmtBuf;
@@ -24,6 +25,8 @@ namespace Oleg.Kleyman.Winrar.Interop
         public uint CmtSize;
         public uint CmtState;
         public uint Flags;
+        public CallbackProc Callback;
+        public IntPtr UserData;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
         public uint[] Reserved;
     }
