@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Winrar.Core", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Winrar.Core.Tests.Integration", "Tests\Integration\Oleg.Kleyman.Winrar.Core.Tests.Integration\Oleg.Kleyman.Winrar.Core.Tests.Integration.csproj", "{1007AEDF-BA4B-44C8-B103-8F35FA052036}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Winrar.Core.Tests", "Tests\Unit\Oleg.Kleyman.Winrar.Core.Tests\Oleg.Kleyman.Winrar.Core.Tests.csproj", "{E15B29E3-1C76-4C2C-B1F6-E5F430903CD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{1007AEDF-BA4B-44C8-B103-8F35FA052036}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1007AEDF-BA4B-44C8-B103-8F35FA052036}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1007AEDF-BA4B-44C8-B103-8F35FA052036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E15B29E3-1C76-4C2C-B1F6-E5F430903CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E15B29E3-1C76-4C2C-B1F6-E5F430903CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E15B29E3-1C76-4C2C-B1F6-E5F430903CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E15B29E3-1C76-4C2C-B1F6-E5F430903CD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{036140E5-8AF1-4F93-A740-F70D5A5097BF} = {92B86929-5B59-4725-8088-C465FB4526DD}
 		{A8C165C7-CAC1-4E3F-8C51-BD9E0B81B9D5} = {92B86929-5B59-4725-8088-C465FB4526DD}
+		{E15B29E3-1C76-4C2C-B1F6-E5F430903CD1} = {92B86929-5B59-4725-8088-C465FB4526DD}
 		{0675E555-1684-4D3F-8423-C3CA2D9C5D71} = {5AB51E71-F1B7-4D23-8FC2-8F53A443487A}
 		{E5860385-4532-4BDA-B835-ED7073BCEA31} = {5AB51E71-F1B7-4D23-8FC2-8F53A443487A}
 		{95F7BC77-D86F-43A5-A58C-E0D9842FDECF} = {5AB51E71-F1B7-4D23-8FC2-8F53A443487A}

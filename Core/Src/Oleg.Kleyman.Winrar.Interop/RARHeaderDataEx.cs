@@ -31,11 +31,5 @@ namespace Oleg.Kleyman.Winrar.Interop
         public uint CmtState;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1024)]
         public uint[] Reserved;
-
-        public void Initialize()
-        {
-            this.CmtBuf = new string((char)0, 65536);
-            this.CmtBufSize = 65536;
-        }
     }
 }

@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Moq">
-      <HintPath>..\..\..\..\Common\Lib\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.6.0.12017, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Common\Lib\nunit.framework.dll</HintPath>
@@ -49,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ArchiveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnrarHandleTests.cs" />
     <Compile Include="UnrarTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +57,10 @@
     <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Winrar.Core\Oleg.Kleyman.Winrar.Core.csproj">
       <Project>{9E4749CF-3F04-4374-A6E3-91BAC775823A}</Project>
       <Name>Oleg.Kleyman.Winrar.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Winrar.Interop\Oleg.Kleyman.Winrar.Interop.csproj">
+      <Project>{95F7BC77-D86F-43A5-A58C-E0D9842FDECF}</Project>
+      <Name>Oleg.Kleyman.Winrar.Interop</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

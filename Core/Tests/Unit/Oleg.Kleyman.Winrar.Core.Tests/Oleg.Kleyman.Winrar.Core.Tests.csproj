@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{95F7BC77-D86F-43A5-A58C-E0D9842FDECF}</ProjectGuid>
+    <ProjectGuid>{E15B29E3-1C76-4C2C-B1F6-E5F430903CD1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Oleg.Kleyman.Winrar.Interop</RootNamespace>
-    <AssemblyName>Oleg.Kleyman.Winrar.Interop</AssemblyName>
+    <RootNamespace>Oleg.Kleyman.Winrar.Core.Tests</RootNamespace>
+    <AssemblyName>Oleg.Kleyman.Winrar.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\..\..\Common\Lib\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Common\Lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,14 +47,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CallbackProc.cs" />
-    <Compile Include="IUnrar.cs" />
-    <Compile Include="OpenMode.cs" />
+    <Compile Include="UnrarHandleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RARHeaderDataEx.cs" />
-    <Compile Include="RAROpenArchiveDataEx.cs" />
-    <Compile Include="RarStatus.cs" />
-    <Compile Include="UnrarDll.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
+      <Project>{E5860385-4532-4BDA-B835-ED7073BCEA31}</Project>
+      <Name>Oleg.Kleyman.Tests.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Winrar.Core\Oleg.Kleyman.Winrar.Core.csproj">
+      <Project>{9E4749CF-3F04-4374-A6E3-91BAC775823A}</Project>
+      <Name>Oleg.Kleyman.Winrar.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Winrar.Interop\Oleg.Kleyman.Winrar.Interop.csproj">
+      <Project>{95F7BC77-D86F-43A5-A58C-E0D9842FDECF}</Project>
+      <Name>Oleg.Kleyman.Winrar.Interop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

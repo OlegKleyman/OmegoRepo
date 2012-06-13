@@ -8,15 +8,15 @@ namespace Oleg.Kleyman.Winrar.Interop
         [DllImport(@"C:\test\unrar.dll")]
         private static extern IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx archiveData);
         [DllImport(@"C:\test\unrar.dll")]
-        private static extern int RARCloseArchive(IntPtr hArcData);
+        private static extern RarStatus RARCloseArchive(IntPtr hArcData);
         [DllImport(@"C:\test\unrar.dll")]
-        private static extern RarStatus RARReadHeaderEx(IntPtr hArcData, ref RARHeaderDataEx headerData);
+        private static extern RarStatus RARReadHeaderEx(IntPtr hArcData, out RARHeaderDataEx headerData);
         [DllImport(@"C:\test\unrar.dll")]
         private static extern int RARProcessFile(IntPtr hArcData, int operation,
             [MarshalAs(UnmanagedType.LPStr)] string destPath,
             [MarshalAs(UnmanagedType.LPStr)] string destName);
         [DllImport(@"C:\test\unrar.dll")]
-        private static extern int RARProcessFileW(IntPtr hArcData, int operation,
+        private static extern RarStatus RARProcessFileW(IntPtr hArcData, int operation,
             [MarshalAs(UnmanagedType.LPWStr)] string destPath,
             [MarshalAs(UnmanagedType.LPWStr)]string destName);
         [DllImport(@"C:\test\unrar.dll")]
@@ -27,12 +27,12 @@ namespace Oleg.Kleyman.Winrar.Interop
             RARSetCallback(hArcData, callback, userData);
         }
 
-        int IUnrar.RARProcessFileW(IntPtr handle, int operation, string destPath, string destName)
+        RarStatus IUnrar.RARProcessFileW(IntPtr handle, int operation, string destPath, string destName)
         {
             return RARProcessFileW(handle, operation, destPath, destName);
         }
 
-        int IUnrar.RARCloseArchive(IntPtr hArcData)
+        RarStatus IUnrar.RARCloseArchive(IntPtr hArcData)
         {
             return RARCloseArchive(hArcData);
         }
@@ -42,9 +42,9 @@ namespace Oleg.Kleyman.Winrar.Interop
             return RAROpenArchiveEx(ref archiveData);
         }
 
-        RarStatus IUnrar.RARReadHeaderEx(IntPtr handle, ref RARHeaderDataEx headerData)
+        RarStatus IUnrar.RARReadHeaderEx(IntPtr handle, out RARHeaderDataEx headerData)
         {
-            return RARReadHeaderEx(handle, ref headerData);
+            return RARReadHeaderEx(handle, out headerData);
         }
 
         int IUnrar.RARProcessFile(IntPtr hArcData, int operation, string destPath, string destName)

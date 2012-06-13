@@ -6,13 +6,6 @@ namespace Oleg.Kleyman.Winrar.Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct RAROpenArchiveDataEx
     {
-        public void Initialize()
-        {
-            CmtBuf = new string((char)0, 65536);
-            CmtBufSize = 65536;
-            Reserved = new uint[32];
-        }
-
         [MarshalAs(UnmanagedType.LPStr)]
         public string ArcName;
         [MarshalAs(UnmanagedType.LPWStr)]

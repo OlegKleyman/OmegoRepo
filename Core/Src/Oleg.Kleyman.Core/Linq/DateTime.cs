@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Oleg.Kleyman.Winrar.Interop
+namespace Oleg.Kleyman.Core.Linq
 {
-    class Unrar
+    class DateTime
     {
     }
 }
