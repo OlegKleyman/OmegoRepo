@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Oleg.Kleyman.Tests.Core;
-using Enumerable = Oleg.Kleyman.Core.Linq.Enumerable;
+using Oleg.Kleyman.Core.Linq;
 
 namespace Oleg.Kleyman.Core.Tests
 {
@@ -22,7 +22,7 @@ namespace Oleg.Kleyman.Core.Tests
                                        {"Distinct", 1}
                                    };
 
-            var coverageAnalyzer = new CoverageAnalyzer(typeof (Enumerable));
+            var coverageAnalyzer = new CoverageAnalyzer(typeof (Linq.Enumerable));
 
             var result = coverageAnalyzer.ValidateMembers(knownMembers);
             if (!result)
@@ -36,8 +36,9 @@ namespace Oleg.Kleyman.Core.Tests
         public void DistinctTest()
         {
             var values = new[] {"Test1", "Test2", "Test3", "Test4", "Test2", "Test5", "Test3", "Test2"};
-            var distinctValues = Enumerable.Distinct(values, (x, y) => x == y);
-            var indexedValues = System.Linq.Enumerable.ToArray(distinctValues);
+            
+            var distinctValues = values.Distinct((x, y) => x == y);
+            var indexedValues = distinctValues.ToArray();
             Assert.AreEqual(5, indexedValues.Length);
             Assert.AreEqual("Test1", indexedValues[0]);
             Assert.AreEqual("Test2", indexedValues[1]);

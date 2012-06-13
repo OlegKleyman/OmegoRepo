@@ -156,7 +156,9 @@ namespace Oleg.Kleyman.Winrar.Core
         {
             var file = new UnpackedFile
                            {
-                               Name = _headerData.FileNameW
+                               Name = _headerData.FileNameW,
+                            //   Volume = _headerData.ArcNameW,
+
                            };
             return file;
         }
