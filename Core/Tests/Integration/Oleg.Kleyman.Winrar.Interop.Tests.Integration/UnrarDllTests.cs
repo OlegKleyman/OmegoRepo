@@ -155,7 +155,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         {
             IUnrar unrar = new UnrarDll();
             var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
+            openData.ArcName = Path.GetFullPath(@"\\vmst01\h$\NewDownloads\Video\Assassins.Creed.II-SKIDROW\sr-acii.r00");
             openData.OpenMode = OpenMode.Extract;
             var handle = unrar.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);

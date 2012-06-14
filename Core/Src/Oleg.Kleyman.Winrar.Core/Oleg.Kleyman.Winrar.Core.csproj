@@ -49,6 +49,10 @@
     <Compile Include="UnrarHandle.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+      <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
+      <Name>Oleg.Kleyman.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Oleg.Kleyman.Winrar.Interop\Oleg.Kleyman.Winrar.Interop.csproj">
       <Project>{95F7BC77-D86F-43A5-A58C-E0D9842FDECF}</Project>
       <Name>Oleg.Kleyman.Winrar.Interop</Name>

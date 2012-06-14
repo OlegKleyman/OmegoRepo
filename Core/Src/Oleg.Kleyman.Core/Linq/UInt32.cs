@@ -18,15 +18,23 @@ namespace Oleg.Kleyman.Core.Linq
             var timeValue = (ushort)(source & 0xFFFF);
             long fileTime;
             DosDateTimeToFileTime(dateValue, timeValue, out fileTime);
-            var date = DateTime.FromFileTimeUtc(fileTime);
-            date = FixDate(date);
+            var date = DateTime.FromFileTime(fileTime);
+            
             return date;
         }
 
-        private static DateTime FixDate(DateTime date)
+        public static long JoinWithLeft(this uint source, uint left)
         {
-            var fixedDate = new DateTime(date.Ticks, DateTimeKind.Local);
-            return fixedDate;
+            long leftMoved = (long)left << 32;
+            var joinedResult = leftMoved | source;
+            return joinedResult;
+        }
+
+        public static long JoinWithRight(this uint source, uint right)
+        {
+            long leftMoved = (long)source << 32;
+            var joinedResult = leftMoved | right;
+            return joinedResult;
         }
     }
 }

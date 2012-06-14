@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using Oleg.Kleyman.Core.Linq;
 using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
@@ -154,13 +155,23 @@ namespace Oleg.Kleyman.Winrar.Core
 
         private UnpackedFile GetUnpackedFile()
         {
+            var modifiedDate = GetLastModifiedDate();
+            
             var file = new UnpackedFile
                            {
                                Name = _headerData.FileNameW,
-                            //   Volume = _headerData.ArcNameW,
+                               //Volume = _headerData.ArcNameW,
+                               //LastModificationDate = modifiedDate,
 
                            };
             return file;
+        }
+
+        private DateTime GetLastModifiedDate()
+        {
+            var date = _headerData.FileTime.ToDate();
+            date = date.AddHours(4); //This is needed because the time comes back 4 hours behind what it should be.
+            return date;
         }
 
         private RarStatus SetHeaderDataAndProcessFile()
