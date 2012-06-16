@@ -4,11 +4,11 @@ namespace Oleg.Kleyman.Winrar.Core
 {
     public class UnrarFileProcessedEventArgs : EventArgs
     {
-        public UnpackedFile UnpackedFile { get; internal set; }
+        public ArchiveMember ArchiveMember { get; internal set; }
 
-        public UnrarFileProcessedEventArgs(UnpackedFile unpackedFile)
+        public UnrarFileProcessedEventArgs(ArchiveMember archiveMember)
         {
-            UnpackedFile = unpackedFile;
+            ArchiveMember = archiveMember;
         }
     }
 }

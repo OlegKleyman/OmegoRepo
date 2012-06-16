@@ -10,7 +10,7 @@ namespace Oleg.Kleyman.Winrar.Interop
         public string ArcName;
         [MarshalAs(UnmanagedType.LPWStr)]
         public string ArcNameW;
-        public OpenMode OpenMode;
+        public uint OpenMode;
         public uint OpenResult;
         [MarshalAs(UnmanagedType.LPStr)]
         public string CmtBuf;

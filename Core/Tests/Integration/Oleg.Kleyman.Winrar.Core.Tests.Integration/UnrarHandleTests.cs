@@ -14,6 +14,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
     {
         private IUnrar UnrarDll { get; set; }
         private string RarFilePath { get; set; }
+        private string InvalidRarFilePath { get; set; }
 
         #region Overrides of TestsBase
 
@@ -21,6 +22,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         {
             UnrarDll = new UnrarDll();
             RarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
+            InvalidRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\test.txt");
         }
 
         #endregion
@@ -34,8 +36,35 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             Assert.AreEqual(RarFilePath, archive.FilePath);
             Assert.AreEqual(2, archive.Files.Count);
             Assert.AreEqual("test2.txt", archive.Files[0].Name);
+            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, archive.Files[0].Flags);
+            Assert.AreEqual(new DateTime(634751294720000000), archive.Files[0].LastModificationDate);
+            Assert.AreEqual(3145642, archive.Files[0].PackedSize);
+            Assert.AreEqual(5293080, archive.Files[0].UnpackedSize);
+            Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part1.rar", archive.Files[0].Volume);
             Assert.AreEqual("test.txt", archive.Files[1].Name);
+            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, archive.Files[1].Flags);
+            Assert.AreEqual(new DateTime(634751294360000000), archive.Files[1].LastModificationDate);
+            Assert.AreEqual(297540, archive.Files[1].PackedSize);
+            Assert.AreEqual(297540, archive.Files[1].UnpackedSize);
+            Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part2.rar", archive.Files[1].Volume);
+
             unrarHandle.Close();
+        }
+
+        [Test]
+        [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to open archive.", MatchType = MessageMatch.Exact)]
+        public void OpenUnknownFormatTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDll, InvalidRarFilePath);
+            try
+            {
+                unrarHandle.OpenArchive();
+            }
+            catch (UnrarException ex)
+            {
+                Assert.AreEqual(RarStatus.BadArchive, ex.Status);
+                throw;
+            }
         }
 
         [Test]

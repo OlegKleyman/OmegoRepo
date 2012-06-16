@@ -44,7 +44,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             var handle = unrar.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);
             var result = unrar.RARCloseArchive(handle);
-            Assert.AreEqual(RarStatus.Success, result);
+            Assert.AreEqual(0, result);
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
 
             var headerData = new RARHeaderDataEx();
             var status = unrar.RARReadHeaderEx(handle, out headerData);
-            Assert.AreEqual(RarStatus.Success, status);
+            Assert.AreEqual(0, status);
 
             Assert.AreEqual("㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴整瑳楆敬爮牡", headerData.ArcName);
             Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\testFile.rar", headerData.ArcNameW);
@@ -82,30 +82,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             Assert.AreEqual(29, headerData.UnpVer);
 
             var result = unrar.RARCloseArchive(handle);
-            Assert.AreEqual(RarStatus.Success, result);
-        }
-
-        [Test]
-        public void RARProcessFileTest()
-        {
-            IUnrar unrar = new UnrarDll();
-            var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
-            openData.OpenMode = OpenMode.Extract;
-            var handle = unrar.RAROpenArchiveEx(ref openData);
-            Assert.AreNotEqual(IntPtr.Zero, handle);
-
-            var headerData = new RARHeaderDataEx();
-            var status = unrar.RARReadHeaderEx(handle, out headerData);
-            Assert.AreEqual(RarStatus.Success, status);
-
-            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
-            var extractStatus = unrar.RARProcessFile(handle, 2, string.Empty, extractPath);
-            Assert.AreEqual(0, extractStatus);
-            Assert.IsTrue(File.Exists(extractPath));
-            File.Delete(extractPath);
-            var result = unrar.RARCloseArchive(handle);
-            Assert.AreEqual(RarStatus.Success, result);
+            Assert.AreEqual(0, result);
         }
 
         [Test]
@@ -114,7 +91,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             IUnrar unrar = new UnrarDll();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
-            openData.OpenMode = OpenMode.Extract;
+            openData.OpenMode = 1;
             var handle = unrar.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);
 
@@ -124,7 +101,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             ExtractAndVerify(unrar, handle, extractPath, headerData);
 
             var result = unrar.RARCloseArchive(handle);
-            Assert.AreEqual(RarStatus.Success, result);
+            Assert.AreEqual(0, result);
         }
 
         [Test]
@@ -133,7 +110,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             IUnrar unrar = new UnrarDll();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
-            openData.OpenMode = OpenMode.Extract;
+            openData.OpenMode = 1;
             var handle = unrar.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);
             
@@ -146,7 +123,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             ExtractAndVerify(unrar, handle, extractPath, headerData);
 
             var result = unrar.RARCloseArchive(handle);
-            Assert.AreEqual(RarStatus.Success, result);
+            Assert.AreEqual(0, result);
         }
 
         private bool _callBackSuccess;
@@ -155,8 +132,8 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         {
             IUnrar unrar = new UnrarDll();
             var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"\\vmst01\h$\NewDownloads\Video\Assassins.Creed.II-SKIDROW\sr-acii.r00");
-            openData.OpenMode = OpenMode.Extract;
+            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
+            openData.OpenMode = 1;
             var handle = unrar.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);
             unrar.RARSetCallback(handle, RarCallBack, Marshal.StringToCoTaskMemUni("test data"));
@@ -172,16 +149,16 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             Assert.IsTrue(_callBackSuccess);
 
             var result = unrar.RARCloseArchive(handle);
-            Assert.AreEqual(RarStatus.Success, result);
+            Assert.AreEqual(0, result);
         }
 
         private void ExtractAndVerify(IUnrar unrar, IntPtr handle, string extractPath, RARHeaderDataEx headerData)
         {
             var status = unrar.RARReadHeaderEx(handle, out headerData);
-            Assert.AreEqual(RarStatus.Success, status);
+            Assert.AreEqual(0, status);
             var extractStatus = unrar.RARProcessFileW(handle, 2, string.Empty, extractPath);
-            Assert.AreEqual(RarStatus.Success, extractStatus);
-            Assert.AreEqual(RarStatus.Success, status);
+            Assert.AreEqual(0, extractStatus);
+            Assert.AreEqual(0, status);
             Assert.IsTrue(File.Exists(extractPath), "file doesn't exist");
             File.Delete(extractPath);
         }
@@ -192,7 +169,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             IUnrar unrar = new UnrarDll();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
-            openData.OpenMode = OpenMode.Extract;
+            openData.OpenMode = 1;
             openData.Callback = RarCallBack;
 
             openData.UserData = Marshal.StringToCoTaskMemUni("test data"); ;
@@ -211,7 +188,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             Assert.IsTrue(_callBackSuccess);
 
             var result = unrar.RARCloseArchive(handle);
-            Assert.AreEqual(RarStatus.Success, result);
+            Assert.AreEqual(0, result);
         }
 
         private int RarCallBack(uint message, IntPtr userData, IntPtr p1, int p2)

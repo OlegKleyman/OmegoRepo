@@ -43,11 +43,9 @@
   <ItemGroup>
     <Compile Include="CallbackProc.cs" />
     <Compile Include="IUnrar.cs" />
-    <Compile Include="OpenMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RARHeaderDataEx.cs" />
     <Compile Include="RAROpenArchiveDataEx.cs" />
-    <Compile Include="RarStatus.cs" />
     <Compile Include="UnrarDll.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

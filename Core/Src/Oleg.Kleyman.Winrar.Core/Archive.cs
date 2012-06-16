@@ -11,14 +11,14 @@ namespace Oleg.Kleyman.Winrar.Core
     {
         public IUnrarHandle Handle { get; internal set; }
 
-        public Collection<UnpackedFile> Files { get; private set; }
+        public Collection<ArchiveMember> Files { get; private set; }
 
         public string FilePath { get; internal set; }
 
         internal Archive(IUnrarHandle handle)
         {
             Handle = handle;
-            Files = new Collection<UnpackedFile>();
+            Files = new Collection<ArchiveMember>();
         }
 
 

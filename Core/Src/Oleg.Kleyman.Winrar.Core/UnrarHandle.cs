@@ -96,13 +96,14 @@ namespace Oleg.Kleyman.Winrar.Core
             var openData = new RAROpenArchiveDataEx
                                {
                                    ArcName = RarFilePath,
-                                   OpenMode = OpenMode.List
+                                   OpenMode = (uint)OpenMode.List
                                };
             Handle = UnrarDll.RAROpenArchiveEx(ref openData);
             GC.ReRegisterForFinalize(this);
             if (Handle == default(IntPtr))
             {
-                throw new ApplicationException("Unable to open archive.");
+                const string unableToOpenArchiveMessage = "Unable to open archive.";
+                throw new UnrarException(unableToOpenArchiveMessage, (RarStatus) openData.OpenResult);
             }
 
             IsOpen = true;
@@ -133,56 +134,40 @@ namespace Oleg.Kleyman.Winrar.Core
                 case RarStatus.EndOfArchive:
                     break;
                 default:
-                    //TODO: throw custom exception
-                    break;
+                    const string unableToReadHeaderDataMessage = "Unable to read header data.";
+                    throw new UnrarException(unableToReadHeaderDataMessage, status);
             }
         }
 
         private void SetArchiveData(Archive archive)
         {
-            var unpackedFile = GetUnpackedFile();
-            OnFileProcessed(unpackedFile);
-            archive.Files.Add(unpackedFile);
+            var archiveMember = (ArchiveMember)_headerData;
+            OnFileProcessed(archiveMember);
+            archive.Files.Add(archiveMember);
         }
 
-        protected void OnFileProcessed(UnpackedFile unpackedFile)
+        protected virtual void OnFileProcessed(ArchiveMember archiveMember)
         {
-            if(FileProcessed != null)
+            if (FileProcessed != null)
             {
-                FileProcessed(this, new UnrarFileProcessedEventArgs(unpackedFile));
+                FileProcessed(this, new UnrarFileProcessedEventArgs(archiveMember));
             }
-        }
-
-        private UnpackedFile GetUnpackedFile()
-        {
-            var modifiedDate = GetLastModifiedDate();
-            
-            var file = new UnpackedFile
-                           {
-                               Name = _headerData.FileNameW,
-                               //Volume = _headerData.ArcNameW,
-                               //LastModificationDate = modifiedDate,
-
-                           };
-            return file;
-        }
-
-        private DateTime GetLastModifiedDate()
-        {
-            var date = _headerData.FileTime.ToDate();
-            date = date.AddHours(4); //This is needed because the time comes back 4 hours behind what it should be.
-            return date;
         }
 
         private RarStatus SetHeaderDataAndProcessFile()
         {
             var status = UnrarDll.RARReadHeaderEx(Handle, out _headerData);
             UnrarDll.RARProcessFileW(Handle, 0, null, null);
-            return status;
+            return (RarStatus)status;
         }
 
         private void ValidatePrerequisites()
         {
+            if (IsOpen)
+            {
+                const string objectIsOpenMessage = "Object is open and must be closed to open again.";
+                throw new InvalidOperationException(objectIsOpenMessage);
+            }
             if (UnrarDll == null)
             {
                 const string unrarDllMustBeSetMessage = "UnrarDll must be set.";
@@ -204,9 +189,10 @@ namespace Oleg.Kleyman.Winrar.Core
             if (IsOpen)
             {
                 var status = UnrarDll.RARCloseArchive(Handle);
-                if (status != RarStatus.Success)
+                if (status != (uint)RarStatus.Success)
                 {
-                    //TODO: throw rar exception
+                    const string unableToCloseArchiveMessage = "Unable to close archive. Possibly because it's already closed.";
+                    throw new UnrarException(unableToCloseArchiveMessage, RarStatus.UnknownError);
                 }
                 IsOpen = false;
             }
@@ -217,6 +203,9 @@ namespace Oleg.Kleyman.Winrar.Core
             }
         }
 
+        /// <summary>
+        /// When an archive member is processed this event is triggered.
+        /// </summary>
         public event EventHandler<UnrarFileProcessedEventArgs> FileProcessed;
     }
 }
