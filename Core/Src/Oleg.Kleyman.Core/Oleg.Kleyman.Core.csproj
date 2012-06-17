@@ -55,6 +55,7 @@
     <Compile Include="IRarExtractorSettings.cs" />
     <Compile Include="Configuration\RarExtractorConfigurationSection.cs" />
     <Compile Include="Linq\UInt32.cs" />
+    <Compile Include="NoCoverageAttribute.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="SystemProcess.cs" />
     <Compile Include="ProcessManager.cs" />

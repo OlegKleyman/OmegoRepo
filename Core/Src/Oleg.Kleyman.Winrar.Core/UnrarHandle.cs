@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Core.Linq;
 using Oleg.Kleyman.Winrar.Interop;
 
@@ -81,6 +82,7 @@ namespace Oleg.Kleyman.Winrar.Core
 
         #endregion
 
+        [NoCoverage]
         ~UnrarHandle()
         {
             Dispose();
@@ -103,7 +105,7 @@ namespace Oleg.Kleyman.Winrar.Core
             if (Handle == default(IntPtr))
             {
                 const string unableToOpenArchiveMessage = "Unable to open archive.";
-                throw new UnrarException(unableToOpenArchiveMessage, (RarStatus) openData.OpenResult);
+                throw new UnrarException(unableToOpenArchiveMessage, (RarStatus)openData.OpenResult);
             }
 
             IsOpen = true;
@@ -173,8 +175,8 @@ namespace Oleg.Kleyman.Winrar.Core
                 const string unrarDllMustBeSetMessage = "UnrarDll must be set.";
                 throw new InvalidOperationException(unrarDllMustBeSetMessage);
             }
-
-            if (RarFilePath == null)
+            
+            if (string.IsNullOrEmpty(RarFilePath))
             {
                 const string rarFilePathMustBeSetMessage = "RarFilePath must be set.";
                 throw new InvalidOperationException(rarFilePathMustBeSetMessage);
@@ -192,7 +194,7 @@ namespace Oleg.Kleyman.Winrar.Core
                 if (status != (uint)RarStatus.Success)
                 {
                     const string unableToCloseArchiveMessage = "Unable to close archive. Possibly because it's already closed.";
-                    throw new UnrarException(unableToCloseArchiveMessage, RarStatus.UnknownError);
+                    throw new UnrarException(unableToCloseArchiveMessage, (RarStatus)status);
                 }
                 IsOpen = false;
             }

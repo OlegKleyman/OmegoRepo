@@ -15,6 +15,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         private IUnrar UnrarDll { get; set; }
         private string RarFilePath { get; set; }
         private string InvalidRarFilePath { get; set; }
+        private string BrokenRarFilePath { get; set; }
 
         #region Overrides of TestsBase
 
@@ -23,6 +24,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             UnrarDll = new UnrarDll();
             RarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             InvalidRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\test.txt");
+            BrokenRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFileCorrupt.rar");
         }
 
         #endregion
@@ -53,7 +55,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
 
         [Test]
         [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to open archive.", MatchType = MessageMatch.Exact)]
-        public void OpenUnknownFormatTest()
+        public void OpenArchiveUnknownFormatTest()
         {
             var unrarHandle = new UnrarHandle(UnrarDll, InvalidRarFilePath);
             try
@@ -64,6 +66,37 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             {
                 Assert.AreEqual(RarStatus.BadArchive, ex.Status);
                 throw;
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Unrar handle is not open.", MatchType = MessageMatch.Exact)]
+        public void CloseAlreadyOpenExceptionTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDll, BrokenRarFilePath);
+            unrarHandle.Close();
+        }
+
+        [Test]
+        [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to read header data.", MatchType = MessageMatch.Exact)]
+        public void OpenArchiveCorruptTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDll, BrokenRarFilePath);
+            try
+            {
+                unrarHandle.OpenArchive();
+            }
+            catch (UnrarException ex)
+            {
+                Assert.AreEqual(RarStatus.BadData, ex.Status);
+                throw;
+            }
+            finally
+            {
+                if(unrarHandle.IsOpen)
+                {
+                    unrarHandle.Close();
+                }
             }
         }
 

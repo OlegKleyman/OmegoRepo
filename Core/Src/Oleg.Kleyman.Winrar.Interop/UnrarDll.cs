@@ -6,7 +6,7 @@ namespace Oleg.Kleyman.Winrar.Interop
     public class UnrarDll : IUnrar
     {
         [DllImport(@"C:\test\unrar.dll")]
-        private static extern IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx archiveData);
+        private static extern IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx openArchiveData);
         [DllImport(@"C:\test\unrar.dll")]
         private static extern uint RARCloseArchive(IntPtr hArcData);
         [DllImport(@"C:\test\unrar.dll")]
@@ -28,14 +28,20 @@ namespace Oleg.Kleyman.Winrar.Interop
             return RARProcessFileW(handle, operation, destPath, destName);
         }
 
+        /// <summary>
+        /// Archive handle must be open to use this method. If it's closed then it fails hard without a
+        /// managed exception.
+        /// </summary>
+        /// <param name="hArcData">The address of the handle of the archive to close.</param>
+        /// <returns>Returns 0 if success. If failed returns 17.</returns>
         uint IUnrar.RARCloseArchive(IntPtr hArcData)
         {
             return RARCloseArchive(hArcData);
         }
 
-        IntPtr IUnrar.RAROpenArchiveEx(ref RAROpenArchiveDataEx archiveData)
+        IntPtr IUnrar.RAROpenArchiveEx(ref RAROpenArchiveDataEx openArchiveData)
         {
-            return RAROpenArchiveEx(ref archiveData);
+            return RAROpenArchiveEx(ref openArchiveData);
         }
 
         uint IUnrar.RARReadHeaderEx(IntPtr handle, out RARHeaderDataEx headerData)

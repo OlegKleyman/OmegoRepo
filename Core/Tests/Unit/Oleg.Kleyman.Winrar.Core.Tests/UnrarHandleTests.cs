@@ -16,11 +16,14 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
     public class UnrarHandleTests : TestsBase
     {
         private Mock<IUnrar> UnrarDllMock { get; set; }
-        public RAROpenArchiveDataEx OpenData;
+        private RAROpenArchiveDataEx _openData;
         private RARHeaderDataEx _defaultHeaderData;
         private RARHeaderDataEx _test2TxtFileHeaderData;
         private RARHeaderDataEx _test1TxtFileHeaderData;
-        private const string FILE_PATH_TO_VALID_RAR = @"..\..\..\..\..\..\Common\Test\Test.part1.rar";
+        private RAROpenArchiveDataEx _invalidFileOpenData;
+        private const string FILE_PATH_TO_INVALID_RAR = "C:\\GitRepos\\MainDefault\\Common\\Test\\test.txt";
+        private const string FILE_PATH_TO_VALID_RAR = @"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar";
+        private const string FILE_PATH_TO_BROKEN_VALID_RAR = @"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar";
 
         #region Overrides of TestsBase
 
@@ -39,7 +42,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         {
             UnrarDllMock = new Mock<IUnrar>();
 
-            OpenData = new RAROpenArchiveDataEx
+            _openData = new RAROpenArchiveDataEx
                            {
                                ArcName = FILE_PATH_TO_VALID_RAR,
                                OpenMode = (uint)OpenMode.List
@@ -92,13 +95,20 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
                 UnpSizeHigh = 0,
                 UnpVer = 20
             };
+
+            _invalidFileOpenData = new RAROpenArchiveDataEx
+            {
+                ArcName = FILE_PATH_TO_INVALID_RAR,
+                OpenMode = (uint)OpenMode.List,
+                OpenResult = 13
+            };
         }
 
         private void MockOpenArchiveTest()
         {
-            UnrarDllMock.Setup(x => x.RAROpenArchiveEx(ref OpenData)).Returns(new IntPtr(1111));
-
+            UnrarDllMock.Setup(x => x.RAROpenArchiveEx(ref _openData)).Returns(new IntPtr(1111));
             UnrarDllMock.Setup(x => x.RARReadHeaderEx(new IntPtr(1111), out _test1TxtFileHeaderData)).Returns(0);
+            UnrarDllMock.Setup(x => x.RARCloseArchive(new IntPtr(1111))).Returns(0);
         }
 
         #endregion
@@ -147,6 +157,152 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             var archive = unrarHandle.OpenArchive();
             Assert.IsNotNull(archive);
             unrarHandle.Close(); //No exception assumes success
+        }
+
+        [Test]
+        [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to read header data.", MatchType = MessageMatch.Exact)]
+        public void OpenArchiveCorruptTest()
+        {
+            SetupInvalidHeaderMock();
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_BROKEN_VALID_RAR);
+            
+            try
+            {
+                unrarHandle.OpenArchive();
+            }
+            catch (UnrarException ex)
+            {
+                Assert.AreEqual(RarStatus.BadData, ex.Status);
+                throw;
+            }
+            finally
+            {
+                if (unrarHandle.IsOpen)
+                {
+                    unrarHandle.Close();
+                }
+            }
+        }
+
+        private void SetupInvalidHeaderMock()
+        {
+            UnrarDllMock.Setup(x => x.RARReadHeaderEx(new IntPtr(1111), out _defaultHeaderData)).Returns(12);
+        }
+
+        [Test]
+        [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to open archive.", MatchType = MessageMatch.Exact)]
+        public void OpenArchiveUnknownFormatTest()
+        {
+            var customMock = new UnrarDllCustomMock
+                                 {
+                                     OpenData = _invalidFileOpenData,
+                                     ReturnIntPtrValue = IntPtr.Zero
+                                 };
+
+            var unrarHandle = new UnrarHandle(customMock, FILE_PATH_TO_INVALID_RAR);
+            try
+            {
+                unrarHandle.OpenArchive();
+            }
+            catch (UnrarException ex)
+            {
+                Assert.AreEqual(RarStatus.BadArchive, ex.Status);
+                throw;
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "UnrarDll cannot be changed if the unrar handle is still open.", MatchType = MessageMatch.Exact)]
+        public void UnrarDllSetCannotChangeTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
+            unrarHandle.FileProcessed += ValidArchiveFileProcessed;
+            unrarHandle.OpenArchive();
+            unrarHandle.UnrarDll = null;
+        }
+
+        [Test]
+        public void UnrarDllSetTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
+            Assert.AreEqual(unrarHandle.UnrarDll, UnrarDllMock.Object);
+            unrarHandle.UnrarDll = null;
+            Assert.IsNull(unrarHandle.UnrarDll);
+        }
+
+        [Test]
+        public void UnrarDllGetTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
+            Assert.AreEqual(unrarHandle.UnrarDll, UnrarDllMock.Object);
+        }
+
+
+
+        [Test]
+        [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to close archive. Possibly because it's already closed.", MatchType = MessageMatch.Exact)]
+        public void CloseUnableToCloseTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
+            unrarHandle.FileProcessed += ValidArchiveFileProcessed;
+            unrarHandle.OpenArchive();
+            UnrarDllMock.Setup(x => x.RARCloseArchive(new IntPtr(1111))).Returns(17);
+            try
+            {
+                unrarHandle.Close();
+            }
+            catch (UnrarException ex)
+            {
+                Assert.AreEqual(RarStatus.CloseError, ex.Status);
+                throw;
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Unrar handle is not open.", MatchType = MessageMatch.Exact)]
+        public void CloseConnectionNotOpenTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
+            unrarHandle.Close();
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "Object is open and must be closed to open again.", MatchType = MessageMatch.Exact)]
+        public void OpenAlreadyOpenTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
+            unrarHandle.FileProcessed += ValidArchiveFileProcessed;
+            unrarHandle.OpenArchive();
+            unrarHandle.OpenArchive();
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "UnrarDll must be set.", MatchType = MessageMatch.Exact)]
+        public void OpenUnrarDllIsNullTest()
+        {
+            var unrarHandle = new UnrarHandle(null, FILE_PATH_TO_VALID_RAR);
+            unrarHandle.OpenArchive();
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "RarFilePath must be set.", MatchType = MessageMatch.Exact)]
+        public void OpenRarFilePathNotSetTest()
+        {
+            var unrarHandle = new UnrarHandle(UnrarDllMock.Object, null);
+            unrarHandle.OpenArchive();
+        }
+
+        [Test]
+        public void DisposeTest()
+        {
+            using(var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR))
+            {
+                unrarHandle.FileProcessed += ValidArchiveFileProcessed;
+                var archive = unrarHandle.OpenArchive();
+                Assert.IsNotNull(archive);
+            }
+
+            //If it gets to here then assume success
         }
     }
 }

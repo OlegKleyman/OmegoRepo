@@ -5,7 +5,7 @@ namespace Oleg.Kleyman.Winrar.Interop
     public interface IUnrar
     {
 // ReSharper disable InconsistentNaming
-        IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx archiveData);
+        IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx openArchiveData);
         uint RARCloseArchive(IntPtr hArcData);
         uint RARReadHeaderEx(IntPtr handle, out RARHeaderDataEx headerData);
         uint RARProcessFileW(IntPtr handle, int operation, string destPath, string destName);
