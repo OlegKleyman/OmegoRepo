@@ -9,7 +9,7 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <summary>
         /// Returns archive member flags.
         /// </summary>
-        public ArchiveMemberFlags Flags { get; set; }
+        public ArchiveMemberFlags Flags { get; internal set; }
 
         /// <summary>
         /// Gets the unpacked size of the file in bytes.

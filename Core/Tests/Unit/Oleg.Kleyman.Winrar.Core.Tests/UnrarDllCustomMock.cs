@@ -6,14 +6,14 @@ using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core.Tests
 {
-    public class UnrarDllCustomMock : IUnrar
+    public class UnrarDllCustomMock : IUnrarDll
     {
         public RAROpenArchiveDataEx OpenData { get; set; }
         public uint ReturnUintValue { get; set; }
         public IntPtr ReturnIntPtrValue { get; set; }
         public RARHeaderDataEx HeaderData { get; set; }
 
-        #region Implementation of IUnrar
+        #region Implementation of IUnrarDll
 
         public IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx openArchiveData)
         {

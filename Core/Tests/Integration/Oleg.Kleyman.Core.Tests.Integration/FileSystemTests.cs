@@ -15,11 +15,11 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         public void CopyFileTest()
         {
             var copier = new FileSystem();
-            var file = copier.CopyFile(@"..\..\..\..\..\..\Common\Test\testFile.Rar",
-                                       @"..\..\..\..\..\..\Common\Test\testFile1.Rar");
-            Assert.IsTrue(File.Exists(@"..\..\..\..\..\..\Common\Test\testFile1.Rar"));
+            var file = copier.CopyFile(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\testFile.Rar",
+                                       @"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\testFile1.Rar");
+            Assert.IsTrue(File.Exists(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\testFile1.Rar"));
             Assert.AreEqual("testFile1.Rar", file.Name);
-            var destinationDirectory = new DirectoryInfo(@"..\..\..\..\..\..\Common\Test\");
+            var destinationDirectory = new DirectoryInfo(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration");
             Assert.AreEqual(destinationDirectory.Name, file.Directory.Name);
             File.Delete(file.FullName);
         }
@@ -28,10 +28,10 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         public void GetFilesByExtensionTest()
         {
             var copier = new FileSystem();
-            var files = copier.GetFilesByExtension(@"..\..\..\..\..\..\Common\Test\", "rar");
+            var files = copier.GetFilesByExtension(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration", "rar");
             Assert.AreEqual(1, files.Length);
             Assert.AreEqual("testFile.rar", files[0].Name);
-            var destinationDirectory = new DirectoryInfo(@"..\..\..\..\..\..\Common\Test\");
+            var destinationDirectory = new DirectoryInfo(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration");
             Assert.AreEqual(destinationDirectory.Name, files[0].Directory.Name);
         }
 
@@ -39,10 +39,10 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         public void GetFilesByExtensionsTest()
         {
             var copier = new FileSystem();
-            var files = copier.GetFilesByExtensions(@"..\..\..\..\..\..\Common\Test\", new[] {"rar"});
+            var files = copier.GetFilesByExtensions(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration", new[] { "rar" });
             Assert.AreEqual(1, files.Length);
             Assert.AreEqual("testFile.rar", files[0].Name);
-            var destinationDirectory = new DirectoryInfo(@"..\..\..\..\..\..\Common\Test\");
+            var destinationDirectory = new DirectoryInfo(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration");
             Assert.AreEqual(destinationDirectory.Name, files[0].Directory.Name);
         }
     }

@@ -13,7 +13,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
     [TestFixture]
     public class ArchiveTests : TestsBase
     {
-        private IUnrar UnrarDll { get; set; }
+        private IUnrarDll UnrarDll { get; set; }
 
         #region Overrides of TestsBase
 
@@ -23,12 +23,5 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         }
 
         #endregion
-
-        [Test]
-        public void OpenTest()
-        {
-            var archive = Archive.Open(UnrarDll, Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar"), OpenMode.Extract);
-            
-        }
     }
 }

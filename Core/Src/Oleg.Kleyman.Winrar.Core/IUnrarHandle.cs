@@ -6,10 +6,10 @@ namespace Oleg.Kleyman.Winrar.Core
     public interface IUnrarHandle : IDisposable
     {
         /// <summary>
-        /// Gets or Sets the UnrarDll for unrar operations.
+        /// Gets or Sets the UnrarDll for unrarDll operations.
         /// </summary>
         /// <exception cref="InvalidOperationException" />
-        IUnrar UnrarDll { get; set; }
+        IUnrarDll UnrarDll { get; set; }
 
         /// <summary>
         /// Gets or sets the RarFilePath
@@ -22,14 +22,23 @@ namespace Oleg.Kleyman.Winrar.Core
         bool IsOpen { get; }
 
         /// <summary>
-        /// Opens handle to the rar Archive.
-        /// </summary>
-        /// <returns>The opened archive.</returns>
-        Archive OpenArchive();
-
-        /// <summary>
         /// Closes the handle to the rar Archive.
         /// </summary>
         void Close();
+
+        /// <summary>
+        /// Opens the archive
+        /// </summary>
+        void Open();
+
+        /// <summary>
+        /// Gets and sets the mode for handle communication.
+        /// </summary>
+        OpenMode Mode { get; set; }
+
+        /// <summary>
+        /// Gets the handle to the rar archive.
+        /// </summary>
+        IntPtr Handle { get; }
     }
 }

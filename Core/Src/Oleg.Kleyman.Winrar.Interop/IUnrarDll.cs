@@ -2,7 +2,7 @@ using System;
 
 namespace Oleg.Kleyman.Winrar.Interop
 {
-    public interface IUnrar
+    public interface IUnrarDll
     {
 // ReSharper disable InconsistentNaming
         IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx openArchiveData);

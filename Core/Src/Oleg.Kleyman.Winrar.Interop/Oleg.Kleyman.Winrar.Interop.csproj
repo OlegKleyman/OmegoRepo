@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallbackProc.cs" />
-    <Compile Include="IUnrar.cs" />
+    <Compile Include="IUnrarDll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RARHeaderDataEx.cs" />
     <Compile Include="RAROpenArchiveDataEx.cs" />

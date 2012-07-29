@@ -11,7 +11,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
     [TestFixture]
     public class UnrarTests : TestsBase
     {
-        private IUnrar UnrarDll { get; set; }
+        private IUnrarDll UnrarDll { get; set; }
 
         #region Overrides of TestsBase
 

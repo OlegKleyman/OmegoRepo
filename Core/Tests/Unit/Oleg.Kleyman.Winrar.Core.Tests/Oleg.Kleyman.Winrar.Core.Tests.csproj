@@ -47,11 +47,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveReaderTests.cs" />
+    <Compile Include="ArchiveTests.cs" />
     <Compile Include="UnrarDllCustomMock.cs" />
     <Compile Include="UnrarHandleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnrarTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+      <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
+      <Name>Oleg.Kleyman.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Tests.Core\Oleg.Kleyman.Tests.Core.csproj">
       <Project>{E5860385-4532-4BDA-B835-ED7073BCEA31}</Project>
       <Name>Oleg.Kleyman.Tests.Core</Name>
