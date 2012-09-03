@@ -3,8 +3,13 @@ using System.Runtime.InteropServices;
 
 namespace Oleg.Kleyman.Winrar.Interop
 {
+    /// <summary>
+    /// Represents the unmanaged RAROpenArchiveDataEx struct.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+// ReSharper disable InconsistentNaming
     public struct RAROpenArchiveDataEx
+// ReSharper restore InconsistentNaming
     {
         [MarshalAs(UnmanagedType.LPStr)]
         public string ArcName;

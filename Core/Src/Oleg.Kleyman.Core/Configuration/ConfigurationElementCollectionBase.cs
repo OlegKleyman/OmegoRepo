@@ -16,6 +16,7 @@ namespace Oleg.Kleyman.Core.Configuration
         ///   Constructions ConfigurationElementCollection with a range of ConfigurationElements.
         /// </summary>
         /// <param name="elements"> ConfigurationElements to create the ConfigurationElementCollection object with. </param>
+        /// <exception cref="ArgumentNullException">Thrown when the elements argument is null.</exception>
         protected ConfigurationElementCollectionBase(IEnumerable<T> elements) : this()
         {
             if (elements == null)

@@ -1,15 +1,14 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using Oleg.Kleyman.Core;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
+    /// <summary>
+    /// Represents an archivee.
+    /// </summary>
     public interface IArchive
     {
-        /// <summary>
-        /// The <see cref="IUnrarHandle"/> to use for Archive operations.
-        /// </summary>
-        IUnrarHandle Handle { get; }
-
         /// <summary>
         /// Files contained in the Archive.
         /// </summary>
@@ -24,7 +23,7 @@ namespace Oleg.Kleyman.Winrar.Core
         /// Extracts the contents of the archive.
         /// </summary>
         /// <param name="destination">The destination file path for extraction.</param>
-        /// <returns>The destination file path.</returns>
-        FileSystemInfo Extract(string destination);
+        /// <returns>The extracted members.</returns>
+        IFileSystemMember[] Extract(string destination);
     }
 }

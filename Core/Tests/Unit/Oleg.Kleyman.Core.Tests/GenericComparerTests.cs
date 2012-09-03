@@ -21,27 +21,6 @@ namespace Oleg.Kleyman.Core.Tests
         }
 
         [Test]
-        public void CheckCoverage()
-        {
-            var knownMembers = new Dictionary<string, int>
-                                   {
-                                       {".ctor", 1},
-                                       {"Equals", 1},
-                                       {"GetHashCode", 1},
-                                       {"CompareHandler", 1}
-                                   };
-
-            var coverageAnalyzer = new CoverageAnalyzer(typeof (EqualityComparer<>));
-
-            var result = coverageAnalyzer.ValidateMembers(knownMembers);
-            if (!result)
-            {
-                const string membersNotCoveredMessage = "All members not covered";
-                Assert.Inconclusive(membersNotCoveredMessage);
-            }
-        }
-
-        [Test]
         public void ConstructorTest()
         {
             var compareHandler = new Func<double, double, bool>((x, y) => true);

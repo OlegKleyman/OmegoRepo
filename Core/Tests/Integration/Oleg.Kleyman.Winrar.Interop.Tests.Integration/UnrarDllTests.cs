@@ -121,6 +121,26 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             Assert.AreEqual(0, result);
         }
 
+        [Test]
+        public void ExtractWithFoldersTest()
+        {
+            IUnrarDll unrarDll = new UnrarDll();
+            var openData = new RAROpenArchiveDataEx();
+            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestFolder.rar");
+            openData.OpenMode = 1;
+            var handle = unrarDll.RAROpenArchiveEx(ref openData);
+            Assert.AreNotEqual(IntPtr.Zero, handle);
+
+            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\");
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+
+            var result = unrarDll.RARCloseArchive(handle);
+            Assert.AreEqual(0, result);
+        }
+
         private bool _callBackSuccess;
         [Test]
         public void RARSetCallbackTest()
@@ -156,12 +176,17 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             Assert.AreEqual(0, status);
             if(string.IsNullOrEmpty(extractPath))
             {
-                Assert.IsTrue(Directory.Exists(directory));
-                var files = Directory.GetFiles(directory);
-                var extractedFiles = from file in files
-                                     where Path.GetFileName(file) == headerData.FileNameW
-                                     select file;
-                Assert.IsTrue(extractedFiles.Any());
+                if ((headerData.Flags & 0xE0) == 0xE0)
+                {
+                    Assert.IsTrue(Directory.Exists(Path.Combine(directory, headerData.FileNameW)));
+                }
+                else
+                {
+                    Assert.IsTrue(File.Exists(Path.Combine(directory, headerData.FileNameW)));
+                }
+
+                Directory.Delete(directory, true);
+                Directory.CreateDirectory(directory);
             }
             else
             {

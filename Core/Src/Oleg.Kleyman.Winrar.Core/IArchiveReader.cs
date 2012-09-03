@@ -1,5 +1,8 @@
 namespace Oleg.Kleyman.Winrar.Core
 {
+    /// <summary>
+    /// Represents an archive reader.
+    /// </summary>
     public interface IArchiveReader
     {
         /// <summary>
@@ -12,10 +15,5 @@ namespace Oleg.Kleyman.Winrar.Core
         /// Gets the status of the Archive.
         /// </summary>
         RarStatus Status { get; }
-
-        /// <summary>
-        /// Gets the <see cref="IUnrarHandle"/> used by the reader.
-        /// </summary>
-        IUnrarHandle Handle { get; }
     }
 }

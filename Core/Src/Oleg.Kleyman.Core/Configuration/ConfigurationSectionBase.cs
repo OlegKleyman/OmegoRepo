@@ -14,6 +14,7 @@ namespace Oleg.Kleyman.Core.Configuration
         ///   Creates configuration section based on keys and values of an IDictionary.
         /// </summary>
         /// <param name="values"> The property names and values to set. </param>
+        /// <exception cref="ArgumentNullException">Thrown when the values argument is null.</exception>
         protected ConfigurationSectionBase(IEnumerable<KeyValuePair<string, object>> values) : this()
         {
             if (values == null)

@@ -12,6 +12,9 @@ namespace Oleg.Kleyman.Core.Configuration
         /// <param name="configurationFilePath"> UNC path to the configuration file </param>
         /// <param name="sectionName"> The name of the configuration section to load. </param>
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
+        /// <exception cref="ArgumentNullException">Thrown when the configurationFilePath or sectionName argument is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when the configurationFilePath or sectionName argument is an empty string.</exception>
+        /// <exception cref="ConfigurationErrorsException">Thrown when the configurationFilePath does not exist.</exception>
         public T GetSettingsByConfigurationFile(string configurationFilePath, string sectionName)
         {
             ThrowExceptionOnInvalidPathArgument(configurationFilePath);
@@ -29,10 +32,16 @@ namespace Oleg.Kleyman.Core.Configuration
 
         private static void ThrowExceptionOnInvalidPathArgument(string configurationFilePath)
         {
-            if (string.IsNullOrEmpty(configurationFilePath))
+            const string configurationFilePathParamName = "configurationFilePath";
+
+            if (configurationFilePath == null)
             {
-                const string configurationFilePathParamName = "configurationFilePath";
                 throw new ArgumentNullException(configurationFilePathParamName);
+            }
+
+            if (configurationFilePath == string.Empty)
+            {
+                throw new ArgumentException(configurationFilePathParamName);
             }
 
             if (!File.Exists(configurationFilePath))
@@ -43,12 +52,15 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
+        ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" />.
         /// </summary>
         /// <param name="configuration"> The <see cref="Oleg.Kleyman.Core.Configuration" /> object containing the <see
-        ///    cref="System.Configuration.ConfigurationSection" /> to load. </param>
-        /// <param name="sectionName"> The name of the configuration section to load. </param>
-        /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
+        ///    cref="System.Configuration.ConfigurationSection" /> to load.</param>
+        /// <param name="sectionName"> The name of the configuration section to load.</param>
+        /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the configuration or sectionName argument is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when the sectionName argument is an empty string.</exception>
+        /// <exception cref="ConfigurationErrorsException">Thrown when the configuration section is not found.</exception>
         public T GetConfigurationSectionByConfiguration(System.Configuration.Configuration configuration,
                                                         string sectionName)
         {
@@ -105,6 +117,9 @@ namespace Oleg.Kleyman.Core.Configuration
         /// </summary>
         /// <param name="sectionName"> The name of the configuration section to load. </param>
         /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
+        /// <exception cref="ArgumentNullException">Thrown when the sectionName argument is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when the sectionName argument is an empty string.</exception>
+        /// <exception cref="ConfigurationErrorsException">Thrown when the configuration section is not found.</exception>
         public T GetConfigurationBySectionName(string sectionName)
         {
             ThrowExceptionOnInvalidArguments(sectionName);

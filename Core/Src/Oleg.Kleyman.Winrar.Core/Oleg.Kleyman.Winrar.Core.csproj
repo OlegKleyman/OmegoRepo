@@ -41,19 +41,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Archive.cs" />
-    <Compile Include="ArchiveMemberFlags.cs" />
+    <Compile Include="ArchiveMemberOperation.cs" />
+    <Compile Include="HighMemberFlags.cs" />
     <Compile Include="ArchiveReader.cs" />
     <Compile Include="IArchive.cs" />
     <Compile Include="IArchiveReader.cs" />
     <Compile Include="IUnrar.cs" />
     <Compile Include="IUnrarHandle.cs" />
+    <Compile Include="LowMemberFlags.cs" />
     <Compile Include="OpenMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ArchiveMember.cs" />
     <Compile Include="RarStatus.cs" />
     <Compile Include="Unrar.cs" />
     <Compile Include="UnrarException.cs" />
-    <Compile Include="UnrarFileProcessedEventArgs.cs" />
+    <Compile Include="UnrarEventArgs.cs" />
     <Compile Include="UnrarHandle.cs" />
   </ItemGroup>
   <ItemGroup>

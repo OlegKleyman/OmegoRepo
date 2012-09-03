@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.IO;
 using Moq;
@@ -13,27 +14,33 @@ namespace Oleg.Kleyman.Core.Tests
         private Mock<IFileSystem> _fileSystem;
         private Mock<IProcessManager> _processManager;
         private Mock<IProcess> _process;
-        private Mock<IFile> _file;
+        private Mock<IFileSystemMember> _file;
+        private Mock<IFileSystemMember> _directory;
         private Mock<IRarExtractorSettings> MockSettings { get; set; }
         private string TestDirectory { get; set; }
 
         public override void Setup()
         {
+            Castle.DynamicProxy.Generators.AttributesToAvoidReplicating.Add(typeof(System.Security.Permissions.FileIOPermissionAttribute));
             MockSettings = new Mock<IRarExtractorSettings>();
             MockSettings.SetupGet(settings => settings.UnrarPath).Returns(@"C:\Program Files\WinRAR\unrar.exe");
             _fileSystem = new Mock<IFileSystem>();
             _process = new Mock<IProcess>();
             _processManager = new Mock<IProcessManager>();
             TestDirectory = new DirectoryInfo(@"..\..\..\..\..\..\Common\Test\").FullName;
-            _file = new Mock<IFile>();
+            _file = new Mock<IFileSystemMember>();
+            _directory = new Mock<IFileSystemMember>();
 
             #region ExtractTest
 
             _file.SetupGet(x => x.FullName).Returns("c:\\gitrepos\\maindefault\\Common\\Test\\testFile.Rar");
+            _directory.SetupGet(x => x.FullName).Returns(@"C:\repo\Common\Test\testUnrar");
+
             _fileSystem.Setup(x => x.GetFileByPath("..\\..\\..\\..\\..\\..\\Common\\Test\\testFile.Rar")).Returns(_file.Object);
+
             _fileSystem.Setup(x => x.DirectoryExists(@"..\..\..\..\..\..\Common\Test\testUnrar\")).Returns(false);
             _fileSystem.Setup(x => x.FileExists(@"C:\Program Files\WinRAR\unrar.exe")).Returns(true);
-            _fileSystem.Setup(x => x.GetDirectory(@"..\..\..\..\..\..\Common\Test\testUnrar\")).Returns(new MockDirectory(@"C:\repo\Common\Test\testUnrar"));
+            _fileSystem.Setup(x => x.GetDirectory(@"..\..\..\..\..\..\Common\Test\testUnrar\")).Returns(_directory.Object);
             _process.SetupGet(x => x.HasExited).Returns(false);
             _processManager.Setup(x => x.Start(It.IsAny<ProcessStartInfo>())).Returns(_process.Object);
 

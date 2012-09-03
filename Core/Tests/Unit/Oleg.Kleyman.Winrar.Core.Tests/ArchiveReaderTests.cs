@@ -16,9 +16,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private Mock<IUnrarDll> UnrarDllMock { get; set; }
         private RARHeaderDataEx _test2TxtFileHeaderData;
         private RARHeaderDataEx _test1TxtFileHeaderData;
-        private const string FILE_PATH_TO_INVALID_RAR = "C:\\GitRepos\\MainDefault\\Common\\Test\\test.txt";
-        private const string FILE_PATH_TO_VALID_RAR = @"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar";
-        private const string FILE_PATH_TO_BROKEN_VALID_RAR = @"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar";
+        private RARHeaderDataEx _defaultHeaderData;
 
         #region Overrides of TestsBase
 
@@ -101,27 +99,35 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
 
             var member = reader.Read();
 
-            Assert.AreEqual(reader.Status, RarStatus.Success);
+            Assert.AreEqual(RarStatus.Success, reader.Status);
 
             Assert.AreEqual("test2.txt", member.Name);
-            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, member.Flags);
+            Assert.AreEqual(HighMemberFlags.DictionarySize4096K, member.HighFlags);
             Assert.AreEqual(new DateTime(634751294720000000), member.LastModificationDate);
             Assert.AreEqual(3145642, member.PackedSize);
             Assert.AreEqual(5293080, member.UnpackedSize);
             Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part1.rar", member.Volume);
+            Assert.AreEqual(LowMemberFlags.FileContinuedOnNextVolume, member.LowFlags);
 
-            UnrarDllMock.Setup(x => x.RARReadHeaderEx(new IntPtr(1111), out _test2TxtFileHeaderData)).Returns((uint)RarStatus.EndOfArchive);
+            UnrarDllMock.Setup(x => x.RARReadHeaderEx(new IntPtr(1111), out _test2TxtFileHeaderData)).Returns(0);
 
             member = reader.Read();
 
-            Assert.AreEqual(reader.Status, RarStatus.EndOfArchive);
+            Assert.AreEqual(RarStatus.Success, reader.Status);
 
             Assert.AreEqual("test.txt", member.Name);
-            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, member.Flags);
+            Assert.AreEqual(HighMemberFlags.DictionarySize4096K, member.HighFlags);
             Assert.AreEqual(new DateTime(634751294360000000), member.LastModificationDate);
             Assert.AreEqual(297540, member.PackedSize);
             Assert.AreEqual(297540, member.UnpackedSize);
             Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part2.rar", member.Volume);
+            Assert.AreEqual(LowMemberFlags.None, member.LowFlags);
+            
+            UnrarDllMock.Setup(x => x.RARReadHeaderEx(new IntPtr(1111), out _defaultHeaderData)).Returns((uint)RarStatus.EndOfArchive);
+            
+            reader.Read();
+            
+            Assert.AreEqual(RarStatus.EndOfArchive, reader.Status);
         }
 
         [Test]

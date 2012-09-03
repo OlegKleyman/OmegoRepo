@@ -10,31 +10,43 @@ namespace Oleg.Kleyman.Winrar.Core
 {
     public class Archive : IArchive
     {
-        public IFileSystem FileSystem { get; private set; }
-        public IUnrarHandle Handle { get; internal set; }
+        /// <summary>
+        /// Gets the files in the archive.
+        /// </summary>
         public ReadOnlyCollection<ArchiveMember> Files { get; private set; }
+        /// <summary>
+        /// Gets the file path of the archive.
+        /// </summary>
         public string FilePath { get; private set; }
-        public static IUnrar Unrar { get; private set; }
+        /// <summary>
+        /// Gets the <see cref="IUnrar"/> object that the instance is interfacing with.
+        /// </summary>
+        public IUnrar Unrar { get; private set; }
 
-        private Archive(IFileSystem fileSystem, IUnrarHandle handle)
+        private Archive(IUnrar unrar)
         {
-            FileSystem = fileSystem;
-            Handle = handle;
+            Unrar = unrar;
             Files = new ReadOnlyCollection<ArchiveMember>(new ArchiveMember[] { });
         }
 
         /// <summary>
         /// Gets the unrar Archive.
         /// </summary>
-        /// <param name="fileSystem">The <see cref="IFileSystem"/> to use for file operations.</param>
         /// <param name="unrar"><see cref="IUnrar" /> to use when getting the Archive</param>
         /// <returns>The Archive.</returns>
-        public static IArchive Open(IFileSystem fileSystem, IUnrar unrar)
+        /// <remarks>This method changes the Mode property of the Handle in the <see cref="IUnrar"/> object to <see cref="OpenMode.Extract"/>.</remarks>
+        public static IArchive Open(IUnrar unrar)
         {
-            Unrar = unrar;
+            var archive = GetArchive(unrar);
             var reader = unrar.ExecuteReader();
 
-            return Open(fileSystem, reader);
+            FillArchive(archive, reader);
+
+            archive.Unrar.Handle.Close();
+            archive.Unrar.Handle.Mode = OpenMode.Extract;
+            archive.Unrar.Handle.Open();
+
+            return archive;
         }
 
         private static void FillArchive(Archive archive, IArchiveReader reader)
@@ -43,58 +55,40 @@ namespace Oleg.Kleyman.Winrar.Core
             while (reader.Status != RarStatus.EndOfArchive)
             {
                 var member = reader.Read();
-                members.Add(member);
+                if (member != null)
+                {
+                    members.Add(member);
+                }
             }
 
             archive.Files = new ReadOnlyCollection<ArchiveMember>(members);
         }
 
-        private static Archive GetArchive(IFileSystem fileSystem, IUnrarHandle handle)
+        private static Archive GetArchive(IUnrar unrar)
         {
-            var archive = new Archive(fileSystem, handle)
+            var archive = new Archive(unrar)
                               {
-                                  FilePath = handle.RarFilePath
+                                  FilePath = unrar.Handle.RarFilePath
                               };
             return archive;
         }
 
-        /// <summary>
-        /// Gets the unrar Archive.
-        /// </summary>
-        /// <param name="fileSystem">The <see cref="IFileSystem"/> to use for file operations.</param>
-        /// <param name="reader"><see cref="IArchiveReader"/> to use when getting the Archive</param>
-        /// <returns>The Archive.</returns>
-        public static IArchive Open(IFileSystem fileSystem, IArchiveReader reader)
-        {
-            var archive = GetArchive(fileSystem, reader.Handle);
-            FillArchive(archive, reader);
-
-            archive.Handle.Close();
-            archive.Handle.Mode = OpenMode.Extract;
-            archive.Handle.Open();
-
-            return archive;
-        }
 
         /// <summary>
         /// Extracts the contents of the archive.
         /// </summary>
         /// <param name="destination">The destination file path for extraction.</param>
-        /// <returns>The destination file path.</returns>
-        public FileSystemInfo Extract(string destination)
+        /// <returns>The extracted members.</returns>
+        public IFileSystemMember[] Extract(string destination)
         {
-            var destinationDirectory = ExtractArchive(destination);
-            return destinationDirectory;
+            var extractedMembers = ExtractArchive(destination);
+            return extractedMembers;
         }
 
-        private FileSystemInfo ExtractArchive(string destination)
+        private IFileSystemMember[] ExtractArchive(string destination)
         {
-            if(Unrar == null)
-            {
-                Unrar = new Unrar(Handle, FileSystem);
-            }
-            var extractPath = Unrar.Extract(destination);
-            return extractPath;
+            var extractedMembers = Unrar.Extract(destination);
+            return extractedMembers;
         }
     }
 }

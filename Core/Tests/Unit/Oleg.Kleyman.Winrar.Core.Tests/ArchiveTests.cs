@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Moq;
@@ -23,6 +24,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
 
         public override void Setup()
         {
+            Castle.DynamicProxy.Generators.AttributesToAvoidReplicating.Add(typeof(System.Security.Permissions.FileIOPermissionAttribute));
             MockUnrarHandle = new Mock<IUnrarHandle>();
             MockUnrar = new Mock<IUnrar>();
             MockArchiveReader = new Mock<IArchiveReader>();
@@ -104,7 +106,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
                                                                            readCallCounter));
                                                                });
 
-            MockArchiveReader.SetupGet(x => x.Handle).Returns(MockUnrarHandle.Object);
+            
             SetupUnrar();
         }
 
@@ -112,7 +114,21 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         {
             MockUnrar.Setup(x => x.ExecuteReader()).Returns(MockArchiveReader.Object);
             MockUnrar.SetupGet(x => x.Handle).Returns(MockUnrarHandle.Object);
-            MockUnrar.Setup(x => x.Extract(FILE_PATH_TO_EXTRACTION_FOLDER)).Returns(new MockDirectory(FILE_PATH_TO_EXTRACTION_FOLDER));
+            var mockMembers = new[]
+                                  {
+                                      new Mock<IFileSystemMember>(),
+                                      new Mock<IFileSystemMember>(),
+                                      new Mock<IFileSystemMember>(),
+                                      new Mock<IFileSystemMember>()
+                                  };
+            mockMembers[0].SetupGet(x => x.FullName).Returns(@"C:\GitRepos\MainDefault\Common\Test\TestFolder\testFile.txt");
+            mockMembers[1].SetupGet(x => x.FullName).Returns(@"C:\GitRepos\MainDefault\Common\Test\test.txt");
+            mockMembers[2].SetupGet(x => x.FullName).Returns(@"C:\GitRepos\MainDefault\Common\Test\TestFolder\InnerTestFolder");
+            mockMembers[2].SetupGet(x => x.Attributes).Returns(FileAttributes.Directory);
+            mockMembers[3].SetupGet(x => x.FullName).Returns(@"C:\GitRepos\MainDefault\Common\Test\TestFolder");
+            mockMembers[3].SetupGet(x => x.Attributes).Returns(FileAttributes.Directory);
+
+            MockUnrar.Setup(x => x.Extract(FILE_PATH_TO_EXTRACTION_FOLDER)).Returns(mockMembers.Select(x => x.Object).ToArray());
         }
 
         private void SetupUnrarHandle()
@@ -135,61 +151,43 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void OpenUnrarTest()
         {
-            var archive = Archive.Open(null, MockUnrar.Object);
+            var archive = Archive.Open(MockUnrar.Object);
             Assert.AreEqual(2, archive.Files.Count);
 
-            Assert.AreEqual(MockUnrarHandle.Object, archive.Handle);
-            Assert.AreEqual(MockUnrarHandle.Object, MockArchiveReader.Object.Handle);
+            
             Assert.AreEqual(@"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar", archive.FilePath);
             Assert.AreEqual(2, archive.Files.Count);
             Assert.AreEqual("test2.txt", archive.Files[0].Name);
-            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, archive.Files[0].Flags);
+            Assert.AreEqual(HighMemberFlags.DictionarySize4096K, archive.Files[0].HighFlags);
             Assert.AreEqual(new DateTime(634751294720000000), archive.Files[0].LastModificationDate);
             Assert.AreEqual(3145642, archive.Files[0].PackedSize);
             Assert.AreEqual(5293080, archive.Files[0].UnpackedSize);
             Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part1.rar", archive.Files[0].Volume);
+            Assert.AreEqual(LowMemberFlags.FileContinuedOnNextVolume, archive.Files[0].LowFlags);
             Assert.AreEqual("test.txt", archive.Files[1].Name);
-            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, archive.Files[1].Flags);
+            Assert.AreEqual(HighMemberFlags.DictionarySize4096K, archive.Files[1].HighFlags);
             Assert.AreEqual(new DateTime(634751294360000000), archive.Files[1].LastModificationDate);
             Assert.AreEqual(297540, archive.Files[1].PackedSize);
             Assert.AreEqual(297540, archive.Files[1].UnpackedSize);
             Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part2.rar", archive.Files[1].Volume);
-            Assert.IsTrue(archive.Handle.IsOpen);
-        }
+            Assert.AreEqual(LowMemberFlags.None, archive.Files[1].LowFlags);
 
-        [Test]
-        public void OpenReaderTest()
-        {
-            var archive = Archive.Open(null, MockArchiveReader.Object);
-            Assert.AreEqual(2, archive.Files.Count);
-
-            Assert.AreEqual(MockUnrarHandle.Object, archive.Handle);
-            Assert.AreEqual(MockUnrarHandle.Object, MockArchiveReader.Object.Handle);
-            Assert.AreEqual(@"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar", archive.FilePath);
-            Assert.AreEqual(2, archive.Files.Count);
-            Assert.AreEqual("test2.txt", archive.Files[0].Name);
-            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, archive.Files[0].Flags);
-            Assert.AreEqual(new DateTime(634751294720000000), archive.Files[0].LastModificationDate);
-            Assert.AreEqual(3145642, archive.Files[0].PackedSize);
-            Assert.AreEqual(5293080, archive.Files[0].UnpackedSize);
-            Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part1.rar", archive.Files[0].Volume);
-            Assert.AreEqual("test.txt", archive.Files[1].Name);
-            Assert.AreEqual(ArchiveMemberFlags.DictionarySize4096K, archive.Files[1].Flags);
-            Assert.AreEqual(new DateTime(634751294360000000), archive.Files[1].LastModificationDate);
-            Assert.AreEqual(297540, archive.Files[1].PackedSize);
-            Assert.AreEqual(297540, archive.Files[1].UnpackedSize);
-            Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\Test.part2.rar", archive.Files[1].Volume);
-            Assert.IsTrue(archive.Handle.IsOpen);
         }
 
         [Test]
         public void ExtractTest()
         {
-            var archive = Archive.Open(null, MockUnrar.Object);
+            var archive = Archive.Open(MockUnrar.Object);
 
-            var containingFolder = archive.Extract(@"C:\GitRepos\MainDefault\Common\Test\");
-            
-            Assert.AreEqual(FILE_PATH_TO_EXTRACTION_FOLDER, containingFolder.FullName);
+            var extractedContents = archive.Extract(@"C:\GitRepos\MainDefault\Common\Test\");
+
+            Assert.AreEqual(4, extractedContents.Length);
+            Assert.AreEqual("C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\testFile.txt", extractedContents[0].FullName);
+            Assert.AreEqual("C:\\GitRepos\\MainDefault\\Common\\Test\\test.txt", extractedContents[1].FullName);
+            Assert.AreEqual("C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\InnerTestFolder", extractedContents[2].FullName);
+            Assert.AreEqual(FileAttributes.Directory, extractedContents[2].Attributes);
+            Assert.AreEqual("C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder", extractedContents[3].FullName);
+            Assert.AreEqual(FileAttributes.Directory, extractedContents[3].Attributes);
         }
     }
 }

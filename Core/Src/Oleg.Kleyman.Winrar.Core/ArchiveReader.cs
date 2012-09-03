@@ -5,6 +5,9 @@ namespace Oleg.Kleyman.Winrar.Core
 {
     public class ArchiveReader : IArchiveReader
     {
+        /// <summary>
+        /// Gets the <see cref="IUnrarHandle"/> that's used for operations.
+        /// </summary>
         public IUnrarHandle Handle { get; private set; }
         private RARHeaderDataEx _headerData;
 
@@ -19,10 +22,12 @@ namespace Oleg.Kleyman.Winrar.Core
         /// Reads the next file in the archive.
         /// </summary>
         /// <returns>The next Archive Member.</returns>
+        /// <exception cref="UnrarException">Thrown when the header data of the archive is unable to be read.</exception>
         public ArchiveMember Read()
         {
             Status = SetHeaderDataAndProcessFile();
-            return (ArchiveMember)_headerData;
+            var member = Status == RarStatus.EndOfArchive ? null : (ArchiveMember) _headerData;
+            return member;
         }
 
         private RarStatus SetHeaderDataAndProcessFile()
@@ -30,7 +35,7 @@ namespace Oleg.Kleyman.Winrar.Core
             var status = Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out _headerData);
             ValidateRarStatus((RarStatus)status);
 
-            Handle.UnrarDll.RARProcessFileW(Handle.Handle, 0, null, null);
+            Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int) ArchiveMemberOperation.Skip, null, null);
 
             return (RarStatus)status;
         }
@@ -44,6 +49,9 @@ namespace Oleg.Kleyman.Winrar.Core
             }
         }
 
+        /// <summary>
+        /// Gets the status of the Archive.
+        /// </summary>
         public RarStatus Status { get; private set; }
 
         #endregion

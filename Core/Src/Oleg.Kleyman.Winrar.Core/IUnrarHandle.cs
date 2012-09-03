@@ -3,6 +3,9 @@ using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
+    /// <summary>
+    /// Represents a handle to an archive.
+    /// </summary>
     public interface IUnrarHandle : IDisposable
     {
         /// <summary>

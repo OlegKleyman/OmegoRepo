@@ -17,13 +17,10 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
     {
         private Mock<IUnrarDll> UnrarDllMock { get; set; }
         private RAROpenArchiveDataEx _openData;
-        private RARHeaderDataEx _defaultHeaderData;
-        private RARHeaderDataEx _test2TxtFileHeaderData;
         private RARHeaderDataEx _test1TxtFileHeaderData;
         private RAROpenArchiveDataEx _invalidFileOpenData;
         private const string FILE_PATH_TO_INVALID_RAR = "C:\\GitRepos\\MainDefault\\Common\\Test\\test.txt";
         private const string FILE_PATH_TO_VALID_RAR = @"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar";
-        private const string FILE_PATH_TO_BROKEN_VALID_RAR = @"C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar";
 
         #region Overrides of TestsBase
 
@@ -72,30 +69,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
                 UnpVer = 20
             };
 
-            _test2TxtFileHeaderData = new RARHeaderDataEx
-            {
-                ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡㉴爮牡",
-                ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part2.rar",
-                CmtBuf = null,
-                CmtBufSize = 1,
-                CmtSize = 0,
-                CmtState = 0,
-                FileAttr = 32,
-                FileCRC = 462830299,
-                FileName = "整瑳琮瑸",
-                FileNameW = "test.txt",
-                FileTime = 1087152892,
-                Flags = 37056,
-                HostOS = 2,
-                Method = 48,
-                PackSize = 297540,
-                PackSizeHigh = 0,
-                Reserved = new uint[1024],
-                UnpSize = 297540,
-                UnpSizeHigh = 0,
-                UnpVer = 20
-            };
-
             _invalidFileOpenData = new RAROpenArchiveDataEx
             {
                 ArcName = FILE_PATH_TO_INVALID_RAR,
@@ -121,31 +94,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
 
             unrarHandle.Close(); //No exception assumes success
         }
-
-        //[Test]
-        //[ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to read header data.", MatchType = MessageMatch.Exact)]
-        //public void OpenArchiveCorruptTest()
-        //{
-        //    SetupInvalidHeaderMock();
-        //    var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_BROKEN_VALID_RAR);
-        //    unrarHandle.Open();
-        //    try
-        //    {
-        //        unrarHandle.GetArchive();
-        //    }
-        //    catch (UnrarException ex)
-        //    {
-        //        Assert.AreEqual(RarStatus.BadData, ex.Status);
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        if (unrarHandle.IsOpen)
-        //        {
-        //            unrarHandle.Close();
-        //        }
-        //    }
-        //}
 
         [Test]
         [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to open archive.", MatchType = MessageMatch.Exact)]
@@ -193,8 +141,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
             Assert.AreEqual(unrarHandle.UnrarDll, UnrarDllMock.Object);
         }
-
-
 
         [Test]
         [ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to close archive. Possibly because it's already closed.", MatchType = MessageMatch.Exact)]
@@ -276,6 +222,14 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             var unrarHandle = new UnrarHandle(UnrarDllMock.Object, FILE_PATH_TO_VALID_RAR);
             unrarHandle.Open();
             unrarHandle.Mode = OpenMode.Extract;
+        }
+
+        [Test]
+        public void SetModeTest()
+        {
+            var unrarHandle = new UnrarHandle(null, null);
+            unrarHandle.Mode = OpenMode.List;
+            Assert.AreEqual(OpenMode.List, unrarHandle.Mode);
         }
     }
 }

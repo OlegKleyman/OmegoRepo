@@ -31,6 +31,7 @@ namespace Oleg.Kleyman.Core
         /// <param name="y"> The second object to compare. </param>
         /// <returns> Boolean that specifies whether the two arguments used are equal. </returns>
         /// <exception cref="System.ArgumentNullException">Thrown when either of the arguments is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the compare handle is null.</exception>
         /// <example>
         ///   var comparer = new EqualityComparer&lt;int&gt;((x, y) => x == y); var valuesAreEqual = comparer.Equals(5, 5); Debug.WriteLine(valuesAreEqual); //writes true to the debug window
         /// </example>
@@ -55,6 +56,7 @@ namespace Oleg.Kleyman.Core
         /// </summary>
         /// <param name="target"> Target object to retreive the hash code from. </param>
         /// <returns> Integer Hash Code of target object. </returns>
+        /// <exception cref="ArgumentNullException">Thrown when the target argument is null.</exception>
         /// <example>
         ///   var comparer = new EqualityComparer&lt;int&gt;((x, y) => x == y); var hashCode = comparer.GetHashCode(5); Debug.WriteLine(hashCode); //writes 5 to the debug window
         /// </example>

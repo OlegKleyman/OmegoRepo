@@ -3,6 +3,9 @@ using System.Configuration;
 
 namespace Oleg.Kleyman.Core.Configuration
 {
+    /// <summary>
+    /// Represents a rar extractor configuration section.
+    /// </summary>
     public sealed class RarExtractorConfigurationSection : SingleValueConfigurationSection, IRarExtractorSettings
     {
         private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
@@ -18,11 +21,21 @@ namespace Oleg.Kleyman.Core.Configuration
         {
         }
 
+        /// <summary>
+        ///   Creates configuration section based on keys and values of an IDictionary.
+        /// </summary>
+        /// <param name="values"> The property names and values to set. </param>
+        /// <example>
+        ///   var propertyNameValues = new Dictionary&lt;string, object&gt; { {"value", "test"}, {"key", "someKey"} }; var element = new SingleValueConfigurationSection(propertyNameValues); //use object
+        /// </example>
         public RarExtractorConfigurationSection(IEnumerable<KeyValuePair<string, object>> values)
             : base(values)
         {
         }
 
+        /// <summary>
+        /// Gets the default extractor settings.
+        /// </summary>
         public static IRarExtractorSettings Default
         {
             get
@@ -42,6 +55,9 @@ namespace Oleg.Kleyman.Core.Configuration
 
         #region Implementation of IRarExtractorSettings
 
+        /// <summary>
+        /// Gets the path for unrar file.
+        /// </summary>
         string IRarExtractorSettings.UnrarPath
         {
             get { return Value; }

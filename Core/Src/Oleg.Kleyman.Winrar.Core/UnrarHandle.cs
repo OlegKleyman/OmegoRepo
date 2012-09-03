@@ -70,7 +70,7 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <summary>
         ///   Gets or Sets the UnrarDll for unrarDll operations.
         /// </summary>
-        /// <exception cref="InvalidOperationException" />
+        /// <exception cref="InvalidOperationException">Thrown when the handle is still open.</exception>
         public IUnrarDll UnrarDll
         {
             get { return _unrarDll; }
@@ -99,6 +99,7 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <summary>
         ///   Closes the handle to the rar archive.
         /// </summary>
+        /// <exception cref="UnrarException">Thrown when the handle cannot be closed.</exception>
         public void Close()
         {
             if (IsOpen)
@@ -150,6 +151,8 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <summary>
         ///   Opens the handle to the archive
         /// </summary>
+        /// <exception cref="UnrarException">Thrown when the archive was unable to be opened.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the handle is already open, the UnrarDll or RarFilePath properties are null or an empty string.</exception>
         public void Open()
         {
             ValidatePrerequisites();

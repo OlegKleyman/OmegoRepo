@@ -15,24 +15,6 @@ namespace Oleg.Kleyman.Core.Tests
         }
 
         [Test]
-        public void CheckCoverage()
-        {
-            var knownMembers = new Dictionary<string, int>
-                                   {
-                                       {"Distinct", 1}
-                                   };
-
-            var coverageAnalyzer = new CoverageAnalyzer(typeof (Linq.Enumerable));
-
-            var result = coverageAnalyzer.ValidateMembers(knownMembers);
-            if (!result)
-            {
-                const string membersNotCoveredMessage = "All members not covered";
-                Assert.Inconclusive(membersNotCoveredMessage);
-            }
-        }
-
-        [Test]
         public void DistinctTest()
         {
             var values = new[] {"Test1", "Test2", "Test3", "Test4", "Test2", "Test5", "Test3", "Test2"};
