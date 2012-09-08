@@ -16,8 +16,14 @@ namespace Oleg.Kleyman.Core.Configuration
         {
             __syncLock = new object();
         }
-
+        
+// ReSharper disable UnusedMember.Local
+        /// <summary>
+        /// Instantiates an instance of the <see cref="RarExtractorConfigurationSection" /> class.
+        /// </summary>
+        /// <remarks>This constructor is needed to create an object dynamically.</remarks>
         private RarExtractorConfigurationSection()
+// ReSharper restore UnusedMember.Local
         {
         }
 

@@ -52,12 +52,12 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" />.
+        ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
         /// </summary>
         /// <param name="configuration"> The <see cref="Oleg.Kleyman.Core.Configuration" /> object containing the <see
-        ///    cref="System.Configuration.ConfigurationSection" /> to load.</param>
-        /// <param name="sectionName"> The name of the configuration section to load.</param>
-        /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object.</returns>
+        ///    cref="System.Configuration.ConfigurationSection" /> to load. </param>
+        /// <param name="sectionName"> The name of the configuration section to load. </param>
+        /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
         /// <exception cref="ArgumentNullException">Thrown when the configuration or sectionName argument is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the sectionName argument is an empty string.</exception>
         /// <exception cref="ConfigurationErrorsException">Thrown when the configuration section is not found.</exception>

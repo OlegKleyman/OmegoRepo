@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Oleg.Kleyman.Winrar.Interop.Tests.Integration")]
+[assembly: AssemblyTitle("Oleg.Kleyman.Utorrent.Core.Tests.Integration")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Oleg.Kleyman.Winrar.Interop.Tests.Integration")]
+[assembly: AssemblyProduct("Oleg.Kleyman.Utorrent.Core.Tests.Integration")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("c68105e9-e09f-4d1c-8984-eaf93c66de39")]
+[assembly: Guid("1dbc4fda-8cd7-4976-a0fc-22ccb8fdfcda")]
 
 // Version information for an assembly consists of the following four values:
 //

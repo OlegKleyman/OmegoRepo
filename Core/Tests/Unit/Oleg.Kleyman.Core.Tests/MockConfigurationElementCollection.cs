@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
 using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Core.Tests
 {
-    internal class MockConfigurationElementCollection<T> : ConfigurationElementCollectionBase<T> where T : ConfigurationElement
+    internal class MockConfigurationElementCollection<T> : ConfigurationElementCollectionBase<T>
+        where T : ConfigurationElement
     {
         internal ConfigurationElement CallCreateNewElement()
         {
@@ -18,7 +16,8 @@ namespace Oleg.Kleyman.Core.Tests
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            throw new NotImplementedException("this class is a mock implementation for testing and this method is not implemented");
+            throw new NotImplementedException(
+                "this class is a mock implementation for testing and this method is not implemented");
         }
 
         #endregion

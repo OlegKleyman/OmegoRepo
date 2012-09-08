@@ -3,12 +3,10 @@ using System.Diagnostics;
 namespace Oleg.Kleyman.Core
 {
     /// <summary>
-    /// Represents a system process.
+    ///   Represents a system process.
     /// </summary>
     public class SystemProcess : IProcess
     {
-        protected Process Process { get; private set; }
-
         internal SystemProcess(Process systemProcess)
         {
             Process = systemProcess;
@@ -17,7 +15,7 @@ namespace Oleg.Kleyman.Core
         #region Implementation of IProcess
 
         /// <summary>
-        /// Gets whether the process has exited.
+        ///   Gets whether the process has exited.
         /// </summary>
         public bool HasExited
         {
@@ -25,7 +23,7 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        /// Blocks the current thread until the process exits.
+        ///   Blocks the current thread until the process exits.
         /// </summary>
         public void WaitForExit()
         {
@@ -33,7 +31,7 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        /// Gets or sets the priority of the process.
+        ///   Gets or sets the priority of the process.
         /// </summary>
         public ProcessPriorityClass PriorityClass
         {
@@ -42,7 +40,7 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        /// Ends the process forcefully.
+        ///   Ends the process forcefully.
         /// </summary>
         public void Kill()
         {
@@ -50,5 +48,7 @@ namespace Oleg.Kleyman.Core
         }
 
         #endregion
+
+        protected Process Process { get; private set; }
     }
 }

@@ -1,7 +1,6 @@
 using System.IO;
 using Moq;
 using NUnit.Framework;
-using Oleg.Kleyman.Core.Configuration;
 
 namespace Oleg.Kleyman.Core.Tests.Integration
 {
@@ -42,13 +41,14 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(FileNotFoundException),
+        [ExpectedException(ExpectedException = typeof (FileNotFoundException),
             ExpectedExceptionName = "System.IO.FileNotFoundException",
             ExpectedMessage = @"Unable to find unrar file at location C:\Program Files\WinRAR\InvalidFile.exe",
             MatchType = MessageMatch.Exact)]
         public void ExtractUnrarFileNotFoundTest()
         {
-            Extractor extractor = new RarExtractor(@"C:\Program Files\WinRAR\InvalidFile.exe", _fileSystem, _processManager);
+            Extractor extractor = new RarExtractor(@"C:\Program Files\WinRAR\InvalidFile.exe", _fileSystem,
+                                                   _processManager);
             const string destination = @"..\..\..\..\..\..\Common\Test\testUnrar\";
 
             extractor.Extract(@"..\..\..\..\..\..\Common\Test\testFile.Rar", destination);

@@ -1,28 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Oleg.Kleyman.Tests.Core.Tests
 {
     [TestFixture]
     public class MockDirectoryTests : TestsBase
     {
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-            
-        }
-
-        #endregion
-
-        [Test]
-        public void FullNameTest()
-        {
-            var mockDirectory = new MockDirectory(@"C:\test");
-            Assert.AreEqual(@"C:\test", mockDirectory.FullName);
         }
 
         [Test]
@@ -38,6 +22,13 @@ namespace Oleg.Kleyman.Tests.Core.Tests
         {
             var mockDirectory = new MockDirectory(@"C:\test");
             Assert.IsTrue(mockDirectory.Exists);
+        }
+
+        [Test]
+        public void FullNameTest()
+        {
+            var mockDirectory = new MockDirectory(@"C:\test");
+            Assert.AreEqual(@"C:\test", mockDirectory.FullName);
         }
 
         [Test]

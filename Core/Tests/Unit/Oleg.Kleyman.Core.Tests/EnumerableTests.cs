@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
-using Oleg.Kleyman.Tests.Core;
 using Oleg.Kleyman.Core.Linq;
 
 namespace Oleg.Kleyman.Core.Tests
@@ -18,7 +16,7 @@ namespace Oleg.Kleyman.Core.Tests
         public void DistinctTest()
         {
             var values = new[] {"Test1", "Test2", "Test3", "Test4", "Test2", "Test5", "Test3", "Test2"};
-            
+
             var distinctValues = values.Distinct((x, y) => x == y);
             var indexedValues = distinctValues.ToArray();
             Assert.AreEqual(5, indexedValues.Length);

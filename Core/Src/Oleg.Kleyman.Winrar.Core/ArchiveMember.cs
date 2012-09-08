@@ -7,37 +7,37 @@ namespace Oleg.Kleyman.Winrar.Core
     public class ArchiveMember
     {
         /// <summary>
-        /// Gets the high member flags.
+        ///   Gets the high member flags.
         /// </summary>
         public HighMemberFlags HighFlags { get; internal set; }
 
         /// <summary>
-        /// Gets the unpacked size of the file in bytes.
+        ///   Gets the unpacked size of the file in bytes.
         /// </summary>
         public long UnpackedSize { get; internal set; }
 
         /// <summary>
-        /// Gets the packed size of the file in bytes.
+        ///   Gets the packed size of the file in bytes.
         /// </summary>
         public long PackedSize { get; internal set; }
 
         /// <summary>
-        /// Gets the last modification date of the file.
+        ///   Gets the last modification date of the file.
         /// </summary>
         public DateTime LastModificationDate { get; internal set; }
 
         /// <summary>
-        /// Gets the name of the file.
+        ///   Gets the name of the file.
         /// </summary>
         public string Name { get; internal set; }
 
         /// <summary>
-        /// Gets the archive volume name that the file is in.
+        ///   Gets the archive volume name that the file is in.
         /// </summary>
         public string Volume { get; internal set; }
 
         /// <summary>
-        /// Gets the low member flags.
+        ///   Gets the low member flags.
         /// </summary>
         public LowMemberFlags LowFlags { get; internal set; }
 
@@ -48,7 +48,7 @@ namespace Oleg.Kleyman.Winrar.Core
             var packedSize = JoinSizes(headerData.PackSize, headerData.PackSizeHigh);
             var maskedMemberFlags = GetArchiveMemberFlags(headerData.Flags);
             var memberFlags = GetMemberFlags(headerData.Flags);
-            
+
             var archiveFile = new ArchiveMember();
             archiveFile.Name = headerData.FileNameW;
             archiveFile.Volume = headerData.ArcNameW;
@@ -63,7 +63,7 @@ namespace Oleg.Kleyman.Winrar.Core
         private static LowMemberFlags GetMemberFlags(uint flags)
         {
             const int flagMask = 0x1F;
-            var flagsResult = (LowMemberFlags)(flags & flagMask);
+            var flagsResult = (LowMemberFlags) (flags & flagMask);
 
             return flagsResult;
         }
@@ -71,7 +71,7 @@ namespace Oleg.Kleyman.Winrar.Core
         private static HighMemberFlags GetArchiveMemberFlags(uint flags)
         {
             const int flagMask = 0xE0;
-            var flagsResult = (HighMemberFlags)(flags & flagMask);
+            var flagsResult = (HighMemberFlags) (flags & flagMask);
 
             return flagsResult;
         }
@@ -86,7 +86,7 @@ namespace Oleg.Kleyman.Winrar.Core
 
         private static long JoinSizes(uint low, uint high)
         {
-            long unpackedSize = high != default(uint) ? low.JoinWithLeft(high) : low;
+            var unpackedSize = high != default(uint) ? low.JoinWithLeft(high) : low;
 
             return unpackedSize;
         }

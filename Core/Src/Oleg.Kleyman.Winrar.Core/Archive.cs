@@ -1,40 +1,54 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Runtime.InteropServices;
 using Oleg.Kleyman.Core;
-using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
     public class Archive : IArchive
     {
-        /// <summary>
-        /// Gets the files in the archive.
-        /// </summary>
-        public ReadOnlyCollection<ArchiveMember> Files { get; private set; }
-        /// <summary>
-        /// Gets the file path of the archive.
-        /// </summary>
-        public string FilePath { get; private set; }
-        /// <summary>
-        /// Gets the <see cref="IUnrar"/> object that the instance is interfacing with.
-        /// </summary>
-        public IUnrar Unrar { get; private set; }
-
         private Archive(IUnrar unrar)
         {
             Unrar = unrar;
-            Files = new ReadOnlyCollection<ArchiveMember>(new ArchiveMember[] { });
+            Files = new ReadOnlyCollection<ArchiveMember>(new ArchiveMember[] {});
         }
 
         /// <summary>
-        /// Gets the unrar Archive.
+        ///   Gets the <see cref="IUnrar" /> object that the instance is interfacing with.
         /// </summary>
-        /// <param name="unrar"><see cref="IUnrar" /> to use when getting the Archive</param>
-        /// <returns>The Archive.</returns>
-        /// <remarks>This method changes the Mode property of the Handle in the <see cref="IUnrar"/> object to <see cref="OpenMode.Extract"/>.</remarks>
+        public IUnrar Unrar { get; private set; }
+
+        #region IArchive Members
+
+        /// <summary>
+        ///   Gets the files in the archive.
+        /// </summary>
+        public ReadOnlyCollection<ArchiveMember> Files { get; private set; }
+
+        /// <summary>
+        ///   Gets the file path of the archive.
+        /// </summary>
+        public string FilePath { get; private set; }
+
+        /// <summary>
+        ///   Extracts the contents of the archive.
+        /// </summary>
+        /// <param name="destination"> The destination file path for extraction. </param>
+        /// <returns> The extracted members. </returns>
+        public IFileSystemMember[] Extract(string destination)
+        {
+            var extractedMembers = ExtractArchive(destination);
+            return extractedMembers;
+        }
+
+        #endregion
+
+        /// <summary>
+        ///   Gets the unrar Archive.
+        /// </summary>
+        /// <param name="unrar"> <see cref="IUnrar" /> to use when getting the Archive </param>
+        /// <returns> The Archive. </returns>
+        /// <remarks>
+        ///   This method changes the Mode property of the Handle in the <see cref="IUnrar" /> object to <see cref="OpenMode.Extract" /> .
+        /// </remarks>
         public static IArchive Open(IUnrar unrar)
         {
             var archive = GetArchive(unrar);
@@ -73,17 +87,6 @@ namespace Oleg.Kleyman.Winrar.Core
             return archive;
         }
 
-
-        /// <summary>
-        /// Extracts the contents of the archive.
-        /// </summary>
-        /// <param name="destination">The destination file path for extraction.</param>
-        /// <returns>The extracted members.</returns>
-        public IFileSystemMember[] Extract(string destination)
-        {
-            var extractedMembers = ExtractArchive(destination);
-            return extractedMembers;
-        }
 
         private IFileSystemMember[] ExtractArchive(string destination)
         {

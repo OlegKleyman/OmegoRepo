@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using NUnit.Framework;
 using Oleg.Kleyman.Tests.Core;
@@ -15,14 +13,145 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
     {
         private ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
 
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-
         }
 
-        #endregion
+        private bool _callBackSuccess;
+
+        private void ExtractAndVerify(IUnrarDll unrarDll, IntPtr handle, string directory, string extractPath)
+        {
+            RARHeaderDataEx headerData;
+            var status = unrarDll.RARReadHeaderEx(handle, out headerData);
+            Assert.AreEqual(0, status);
+            var extractStatus = unrarDll.RARProcessFileW(handle, 2, directory, extractPath);
+            Assert.AreEqual(0, extractStatus);
+            Assert.AreEqual(0, status);
+            if (string.IsNullOrEmpty(extractPath))
+            {
+                if ((headerData.Flags & 0xE0) == 0xE0)
+                {
+                    Assert.IsTrue(Directory.Exists(Path.Combine(directory, headerData.FileNameW)));
+                }
+                else
+                {
+                    Assert.IsTrue(File.Exists(Path.Combine(directory, headerData.FileNameW)));
+                }
+
+                Directory.Delete(directory, true);
+                Directory.CreateDirectory(directory);
+            }
+            else
+            {
+                Assert.IsTrue(File.Exists(extractPath), "file doesn't exist");
+                File.Delete(extractPath);
+            }
+        }
+
+        private int RarCallBack(uint message, IntPtr userData, IntPtr p1, int p2)
+        {
+            Assert.AreEqual("test data", Marshal.PtrToStringUni(userData));
+            _callBackSuccess = true;
+            return 1;
+        }
+
+        [Test]
+        public void ExtractToDirectoryTest()
+        {
+            IUnrarDll unrarDll = new UnrarDll();
+            var openData = new RAROpenArchiveDataEx();
+            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
+            openData.OpenMode = 1;
+            var handle = unrarDll.RAROpenArchiveEx(ref openData);
+            Assert.AreNotEqual(IntPtr.Zero, handle);
+
+            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\test");
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+
+            var result = unrarDll.RARCloseArchive(handle);
+            Assert.AreEqual(0, result);
+
+            Directory.Delete(extractPath, true);
+        }
+
+        [Test]
+        public void ExtractWithFoldersTest()
+        {
+            IUnrarDll unrarDll = new UnrarDll();
+            var openData = new RAROpenArchiveDataEx();
+            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestFolder.rar");
+            openData.OpenMode = 1;
+            var handle = unrarDll.RAROpenArchiveEx(ref openData);
+            Assert.AreNotEqual(IntPtr.Zero, handle);
+
+            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\");
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+            ExtractAndVerify(unrarDll, handle, extractPath, null);
+
+            var result = unrarDll.RARCloseArchive(handle);
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void MultiVolumeTest()
+        {
+            IUnrarDll unrarDll = new UnrarDll();
+            var openData = new RAROpenArchiveDataEx();
+            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
+            openData.OpenMode = 1;
+            var handle = unrarDll.RAROpenArchiveEx(ref openData);
+            Assert.AreNotEqual(IntPtr.Zero, handle);
+
+            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
+            ExtractAndVerify(unrarDll, handle, null, extractPath);
+            extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile2.txt.test");
+            ExtractAndVerify(unrarDll, handle, null, extractPath);
+
+            var result = unrarDll.RARCloseArchive(handle);
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void RARCloseArchiveTest()
+        {
+            IUnrarDll unrarDll = new UnrarDll();
+            var openData = new RAROpenArchiveDataEx();
+            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
+            var handle = unrarDll.RAROpenArchiveEx(ref openData);
+            Assert.AreNotEqual(IntPtr.Zero, handle);
+            var result = unrarDll.RARCloseArchive(handle);
+            Assert.AreEqual(0, result);
+        }
+
+        [Test]
+        public void RAROpenArchiveDataExCallBackTest()
+        {
+            IUnrarDll unrarDll = new UnrarDll();
+            var openData = new RAROpenArchiveDataEx();
+            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
+            openData.OpenMode = 1;
+            openData.Callback = RarCallBack;
+
+            openData.UserData = Marshal.StringToCoTaskMemUni("test data");
+            ;
+            var handle = unrarDll.RAROpenArchiveEx(ref openData);
+            Assert.AreNotEqual(IntPtr.Zero, handle);
+
+            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
+            ExtractAndVerify(unrarDll, handle, null, extractPath);
+            Assert.IsTrue(_callBackSuccess);
+            _callBackSuccess = false;
+
+            extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile2.txt.test");
+            ExtractAndVerify(unrarDll, handle, null, extractPath);
+            Assert.IsTrue(_callBackSuccess);
+
+            var result = unrarDll.RARCloseArchive(handle);
+            Assert.AreEqual(0, result);
+        }
 
         [Test]
         public void RAROpenArchiveExTest()
@@ -36,13 +165,18 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         }
 
         [Test]
-        public void RARCloseArchiveTest()
+        public void RARProcessFileWTest()
         {
             IUnrarDll unrarDll = new UnrarDll();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
+            openData.OpenMode = 1;
             var handle = unrarDll.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);
+
+            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
+            ExtractAndVerify(unrarDll, handle, null, extractPath);
+
             var result = unrarDll.RARCloseArchive(handle);
             Assert.AreEqual(0, result);
         }
@@ -86,63 +220,6 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         }
 
         [Test]
-        public void RARProcessFileWTest()
-        {
-            IUnrarDll unrarDll = new UnrarDll();
-            var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
-            openData.OpenMode = 1;
-            var handle = unrarDll.RAROpenArchiveEx(ref openData);
-            Assert.AreNotEqual(IntPtr.Zero, handle);
-            
-            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
-            ExtractAndVerify(unrarDll, handle, null, extractPath);
-
-            var result = unrarDll.RARCloseArchive(handle);
-            Assert.AreEqual(0, result);
-        }
-
-        [Test]
-        public void MultiVolumeTest()
-        {
-            IUnrarDll unrarDll = new UnrarDll();
-            var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
-            openData.OpenMode = 1;
-            var handle = unrarDll.RAROpenArchiveEx(ref openData);
-            Assert.AreNotEqual(IntPtr.Zero, handle);
-
-            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
-            ExtractAndVerify(unrarDll, handle, null, extractPath);
-            extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile2.txt.test");
-            ExtractAndVerify(unrarDll, handle, null, extractPath);
-
-            var result = unrarDll.RARCloseArchive(handle);
-            Assert.AreEqual(0, result);
-        }
-
-        [Test]
-        public void ExtractWithFoldersTest()
-        {
-            IUnrarDll unrarDll = new UnrarDll();
-            var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestFolder.rar");
-            openData.OpenMode = 1;
-            var handle = unrarDll.RAROpenArchiveEx(ref openData);
-            Assert.AreNotEqual(IntPtr.Zero, handle);
-
-            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\");
-            ExtractAndVerify(unrarDll, handle, extractPath, null);
-            ExtractAndVerify(unrarDll, handle, extractPath, null);
-            ExtractAndVerify(unrarDll, handle, extractPath, null);
-            ExtractAndVerify(unrarDll, handle, extractPath, null);
-
-            var result = unrarDll.RARCloseArchive(handle);
-            Assert.AreEqual(0, result);
-        }
-
-        private bool _callBackSuccess;
-        [Test]
         public void RARSetCallbackTest()
         {
             IUnrarDll unrarDll = new UnrarDll();
@@ -152,80 +229,6 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             var handle = unrarDll.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);
             unrarDll.RARSetCallback(handle, RarCallBack, Marshal.StringToCoTaskMemUni("test data"));
-            
-            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
-            ExtractAndVerify(unrarDll, handle, null, extractPath);
-            Assert.IsTrue(_callBackSuccess);
-            _callBackSuccess = false;
-
-            extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile2.txt.test");
-            ExtractAndVerify(unrarDll, handle, null, extractPath);
-            Assert.IsTrue(_callBackSuccess);
-
-            var result = unrarDll.RARCloseArchive(handle);
-            Assert.AreEqual(0, result);
-        }
-
-        private void ExtractAndVerify(IUnrarDll unrarDll, IntPtr handle, string directory, string extractPath)
-        {
-            RARHeaderDataEx headerData;
-            var status = unrarDll.RARReadHeaderEx(handle, out headerData);
-            Assert.AreEqual(0, status);
-            var extractStatus = unrarDll.RARProcessFileW(handle, 2, directory, extractPath);
-            Assert.AreEqual(0, extractStatus);
-            Assert.AreEqual(0, status);
-            if(string.IsNullOrEmpty(extractPath))
-            {
-                if ((headerData.Flags & 0xE0) == 0xE0)
-                {
-                    Assert.IsTrue(Directory.Exists(Path.Combine(directory, headerData.FileNameW)));
-                }
-                else
-                {
-                    Assert.IsTrue(File.Exists(Path.Combine(directory, headerData.FileNameW)));
-                }
-
-                Directory.Delete(directory, true);
-                Directory.CreateDirectory(directory);
-            }
-            else
-            {
-                Assert.IsTrue(File.Exists(extractPath), "file doesn't exist");
-                File.Delete(extractPath);
-            }
-        }
-
-        [Test]
-        public void ExtractToDirectoryTest()
-        {
-            IUnrarDll unrarDll = new UnrarDll();
-            var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
-            openData.OpenMode = 1;
-            var handle = unrarDll.RAROpenArchiveEx(ref openData);
-            Assert.AreNotEqual(IntPtr.Zero, handle);
-
-            var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\test");
-            ExtractAndVerify(unrarDll, handle, extractPath, null);
-            ExtractAndVerify(unrarDll, handle, extractPath, null);
-
-            var result = unrarDll.RARCloseArchive(handle);
-            Assert.AreEqual(0, result);
-
-            Directory.Delete(extractPath, true);
-        }
-        [Test]
-        public void RAROpenArchiveDataExCallBackTest()
-        {
-            IUnrarDll unrarDll = new UnrarDll();
-            var openData = new RAROpenArchiveDataEx();
-            openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
-            openData.OpenMode = 1;
-            openData.Callback = RarCallBack;
-
-            openData.UserData = Marshal.StringToCoTaskMemUni("test data"); ;
-            var handle = unrarDll.RAROpenArchiveEx(ref openData);
-            Assert.AreNotEqual(IntPtr.Zero, handle);
 
             var extractPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestExtractions\testFile.txt.test");
             ExtractAndVerify(unrarDll, handle, null, extractPath);
@@ -238,13 +241,6 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
 
             var result = unrarDll.RARCloseArchive(handle);
             Assert.AreEqual(0, result);
-        }
-
-        private int RarCallBack(uint message, IntPtr userData, IntPtr p1, int p2)
-        {
-            Assert.AreEqual("test data", Marshal.PtrToStringUni(userData));
-            _callBackSuccess = true;
-            return 1;
         }
     }
 }

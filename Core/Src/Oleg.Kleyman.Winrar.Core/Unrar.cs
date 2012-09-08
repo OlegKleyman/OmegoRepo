@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -9,24 +8,68 @@ using Oleg.Kleyman.Winrar.Interop;
 namespace Oleg.Kleyman.Winrar.Core
 {
     /// <summary>
-    /// Represents a store of Unrar operations.
+    ///   Represents a store of Unrar operations.
     /// </summary>
     public class Unrar : IUnrar
     {
         /// <summary>
-        /// The <see cref="IUnrarHandle"/> to use for operations.
+        ///   Initializes the <see cref="Unrar" /> object.
         /// </summary>
-        public IUnrarHandle  Handle { get; set; }
+        /// <param name="handle"> The <see cref="IUnrarHandle" /> to use for operations. </param>
+        /// <param name="fileSystem"> The <see cref="IFileSystem" /> to use for file system operations. </param>
+        public Unrar(IUnrarHandle handle, IFileSystem fileSystem)
+        {
+            Handle = handle;
+            FileSystem = fileSystem;
+        }
 
         /// <summary>
-        /// The <see cref="IFileSystem"/> to use for file system operations.
+        ///   The <see cref="IFileSystem" /> to use for file system operations.
         /// </summary>
         public IFileSystem FileSystem { get; set; }
 
+        #region IUnrar Members
+
         /// <summary>
-        /// Invoked when a compressed member is extracted.
+        ///   The <see cref="IUnrarHandle" /> to use for operations.
+        /// </summary>
+        public IUnrarHandle Handle { get; set; }
+
+        /// <summary>
+        ///   Invoked when a compressed member is extracted.
         /// </summary>
         public event EventHandler<UnrarEventArgs> MemberExtracted;
+
+        /// <summary>
+        ///   Executes the archive reader.
+        /// </summary>
+        /// <returns> An <see cref="IArchiveReader" /> . </returns>
+        /// <exception cref="InvalidOperationException">Thrown when the handle is not open or the handle mode is
+        ///   <see cref="OpenMode.Extract" />
+        ///   .</exception>
+        public IArchiveReader ExecuteReader()
+        {
+            ThrowExceptionOnHandleNull();
+            var reader = new ArchiveReader(Handle);
+            reader.ValidateHandle();
+            return reader;
+        }
+
+        /// <summary>
+        ///   Extracts the archive.
+        /// </summary>
+        /// <param name="destinationPath"> The destination folder to extract to. If it does not exist then it will be created. </param>
+        /// <returns> A <see cref="FileSystemInfo" /> object containing directory information of the destination. </returns>
+        /// <exception cref="InvalidOperationException">Thrown when the Handle or FileSystem properties are null.</exception>
+        public IFileSystemMember[] Extract(string destinationPath)
+        {
+            ThrowExceptionOnHandleNull();
+            ThrowExceptionOnFileSystemNull();
+
+            return ExtractArchive(destinationPath);
+        }
+
+        #endregion
 
         protected void OnMemberExtracted(UnrarEventArgs e)
         {
@@ -37,30 +80,6 @@ namespace Oleg.Kleyman.Winrar.Core
             }
         }
 
-        /// <summary>
-        /// Initializes the <see cref="Unrar"/> object.
-        /// </summary>
-        /// <param name="handle">The <see cref="IUnrarHandle"/> to use for operations.</param>
-        /// <param name="fileSystem">The <see cref="IFileSystem"/> to use for file system operations.</param>
-        public Unrar(IUnrarHandle handle, IFileSystem fileSystem)
-        {
-            Handle = handle;
-            FileSystem = fileSystem;
-        }
-
-        /// <summary>
-        /// Executes the archive reader.
-        /// </summary>
-        /// <returns>An <see cref="IArchiveReader"/>.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the handle is not open or the handle mode is <see cref="OpenMode.Extract"/>.</exception>
-        public IArchiveReader ExecuteReader()
-        {
-            ThrowExceptionOnHandleNull();
-            var reader = new ArchiveReader(Handle);
-            reader.ValidateHandle();
-            return reader;
-        }
-
         private void ThrowExceptionOnHandleNull()
         {
             if (Handle == null)
@@ -68,20 +87,6 @@ namespace Oleg.Kleyman.Winrar.Core
                 const string handleCannotBeNullMessage = "Handle cannot be null.";
                 throw new InvalidOperationException(handleCannotBeNullMessage);
             }
-        }
-
-        /// <summary>
-        /// Extracts the archive.
-        /// </summary>
-        /// <param name="destinationPath">The destination folder to extract to. If it does not exist then it will be created.</param>
-        /// <returns>A <see cref="FileSystemInfo"/> object containing directory information of the destination.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the Handle or FileSystem properties are null.</exception>
-        public IFileSystemMember[] Extract(string destinationPath)
-        {
-            ThrowExceptionOnHandleNull();
-            ThrowExceptionOnFileSystemNull();
-            
-            return ExtractArchive(destinationPath);
         }
 
         private IFileSystemMember[] ExtractArchive(string destinationPath)
@@ -111,7 +116,7 @@ namespace Oleg.Kleyman.Winrar.Core
             {
                 content = ProcessFile(destinationPath, headerData);
             }
-            else if(result != RarStatus.EndOfArchive)
+            else if (result != RarStatus.EndOfArchive)
             {
                 const string unableToReadHeaderData = "Unable to read header data.";
                 throw new UnrarException(unableToReadHeaderData, result);
@@ -136,7 +141,6 @@ namespace Oleg.Kleyman.Winrar.Core
             if (memberFlags == HighMemberFlags.DirectoryRecord)
             {
                 content = FileSystem.GetDirectory(extractedPath);
-                
             }
             else
             {
@@ -148,7 +152,10 @@ namespace Oleg.Kleyman.Winrar.Core
 
         private void ProcessFile(string destinationPath)
         {
-            var result = (RarStatus)Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int) ArchiveMemberOperation.Extract, destinationPath, null);
+            var result =
+                (RarStatus)
+                Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int) ArchiveMemberOperation.Extract, destinationPath,
+                                                null);
             if (result != RarStatus.Success)
             {
                 const string unableToExtractFileMessage = "Unable to extract file.";

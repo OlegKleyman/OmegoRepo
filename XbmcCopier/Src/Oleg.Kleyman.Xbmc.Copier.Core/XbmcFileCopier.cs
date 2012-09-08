@@ -22,7 +22,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         {
             ThrowInvalidArgumentExceptionIfOutputIsInvalidType(output);
             var releaseOutput = (ReleaseOutput) output;
-            
+
             switch (releaseOutput.Release.ReleaseType)
             {
                 case ReleaseType.Tv:
@@ -35,8 +35,9 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
                     goto default;
                 default:
                     throw new ApplicationException(string.Format("Release type of {0} is not supported.",
-                                                                 Enum.GetName(releaseOutput.Release.ReleaseType.GetType(),
-                                                                              releaseOutput.Release.ReleaseType)));
+                                                                 Enum.GetName(
+                                                                     releaseOutput.Release.ReleaseType.GetType(),
+                                                                     releaseOutput.Release.ReleaseType)));
             }
 
             var copiedOutput = GetOutput(releaseOutput);
@@ -45,13 +46,14 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private Output GetOutput(ReleaseOutput releaseOutput)
         {
-            if(releaseOutput.Release.ReleaseType ==  ReleaseType.Tv)
+            if (releaseOutput.Release.ReleaseType == ReleaseType.Tv)
             {
                 var targetDirectory = Path.Combine(ConfigSettings.TvPath, releaseOutput.Release.Name);
-                if(!string.IsNullOrEmpty(releaseOutput.FileName))
+                if (!string.IsNullOrEmpty(releaseOutput.FileName))
                 {
-                    var fileExists = Dependencies.FileSystem.FileExists(Path.Combine(targetDirectory, releaseOutput.FileName));
-                    if(fileExists)
+                    var fileExists =
+                        Dependencies.FileSystem.FileExists(Path.Combine(targetDirectory, releaseOutput.FileName));
+                    if (fileExists)
                     {
                         return new Output(releaseOutput.FileName, targetDirectory);
                     }
@@ -63,7 +65,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 
         private void ThrowInvalidArgumentExceptionIfOutputIsInvalidType(object output)
         {
-            if(!(output is ReleaseOutput))
+            if (!(output is ReleaseOutput))
             {
                 const string mustBeOfTypeReleaseoutputMessage = "Must be of type ReleaseOutput";
                 const string outputName = "output";

@@ -46,10 +46,12 @@ namespace Oleg.Kleyman.Winrar.Core
 
         #endregion
 
+        #region IUnrarHandle Members
+
         public IntPtr Handle { get; private set; }
 
         /// <summary>
-        /// Gets or sets the open mode for the handle.
+        ///   Gets or sets the open mode for the handle.
         /// </summary>
         public OpenMode Mode
         {
@@ -64,8 +66,6 @@ namespace Oleg.Kleyman.Winrar.Core
                 _mode = value;
             }
         }
-
-        #region IUnrarHandle Members
 
         /// <summary>
         ///   Gets or Sets the UnrarDll for unrarDll operations.
@@ -120,6 +120,33 @@ namespace Oleg.Kleyman.Winrar.Core
             }
         }
 
+        /// <summary>
+        ///   Opens the handle to the archive
+        /// </summary>
+        /// <exception cref="UnrarException">Thrown when the archive was unable to be opened.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the handle is already open, the UnrarDll or RarFilePath properties are null or an empty string.</exception>
+        public void Open()
+        {
+            ValidatePrerequisites();
+            var openData = new RAROpenArchiveDataEx
+                               {
+                                   ArcName = RarFilePath,
+                                   OpenMode = (uint) Mode
+                               };
+
+            Handle = UnrarDll.RAROpenArchiveEx(ref openData);
+
+            GC.ReRegisterForFinalize(this);
+
+            if (Handle == default(IntPtr))
+            {
+                const string unableToOpenArchiveMessage = "Unable to open archive.";
+                throw new UnrarException(unableToOpenArchiveMessage, (RarStatus) openData.OpenResult);
+            }
+
+            IsOpen = true;
+        }
+
         #endregion
 
         [NoCoverage]
@@ -146,33 +173,6 @@ namespace Oleg.Kleyman.Winrar.Core
                 const string rarFilePathMustBeSetMessage = "RarFilePath must be set.";
                 throw new InvalidOperationException(rarFilePathMustBeSetMessage);
             }
-        }
-
-        /// <summary>
-        ///   Opens the handle to the archive
-        /// </summary>
-        /// <exception cref="UnrarException">Thrown when the archive was unable to be opened.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the handle is already open, the UnrarDll or RarFilePath properties are null or an empty string.</exception>
-        public void Open()
-        {
-            ValidatePrerequisites();
-            var openData = new RAROpenArchiveDataEx
-                               {
-                                   ArcName = RarFilePath,
-                                   OpenMode = (uint) Mode
-                               };
-
-            Handle = UnrarDll.RAROpenArchiveEx(ref openData);
-
-            GC.ReRegisterForFinalize(this);
-
-            if (Handle == default(IntPtr))
-            {
-                const string unableToOpenArchiveMessage = "Unable to open archive.";
-                throw new UnrarException(unableToOpenArchiveMessage, (RarStatus) openData.OpenResult);
-            }
-
-            IsOpen = true;
         }
     }
 }

@@ -6,21 +6,19 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
     [TestFixture]
     public class ReleaseBuilderTests : TestsBase
     {
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-            
         }
-
-        #endregion
 
         [Test]
-        public void DefaultConstructorTest()
+        public void BuildMovieTest()
         {
-            var builder = new ReleaseBuilder(new TestSettings(), "Breaking.Bad.S01E07.720p");
-            Assert.AreEqual("Breaking.Bad.S01E07.720p", builder.Name);
+            var builder = new ReleaseBuilder(new TestSettings(), "The.Matix.1999.1080p.BluRay");
+            var release = builder.Build();
+            Assert.AreEqual("The.Matix.1999.1080p.BluRay", release.Name);
+            Assert.AreEqual(ReleaseType.Movie, release.ReleaseType);
         }
+
         [Test]
         public void BuildTvTest()
         {
@@ -31,12 +29,10 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
         }
 
         [Test]
-        public void BuildMovieTest()
+        public void DefaultConstructorTest()
         {
-            var builder = new ReleaseBuilder(new TestSettings(), "The.Matix.1999.1080p.BluRay");
-            var release = builder.Build();
-            Assert.AreEqual("The.Matix.1999.1080p.BluRay", release.Name);
-            Assert.AreEqual(ReleaseType.Movie, release.ReleaseType);
+            var builder = new ReleaseBuilder(new TestSettings(), "Breaking.Bad.S01E07.720p");
+            Assert.AreEqual("Breaking.Bad.S01E07.720p", builder.Name);
         }
     }
 }

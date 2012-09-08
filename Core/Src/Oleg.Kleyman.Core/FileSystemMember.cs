@@ -3,23 +3,36 @@ using System.IO;
 namespace Oleg.Kleyman.Core
 {
     /// <summary>
-    /// Represents a file system member.
+    ///   Represents a file system member.
     /// </summary>
-    /// <remarks>Such as a file or a directory.</remarks>
+    /// <remarks>
+    ///   Such as a file or a directory.
+    /// </remarks>
     public class FileSystemMember : IFileSystemMember
     {
+        /// <summary>
+        ///   Initializes a <see cref="FileSystemMember" /> object.
+        /// </summary>
+        /// <param name="fileSystemInfo"> The <see cref="FileSystemInfo" /> object to interface with. </param>
+        public FileSystemMember(FileSystemInfo fileSystemInfo)
+        {
+            FileSystemInfo = fileSystemInfo;
+        }
+
         private FileSystemInfo FileSystemInfo { get; set; }
 
+        #region IFileSystemMember Members
+
         /// <summary>
-        /// Gets the full name of the member.
+        ///   Gets the full name of the member.
         /// </summary>
-        public string FullName 
+        public string FullName
         {
             get { return FileSystemInfo.FullName; }
         }
 
         /// <summary>
-        /// Gets the attributes of the member.
+        ///   Gets the attributes of the member.
         /// </summary>
         public FileAttributes Attributes
         {
@@ -27,20 +40,13 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        /// Gets whether the member exists.
+        ///   Gets whether the member exists.
         /// </summary>
         public bool Exists
         {
             get { return FileSystemInfo.Exists; }
         }
 
-        /// <summary>
-        /// Initializes a <see cref="FileSystemMember"/> object.
-        /// </summary>
-        /// <param name="fileSystemInfo">The <see cref="FileSystemInfo"/> object to interface with.</param>
-        public FileSystemMember(FileSystemInfo fileSystemInfo)
-        {
-            FileSystemInfo = fileSystemInfo;
-        }
+        #endregion
     }
 }

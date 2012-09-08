@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Moq;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Configuration;
@@ -11,7 +10,9 @@ namespace Oleg.Kleyman.Core.Tests
     public class SingleValueConfigurationElementCollectionTests
     {
         private IDictionary<string, object> PropertyNameValues { get; set; }
-        protected Mock<SingleValueConfigurationElementCollection<SingleValueConfigurationSection>> MockSingleValueConfigurationElementCollection { get; set; }
+
+        protected Mock<SingleValueConfigurationElementCollection<SingleValueConfigurationSection>>
+            MockSingleValueConfigurationElementCollection { get; set; }
 
         [TestFixtureSetUp]
         public void Setup()
@@ -20,7 +21,8 @@ namespace Oleg.Kleyman.Core.Tests
                                      {
                                          {"value", "test"}
                                      };
-            MockSingleValueConfigurationElementCollection = new Mock<SingleValueConfigurationElementCollection<SingleValueConfigurationSection>>();
+            MockSingleValueConfigurationElementCollection =
+                new Mock<SingleValueConfigurationElementCollection<SingleValueConfigurationSection>>();
         }
 
         [Test]

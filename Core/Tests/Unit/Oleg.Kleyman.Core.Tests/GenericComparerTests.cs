@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
-using Oleg.Kleyman.Tests.Core;
 
 namespace Oleg.Kleyman.Core.Tests
 {

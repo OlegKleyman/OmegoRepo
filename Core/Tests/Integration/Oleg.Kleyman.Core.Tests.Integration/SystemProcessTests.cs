@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using NUnit.Framework;
 using Oleg.Kleyman.Tests.Core;
@@ -14,8 +11,6 @@ namespace Oleg.Kleyman.Core.Tests.Integration
     {
         private ProcessStartInfo _processInfo;
 
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
             _processInfo = new ProcessStartInfo(@"cmd.exe")
@@ -26,13 +21,11 @@ namespace Oleg.Kleyman.Core.Tests.Integration
                                };
         }
 
-        #endregion
-
         [Test]
         public void ConstructorTest()
         {
             var processManager = new ProcessManager();
-            
+
             var process = processManager.Start(_processInfo);
             Assert.IsInstanceOf<SystemProcess>(process);
             Assert.IsFalse(process.HasExited);
@@ -40,37 +33,6 @@ namespace Oleg.Kleyman.Core.Tests.Integration
             process.Kill();
             process.WaitForExit();
             Assert.AreEqual(true, process.HasExited);
-        }
-
-        [Test]
-        public void KillTest()
-        {
-            var processManager = new ProcessManager();
-
-            var process = processManager.Start(_processInfo);
-            Assert.IsFalse(process.HasExited);
-            process.Kill();
-            process.WaitForExit();
-            Assert.IsTrue(process.HasExited);
-        }
-
-        [Test]
-        public void WaitForExitTest()
-        {
-            var processManager = new ProcessManager();
-
-            var process = processManager.Start(_processInfo);
-            var action = new Action(() =>
-                                        {
-                                            process.WaitForExit();
-                                            Assert.IsTrue(process.HasExited);
-                                        });
-            var asyncResult = action.BeginInvoke(null, null);
-            
-            Assert.IsFalse(process.HasExited);
-            Thread.Sleep(2000);
-            process.Kill();
-            action.EndInvoke(asyncResult);
         }
 
         [Test]
@@ -86,15 +48,47 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         }
 
         [Test]
+        public void KillTest()
+        {
+            var processManager = new ProcessManager();
+
+            var process = processManager.Start(_processInfo);
+            Assert.IsFalse(process.HasExited);
+            process.Kill();
+            process.WaitForExit();
+            Assert.IsTrue(process.HasExited);
+        }
+
+        [Test]
         public void PriorityClassest()
         {
             var processManager = new ProcessManager();
 
-            var process = processManager.Start(_processInfo);;
+            var process = processManager.Start(_processInfo);
+            ;
             Assert.AreEqual(ProcessPriorityClass.Normal, process.PriorityClass);
             process.Kill();
             process.WaitForExit();
             Assert.AreEqual(true, process.HasExited);
+        }
+
+        [Test]
+        public void WaitForExitTest()
+        {
+            var processManager = new ProcessManager();
+
+            var process = processManager.Start(_processInfo);
+            var action = new Action(() =>
+                                        {
+                                            process.WaitForExit();
+                                            Assert.IsTrue(process.HasExited);
+                                        });
+            var asyncResult = action.BeginInvoke(null, null);
+
+            Assert.IsFalse(process.HasExited);
+            Thread.Sleep(2000);
+            process.Kill();
+            action.EndInvoke(asyncResult);
         }
     }
 }

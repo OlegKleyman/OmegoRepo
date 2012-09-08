@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics;
 using NUnit.Framework;
 
 namespace Oleg.Kleyman.Core.Tests.Integration
@@ -13,7 +9,6 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         [TestFixtureSetUp]
         public void Setup()
         {
-            
         }
 
         [Test]

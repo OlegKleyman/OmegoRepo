@@ -1,9 +1,9 @@
-using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Permissions;
+using Castle.DynamicProxy.Generators;
 using Moq;
 using NUnit.Framework;
-using Oleg.Kleyman.Core.Configuration;
 using Oleg.Kleyman.Tests.Core;
 
 namespace Oleg.Kleyman.Core.Tests
@@ -21,7 +21,7 @@ namespace Oleg.Kleyman.Core.Tests
 
         public override void Setup()
         {
-            Castle.DynamicProxy.Generators.AttributesToAvoidReplicating.Add(typeof(System.Security.Permissions.FileIOPermissionAttribute));
+            AttributesToAvoidReplicating.Add(typeof (FileIOPermissionAttribute));
             MockSettings = new Mock<IRarExtractorSettings>();
             MockSettings.SetupGet(settings => settings.UnrarPath).Returns(@"C:\Program Files\WinRAR\unrar.exe");
             _fileSystem = new Mock<IFileSystem>();
@@ -36,11 +36,13 @@ namespace Oleg.Kleyman.Core.Tests
             _file.SetupGet(x => x.FullName).Returns("c:\\gitrepos\\maindefault\\Common\\Test\\testFile.Rar");
             _directory.SetupGet(x => x.FullName).Returns(@"C:\repo\Common\Test\testUnrar");
 
-            _fileSystem.Setup(x => x.GetFileByPath("..\\..\\..\\..\\..\\..\\Common\\Test\\testFile.Rar")).Returns(_file.Object);
+            _fileSystem.Setup(x => x.GetFileByPath("..\\..\\..\\..\\..\\..\\Common\\Test\\testFile.Rar")).Returns(
+                _file.Object);
 
             _fileSystem.Setup(x => x.DirectoryExists(@"..\..\..\..\..\..\Common\Test\testUnrar\")).Returns(false);
             _fileSystem.Setup(x => x.FileExists(@"C:\Program Files\WinRAR\unrar.exe")).Returns(true);
-            _fileSystem.Setup(x => x.GetDirectory(@"..\..\..\..\..\..\Common\Test\testUnrar\")).Returns(_directory.Object);
+            _fileSystem.Setup(x => x.GetDirectory(@"..\..\..\..\..\..\Common\Test\testUnrar\")).Returns(
+                _directory.Object);
             _process.SetupGet(x => x.HasExited).Returns(false);
             _processManager.Setup(x => x.Start(It.IsAny<ProcessStartInfo>())).Returns(_process.Object);
 
@@ -51,26 +53,27 @@ namespace Oleg.Kleyman.Core.Tests
             _fileSystem.Setup(x => x.FileExists(@"C:\Program Files\WinRAR\InvalidFile.exe")).Returns(false);
 
             #endregion
-
         }
 
         [Test]
         public void ExtractTest()
         {
-            Extractor extractor = new RarExtractor(@"C:\Program Files\WinRAR\unrar.exe", _fileSystem.Object, _processManager.Object);
+            Extractor extractor = new RarExtractor(@"C:\Program Files\WinRAR\unrar.exe", _fileSystem.Object,
+                                                   _processManager.Object);
             var destination = @"..\..\..\..\..\..\Common\Test\testUnrar\";
             var info = extractor.Extract(@"..\..\..\..\..\..\Common\Test\testFile.Rar", destination);
             Assert.AreEqual(@"C:\repo\Common\Test\testUnrar", info.FullName);
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof(FileNotFoundException),
+        [ExpectedException(ExpectedException = typeof (FileNotFoundException),
             ExpectedExceptionName = "System.IO.FileNotFoundException",
             ExpectedMessage = @"Unable to find unrar file at location C:\Program Files\WinRAR\InvalidFile.exe",
             MatchType = MessageMatch.Exact)]
         public void ExtractUnrarFileNotFoundTest()
         {
-            Extractor extractor = new RarExtractor(@"C:\Program Files\WinRAR\InvalidFile.exe", _fileSystem.Object, _processManager.Object);
+            Extractor extractor = new RarExtractor(@"C:\Program Files\WinRAR\InvalidFile.exe", _fileSystem.Object,
+                                                   _processManager.Object);
             const string destination = @"..\..\..\..\..\..\Common\Test\testUnrar\";
 
             extractor.Extract(@"..\..\..\..\..\..\Common\Test\testFile.Rar", destination);

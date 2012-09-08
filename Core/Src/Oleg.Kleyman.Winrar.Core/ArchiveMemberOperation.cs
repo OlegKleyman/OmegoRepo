@@ -1,7 +1,7 @@
 namespace Oleg.Kleyman.Winrar.Core
 {
     /// <summary>
-    /// Represents the archive member operation when processing it.
+    ///   Represents the archive member operation when processing it.
     /// </summary>
     internal enum ArchiveMemberOperation
     {
