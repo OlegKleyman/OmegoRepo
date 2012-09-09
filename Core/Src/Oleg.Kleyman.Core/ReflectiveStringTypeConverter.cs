@@ -12,7 +12,7 @@ namespace Oleg.Kleyman.Core
         /// <summary>
         ///   Returns whether this converter can convert an object of the given type to the type of this converter, using the specified context.
         /// </summary>
-        /// <param name="context"> An System.ComponentModel.ITypeDescriptorContext that provides a format context. </param>
+        /// <param name="context"> An <see cref="ITypeDescriptorContext" /> object that provides a format context. </param>
         /// <param name="sourceType"> A System.Type that represents the type you want to convert from. </param>
         /// <returns> true if this converter can perform the conversion; otherwise, false. </returns>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -28,7 +28,7 @@ namespace Oleg.Kleyman.Core
         /// <summary>
         ///   Returns whether this converter can convert the object to the specified type, using the specified context.
         /// </summary>
-        /// <param name="context"> An System.ComponentModel.ITypeDescriptorContext that provides a format context. </param>
+        /// <param name="context"> An <see cref="ITypeDescriptorContext" /> object that provides a format context. </param>
         /// <param name="destinationType"> A System.Type that represents the type you want to convert to. </param>
         /// <returns> true if this converter can perform the conversion; otherwise, false. </returns>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
