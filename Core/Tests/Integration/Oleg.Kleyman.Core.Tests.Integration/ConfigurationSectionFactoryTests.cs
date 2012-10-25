@@ -79,13 +79,23 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         }
 
         [Test]
-        [ExpectedException(ExpectedException = typeof (ArgumentNullException),
+        [ExpectedException(ExpectedException = typeof(ArgumentNullException),
             ExpectedExceptionName = "System.ArgumentNullException",
             ExpectedMessage = "Value cannot be null.\r\nParameter name: configurationFilePath",
             MatchType = MessageMatch.Exact)]
         public void GetByConfigurationFilePathIsNullTest()
         {
             ConfigurationSectionFactory.GetSettingsByConfigurationFile(null, null);
+        }
+
+        [Test]
+        [ExpectedException(ExpectedException = typeof(ArgumentException),
+            ExpectedExceptionName = "System.ArgumentException",
+            ExpectedMessage = "Value cannot be empty.\r\nParameter name: configurationFilePath",
+            MatchType = MessageMatch.Exact)]
+        public void GetByConfigurationFilePathIsEmptyTest()
+        {
+            ConfigurationSectionFactory.GetSettingsByConfigurationFile(string.Empty, SECTION_NAME);
         }
 
         [Test]

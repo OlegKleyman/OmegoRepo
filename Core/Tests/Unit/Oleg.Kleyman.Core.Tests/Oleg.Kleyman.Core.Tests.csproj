@@ -40,12 +40,14 @@
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.0.12017, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Common\Lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\..\Common\Lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,12 +58,15 @@
     <Compile Include="ConfigurationElementCollectionBaseTests.cs" />
     <Compile Include="ConfigurationElementCollectionTests.cs" />
     <Compile Include="JsonSerializerTests.cs" />
+    <Compile Include="JsonXmlContentTypeMapperTests.cs" />
     <Compile Include="MockConfigurationElementCollection.cs" />
     <Compile Include="MockConfigurationSection.cs" />
+    <Compile Include="MockXmlObjectSerializer.cs" />
     <Compile Include="OutputTests.cs" />
     <Compile Include="RarExtractorConfigurationSectionTests.cs" />
     <Compile Include="RarExtractorTests.cs" />
     <Compile Include="ReflectiveStringTypeConverterTests.cs" />
+    <Compile Include="SecureStringTests.cs" />
     <Compile Include="SingletonTests.cs" />
     <Compile Include="SingleValueConfigurationElementCollectionTests.cs" />
     <Compile Include="EnumerableTests.cs" />
@@ -71,6 +76,8 @@
     <Compile Include="SingleValueConfigurationElementTests.cs" />
     <Compile Include="TestJsonObject.cs" />
     <Compile Include="UInt32Tests.cs" />
+    <Compile Include="XPathBehaviorAttributeTest.cs" />
+    <Compile Include="XPathFormatterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">

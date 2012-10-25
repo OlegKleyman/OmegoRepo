@@ -41,7 +41,8 @@ namespace Oleg.Kleyman.Core.Configuration
 
             if (configurationFilePath == string.Empty)
             {
-                throw new ArgumentException(configurationFilePathParamName);
+                const string stringCannotBeEmptyMessage = "Value cannot be empty.";
+                throw new ArgumentException(stringCannotBeEmptyMessage, configurationFilePathParamName);
             }
 
             if (!File.Exists(configurationFilePath))

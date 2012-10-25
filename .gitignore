@@ -6,3 +6,4 @@ obj/
 *.sln.DotSettings.user
 *.orig
 *.dotCover
+*.dotsettings

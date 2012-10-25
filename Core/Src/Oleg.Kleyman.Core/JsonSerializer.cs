@@ -10,8 +10,8 @@ namespace Oleg.Kleyman.Core
     {
         public T Deserialize(string json)
         {
-            var ser = new JavaScriptSerializer();
-            var deserialized = ser.Deserialize<T>(json);
+            var serializer = new JavaScriptSerializer();
+            var deserialized = serializer.Deserialize<T>(json);
             return deserialized;
         }
     }
