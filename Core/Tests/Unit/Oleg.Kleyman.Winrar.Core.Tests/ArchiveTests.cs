@@ -41,79 +41,79 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             SetupUnrarHandle();
 
             var test1TxtFileHeaderData = new RARHeaderDataEx
-                                             {
-                                                 ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡ㅴ爮牡",
-                                                 ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar",
-                                                 CmtBuf = null,
-                                                 CmtBufSize = 1,
-                                                 CmtSize = 0,
-                                                 CmtState = 0,
-                                                 FileAttr = 32,
-                                                 FileCRC = 2631502099,
-                                                 FileName = "整瑳⸲硴t",
-                                                 FileNameW = "test2.txt",
-                                                 FileTime = 1087152912,
-                                                 Flags = 37058,
-                                                 HostOS = 2,
-                                                 Method = 48,
-                                                 PackSize = 3145642,
-                                                 PackSizeHigh = 0,
-                                                 Reserved = new uint[1024],
-                                                 UnpSize = 5293080,
-                                                 UnpSizeHigh = 0,
-                                                 UnpVer = 20
-                                             };
+                {
+                    ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡ㅴ爮牡",
+                    ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar",
+                    CmtBuf = null,
+                    CmtBufSize = 1,
+                    CmtSize = 0,
+                    CmtState = 0,
+                    FileAttr = 32,
+                    FileCRC = 2631502099,
+                    FileName = "整瑳⸲硴t",
+                    FileNameW = "test2.txt",
+                    FileTime = 1087152912,
+                    Flags = 37058,
+                    HostOS = 2,
+                    Method = 48,
+                    PackSize = 3145642,
+                    PackSizeHigh = 0,
+                    Reserved = new uint[1024],
+                    UnpSize = 5293080,
+                    UnpSizeHigh = 0,
+                    UnpVer = 20
+                };
 
             var test2TxtFileHeaderData = new RARHeaderDataEx
-                                             {
-                                                 ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡㉴爮牡",
-                                                 ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part2.rar",
-                                                 CmtBuf = null,
-                                                 CmtBufSize = 1,
-                                                 CmtSize = 0,
-                                                 CmtState = 0,
-                                                 FileAttr = 32,
-                                                 FileCRC = 462830299,
-                                                 FileName = "整瑳琮瑸",
-                                                 FileNameW = "test.txt",
-                                                 FileTime = 1087152892,
-                                                 Flags = 37056,
-                                                 HostOS = 2,
-                                                 Method = 48,
-                                                 PackSize = 297540,
-                                                 PackSizeHigh = 0,
-                                                 Reserved = new uint[1024],
-                                                 UnpSize = 297540,
-                                                 UnpSizeHigh = 0,
-                                                 UnpVer = 20
-                                             };
+                {
+                    ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡㉴爮牡",
+                    ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part2.rar",
+                    CmtBuf = null,
+                    CmtBufSize = 1,
+                    CmtSize = 0,
+                    CmtState = 0,
+                    FileAttr = 32,
+                    FileCRC = 462830299,
+                    FileName = "整瑳琮瑸",
+                    FileNameW = "test.txt",
+                    FileTime = 1087152892,
+                    Flags = 37056,
+                    HostOS = 2,
+                    Method = 48,
+                    PackSize = 297540,
+                    PackSizeHigh = 0,
+                    Reserved = new uint[1024],
+                    UnpSize = 297540,
+                    UnpSizeHigh = 0,
+                    UnpVer = 20
+                };
 
             var members = new[]
-                              {
-                                  (ArchiveMember) test1TxtFileHeaderData,
-                                  (ArchiveMember) test2TxtFileHeaderData
-                              };
+                {
+                    (ArchiveMember) test1TxtFileHeaderData,
+                    (ArchiveMember) test2TxtFileHeaderData
+                };
 
             var readCallCounter = 1;
             MockArchiveReader.Setup(x => x.Read()).Returns(() =>
-                                                               {
-                                                                   switch (readCallCounter)
-                                                                   {
-                                                                       case 1:
-                                                                           readCallCounter++;
-                                                                           return members[0];
-                                                                       case 2:
-                                                                           MockArchiveReader.SetupGet(x => x.Status).
-                                                                               Returns(RarStatus.EndOfArchive);
-                                                                           readCallCounter = 1;
-                                                                           return members[1];
-                                                                   }
+                {
+                    switch (readCallCounter)
+                    {
+                        case 1:
+                            readCallCounter++;
+                            return members[0];
+                        case 2:
+                            MockArchiveReader.SetupGet(x => x.Status).
+                                Returns(RarStatus.EndOfArchive);
+                            readCallCounter = 1;
+                            return members[1];
+                    }
 
-                                                                   throw new ApplicationException(
-                                                                       string.Format(
-                                                                           "readCallCounter was at an unknown value {0}",
-                                                                           readCallCounter));
-                                                               });
+                    throw new ApplicationException(
+                        string.Format(
+                            "readCallCounter was at an unknown value {0}",
+                            readCallCounter));
+                });
 
 
             SetupUnrar();
@@ -124,12 +124,12 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             MockUnrar.Setup(x => x.ExecuteReader()).Returns(MockArchiveReader.Object);
             MockUnrar.SetupGet(x => x.Handle).Returns(MockUnrarHandle.Object);
             var mockMembers = new[]
-                                  {
-                                      new Mock<IFileSystemMember>(),
-                                      new Mock<IFileSystemMember>(),
-                                      new Mock<IFileSystemMember>(),
-                                      new Mock<IFileSystemMember>()
-                                  };
+                {
+                    new Mock<IFileSystemMember>(),
+                    new Mock<IFileSystemMember>(),
+                    new Mock<IFileSystemMember>(),
+                    new Mock<IFileSystemMember>()
+                };
             mockMembers[0].SetupGet(x => x.FullName).Returns(
                 @"C:\GitRepos\MainDefault\Common\Test\TestFolder\testFile.txt");
             mockMembers[1].SetupGet(x => x.FullName).Returns(@"C:\GitRepos\MainDefault\Common\Test\test.txt");

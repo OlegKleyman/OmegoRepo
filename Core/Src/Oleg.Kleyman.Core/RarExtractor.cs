@@ -42,11 +42,11 @@ namespace Oleg.Kleyman.Core
             FileSystem = fileSystem;
             ProcessManager = processManager;
             _processInfo = new ProcessStartInfo(settings.UnrarPath)
-                               {
-                                   CreateNoWindow = true,
-                                   UseShellExecute = false,
-                                   WindowStyle = ProcessWindowStyle.Hidden
-                               };
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
         }
 
         /// <summary>

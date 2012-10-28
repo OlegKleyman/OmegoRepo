@@ -81,9 +81,9 @@ namespace Oleg.Kleyman.Winrar.Core
         private static Archive GetArchive(IUnrar unrar)
         {
             var archive = new Archive(unrar)
-                              {
-                                  FilePath = unrar.Handle.RarFilePath
-                              };
+                {
+                    FilePath = unrar.Handle.RarFilePath
+                };
             return archive;
         }
 

@@ -4,7 +4,7 @@ using System.Configuration;
 namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
-    /// Represents a rar extractor configuration section.
+    ///   Represents a rar extractor configuration section.
     /// </summary>
     public sealed class RarExtractorConfigurationSection : SingleValueConfigurationSection, IRarExtractorSettings
     {
@@ -16,12 +16,14 @@ namespace Oleg.Kleyman.Core.Configuration
         {
             __syncLock = new object();
         }
-        
+
 // ReSharper disable UnusedMember.Local
         /// <summary>
-        /// Instantiates an instance of the <see cref="RarExtractorConfigurationSection" /> class.
+        ///   Instantiates an instance of the <see cref="RarExtractorConfigurationSection" /> class.
         /// </summary>
-        /// <remarks>This constructor is needed to create an object dynamically.</remarks>
+        /// <remarks>
+        ///   This constructor is needed to create an object dynamically.
+        /// </remarks>
         private RarExtractorConfigurationSection()
 // ReSharper restore UnusedMember.Local
         {
@@ -40,7 +42,7 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        /// Gets the default extractor settings.
+        ///   Gets the default extractor settings.
         /// </summary>
         public static IRarExtractorSettings Default
         {
@@ -62,7 +64,7 @@ namespace Oleg.Kleyman.Core.Configuration
         #region Implementation of IRarExtractorSettings
 
         /// <summary>
-        /// Gets the path for unrar file.
+        ///   Gets the path for unrar file.
         /// </summary>
         string IRarExtractorSettings.UnrarPath
         {

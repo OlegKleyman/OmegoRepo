@@ -14,11 +14,11 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         public override void Setup()
         {
             _processInfo = new ProcessStartInfo(@"cmd.exe")
-                               {
-                                   CreateNoWindow = true,
-                                   WindowStyle = ProcessWindowStyle.Hidden,
-                                   UseShellExecute = true
-                               };
+                {
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = true
+                };
         }
 
         [Test]
@@ -79,10 +79,10 @@ namespace Oleg.Kleyman.Core.Tests.Integration
 
             var process = processManager.Start(_processInfo);
             var action = new Action(() =>
-                                        {
-                                            process.WaitForExit();
-                                            Assert.IsTrue(process.HasExited);
-                                        });
+                {
+                    process.WaitForExit();
+                    Assert.IsTrue(process.HasExited);
+                });
             var asyncResult = action.BeginInvoke(null, null);
 
             Assert.IsFalse(process.HasExited);

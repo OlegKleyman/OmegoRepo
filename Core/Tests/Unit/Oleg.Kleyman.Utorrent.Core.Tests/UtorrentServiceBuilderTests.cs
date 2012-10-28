@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Oleg.Kleyman.Tests.Core;
 
 namespace Oleg.Kleyman.Utorrent.Core.Tests
@@ -7,14 +6,14 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
     [TestFixture]
     public class UtorrentServiceBuilderTests : TestsBase
     {
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-
         }
 
-        #endregion
+        private UtorrentServiceBuilder CreateServiceBuilder()
+        {
+            return new UtorrentServiceBuilder(new MockUtorrentSettings());
+        }
 
         [Test]
         public void ConstructorShouldReturnServiceBuilderWithTheCorrectProperties()
@@ -39,10 +38,6 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
             var serviceBuilder = CreateServiceBuilder();
             serviceBuilder.Password = "password";
             Assert.Pass("Reaching this point of the test means that setting the password did not cause any issues.");
-        }
-        private UtorrentServiceBuilder CreateServiceBuilder()
-        {
-            return new UtorrentServiceBuilder(new MockUtorrentSettings());
         }
     }
 }

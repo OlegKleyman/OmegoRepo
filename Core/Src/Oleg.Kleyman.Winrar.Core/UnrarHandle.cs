@@ -129,10 +129,10 @@ namespace Oleg.Kleyman.Winrar.Core
         {
             ValidatePrerequisites();
             var openData = new RAROpenArchiveDataEx
-                               {
-                                   ArcName = RarFilePath,
-                                   OpenMode = (uint) Mode
-                               };
+                {
+                    ArcName = RarFilePath,
+                    OpenMode = (uint) Mode
+                };
 
             Handle = UnrarDll.RAROpenArchiveEx(ref openData);
 

@@ -36,41 +36,41 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             UnrarDllMock = new Mock<IUnrarDll>();
 
             _openData = new RAROpenArchiveDataEx
-                            {
-                                ArcName = FILE_PATH_TO_VALID_RAR,
-                                OpenMode = (uint) OpenMode.List
-                            };
+                {
+                    ArcName = FILE_PATH_TO_VALID_RAR,
+                    OpenMode = (uint) OpenMode.List
+                };
 
             _test1TxtFileHeaderData = new RARHeaderDataEx
-                                          {
-                                              ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡ㅴ爮牡",
-                                              ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar",
-                                              CmtBuf = null,
-                                              CmtBufSize = 1,
-                                              CmtSize = 0,
-                                              CmtState = 0,
-                                              FileAttr = 32,
-                                              FileCRC = 2631502099,
-                                              FileName = "整瑳⸲硴t",
-                                              FileNameW = "test2.txt",
-                                              FileTime = 1087152912,
-                                              Flags = 37058,
-                                              HostOS = 2,
-                                              Method = 48,
-                                              PackSize = 3145642,
-                                              PackSizeHigh = 0,
-                                              Reserved = new uint[1024],
-                                              UnpSize = 5293080,
-                                              UnpSizeHigh = 0,
-                                              UnpVer = 20
-                                          };
+                {
+                    ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡ㅴ爮牡",
+                    ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar",
+                    CmtBuf = null,
+                    CmtBufSize = 1,
+                    CmtSize = 0,
+                    CmtState = 0,
+                    FileAttr = 32,
+                    FileCRC = 2631502099,
+                    FileName = "整瑳⸲硴t",
+                    FileNameW = "test2.txt",
+                    FileTime = 1087152912,
+                    Flags = 37058,
+                    HostOS = 2,
+                    Method = 48,
+                    PackSize = 3145642,
+                    PackSizeHigh = 0,
+                    Reserved = new uint[1024],
+                    UnpSize = 5293080,
+                    UnpSizeHigh = 0,
+                    UnpVer = 20
+                };
 
             _invalidFileOpenData = new RAROpenArchiveDataEx
-                                       {
-                                           ArcName = FILE_PATH_TO_INVALID_RAR,
-                                           OpenMode = (uint) OpenMode.List,
-                                           OpenResult = 13
-                                       };
+                {
+                    ArcName = FILE_PATH_TO_INVALID_RAR,
+                    OpenMode = (uint) OpenMode.List,
+                    OpenResult = 13
+                };
         }
 
         private void MockOpenArchiveTest()
@@ -156,10 +156,10 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         public void OpenArchiveUnknownFormatTest()
         {
             var customMock = new UnrarDllCustomMock
-                                 {
-                                     OpenData = _invalidFileOpenData,
-                                     ReturnIntPtrValue = IntPtr.Zero
-                                 };
+                {
+                    OpenData = _invalidFileOpenData,
+                    ReturnIntPtrValue = IntPtr.Zero
+                };
 
             var unrarHandle = new UnrarHandle(customMock, FILE_PATH_TO_INVALID_RAR);
             try
