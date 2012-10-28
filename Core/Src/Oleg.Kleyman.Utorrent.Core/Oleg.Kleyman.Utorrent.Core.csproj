@@ -61,7 +61,7 @@
     <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+    <ProjectReference Include="..\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
       <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
       <Name>Oleg.Kleyman.Core</Name>
     </ProjectReference>

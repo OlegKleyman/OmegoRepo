@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Winrar.Core.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Utorrent.Core.Tests.Integration", "..\Core\Tests\Integration\Oleg.Kleyman.Utorrent.Core.Tests.Integration\Oleg.Kleyman.Utorrent.Core.Tests.Integration.csproj", "{730C358C-99A8-487F-9A0E-A8C2C8251A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Utorrent.Core", "Oleg.Kleyman.Utorrent.Core\Oleg.Kleyman.Utorrent.Core.csproj", "{5FE4820F-C331-4504-AE10-A8B1D6E2399E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Utorrent.Core", "..\Core\Src\Oleg.Kleyman.Utorrent.Core\Oleg.Kleyman.Utorrent.Core.csproj", "{5FE4820F-C331-4504-AE10-A8B1D6E2399E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Utorrent.Core.Tests", "..\Core\Tests\Unit\Oleg.Kleyman.Utorrent.Core.Tests\Oleg.Kleyman.Utorrent.Core.Tests.csproj", "{1D554A71-30D3-49B6-B66B-F9F1274FFA4D}"
 EndProject
