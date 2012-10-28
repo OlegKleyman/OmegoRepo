@@ -45,14 +45,12 @@ namespace Oleg.Kleyman.Utorrent.Core
         /// <summary>
         /// Creates a utorrent service object.
         /// </summary>
-        /// <param name="url">The URL that the uTorrent service will use.</param>
-        /// <param name="username">The username the uTorrent service will use.</param>
-        /// <param name="password">The password that the uTorrent service will use.</param>
-        public UtorrentServiceBuilder(Uri url, string username, string password)
+        /// <param name="settings">The <see cref="ISettingsProvider"/> object containing the settings for this instance.</param>
+        public UtorrentServiceBuilder(ISettingsProvider settings)
         {
-            Url = url;
-            Username = username;
-            Password = password;
+            Url = settings.Url;
+            Username = settings.Username;
+            Password = settings.Password;
         }
 
         /// <summary>
