@@ -13,7 +13,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         [BeforeFeature]
         public static void Setup()
         {
-            var builder = new UtorrentServiceBuilder(new Uri("http://vmst01:8085/gui"), "OKleyman", "removed");
+            var builder = new UtorrentServiceBuilder(new DefaultSettings());
             ServiceClient = builder.GetService();
         }
 

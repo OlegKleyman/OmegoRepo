@@ -19,7 +19,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
 
         private static UtorrentServiceBuilder GetUtorrentServiceBuilder()
         {
-            return new UtorrentServiceBuilder(new Uri("http://vmst01:8085/gui"), "OKleyman", "removed");
+            return new UtorrentServiceBuilder(new DefaultSettings());
         }
 
         [Test]

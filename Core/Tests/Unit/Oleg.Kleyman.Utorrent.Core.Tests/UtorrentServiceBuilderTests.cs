@@ -17,6 +17,14 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
         #endregion
 
         [Test]
+        public void ConstructorShouldReturnServiceBuilderWithTheCorrectProperties()
+        {
+            var serviceBuilder = CreateServiceBuilder();
+            Assert.AreEqual("http://someurl.com:8085/gui", serviceBuilder.Url.AbsoluteUri);
+            Assert.AreEqual("someusername", serviceBuilder.Username);
+        }
+
+        [Test]
         public void GetServiceShouldReturnAnInstanceOfTheUtorrentService()
         {
             var serviceBuilder = CreateServiceBuilder();
@@ -29,12 +37,12 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
         public void SettingThePasswordShouldNotCauseAnException()
         {
             var serviceBuilder = CreateServiceBuilder();
-            serviceBuilder.Password = "test password";
+            serviceBuilder.Password = "password";
             Assert.Pass("Reaching this point of the test means that setting the password did not cause any issues.");
         }
         private UtorrentServiceBuilder CreateServiceBuilder()
         {
-            return new UtorrentServiceBuilder(new Uri("http://vmst01:8085/gui"), "some user name", "some password");
+            return new UtorrentServiceBuilder(new MockUtorrentSettings());
         }
     }
 }
