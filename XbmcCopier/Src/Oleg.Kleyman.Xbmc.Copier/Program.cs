@@ -11,7 +11,7 @@ namespace Oleg.Kleyman.Xbmc.Copier
             using (var writer = new StreamWriter(@"C:\Copier\copier.log", true))
             {
                 writer.WriteLine("============================");
-                writer.WriteLine(string.Format("Length: {0}", args.Length));
+                writer.WriteLine("Length: {0}", args.Length);
                 foreach (var arg in args)
                 {
                     writer.WriteLine(arg);

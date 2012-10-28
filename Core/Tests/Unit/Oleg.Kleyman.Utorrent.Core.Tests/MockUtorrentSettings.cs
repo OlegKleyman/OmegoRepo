@@ -6,9 +6,20 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
     {
         #region Implementation of ISettingsProvider
 
-        public Uri Url { get { return new Uri("http://someurl.com:8085/gui"); } }
-        public string Username { get { return "someusername"; } }
-        public string Password { get { return "password"; } }
+        public Uri Url
+        {
+            get { return new Uri("http://someurl.com:8085/gui"); }
+        }
+
+        public string Username
+        {
+            get { return "someusername"; }
+        }
+
+        public string Password
+        {
+            get { return "password"; }
+        }
 
         #endregion
     }

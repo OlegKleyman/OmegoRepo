@@ -26,7 +26,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\r\n        http://vmst01:8085/gui\r\n      ")]
         public string Url {
             get {
                 return ((string)(this["Url"]));

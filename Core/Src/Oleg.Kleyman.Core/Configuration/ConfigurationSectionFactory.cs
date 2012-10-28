@@ -22,9 +22,9 @@ namespace Oleg.Kleyman.Core.Configuration
             ThrowExceptionOnInvalidArguments(sectionName);
 
             var fileMap = new ExeConfigurationFileMap
-                              {
-                                  ExeConfigFilename = configurationFilePath
-                              };
+                {
+                    ExeConfigFilename = configurationFilePath
+                };
 
             var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
             return GetConfigurationSectionByConfiguration(configuration, sectionName);

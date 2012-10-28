@@ -6,7 +6,6 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
     public sealed class XbmcCopierConfigurationSection : ConfigurationSectionBase, ISettingsProvider
     {
-        private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
         private const string TV_PATH_PROPERTY_NAME = "tvPath";
         private const string MOVIE_PATH_PROPERTY_NAME = "moviePath";
         private const string MOVIE_FILTERS_PROPERTY_NAME = "movieFilters";
@@ -70,7 +69,10 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
             {
                 lock (__syncRoot)
                 {
+// ReSharper disable ConvertIfStatementToNullCoalescingExpression
+                    //Unsure if null coalescing has the same thread safe result as an if statement and thus suppressing resharper warning.
                     if (__singletonSettingsInstance == null)
+// ReSharper restore ConvertIfStatementToNullCoalescingExpression
                     {
                         __singletonSettingsInstance = GetConfigurationSection();
                     }

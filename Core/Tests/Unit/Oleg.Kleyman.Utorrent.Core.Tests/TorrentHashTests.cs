@@ -7,14 +7,9 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
     [TestFixture]
     public class TorrentHashTests : TestsBase
     {
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-
         }
-
-        #endregion
 
         [Test]
         public void ParseShouldParseStringCorrectlyTest()
@@ -24,7 +19,8 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = "The torrent hash must be a 40 character string.", MatchType = MessageMatch.Exact)]
+        [ExpectedException(typeof (InvalidOperationException),
+            ExpectedMessage = "The torrent hash must be a 40 character string.", MatchType = MessageMatch.Exact)]
         public void ParseShouldThrowInvalidOperationExceptionOnInvalidHashStringTest()
         {
             TorrentHash.Parse("invalid hash");

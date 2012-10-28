@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Security;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -9,23 +10,35 @@ using Oleg.Kleyman.Core.Linq;
 namespace Oleg.Kleyman.Utorrent.Core
 {
     /// <summary>
-    /// Represents a utorrent service builder.
+    ///   Represents a utorrent service builder.
     /// </summary>
     public class UtorrentServiceBuilder : IUtorrentServiceBuilder
     {
+        private SecureString _password;
+
         /// <summary>
-        /// Gets or sets the service URL.
+        ///   Creates a utorrent service object.
+        /// </summary>
+        /// <param name="settings"> The <see cref="ISettingsProvider" /> object containing the settings for this instance. </param>
+        public UtorrentServiceBuilder(ISettingsProvider settings)
+        {
+            Url = settings.Url;
+            Username = settings.Username;
+            Password = settings.Password;
+        }
+
+        /// <summary>
+        ///   Gets or sets the service URL.
         /// </summary>
         public Uri Url { get; set; }
 
         /// <summary>
-        /// Gets or sets the username for the service.
+        ///   Gets or sets the username for the service.
         /// </summary>
         public string Username { get; set; }
 
-        private SecureString _password;
         /// <summary>
-        /// Sets the password for the service.
+        ///   Sets the password for the service.
         /// </summary>
         public string Password
         {
@@ -42,21 +55,12 @@ namespace Oleg.Kleyman.Utorrent.Core
             }
         }
 
-        /// <summary>
-        /// Creates a utorrent service object.
-        /// </summary>
-        /// <param name="settings">The <see cref="ISettingsProvider"/> object containing the settings for this instance.</param>
-        public UtorrentServiceBuilder(ISettingsProvider settings)
-        {
-            Url = settings.Url;
-            Username = settings.Username;
-            Password = settings.Password;
-        }
+        #region IUtorrentServiceBuilder Members
 
         /// <summary>
-        /// Gets the utorrent service.
+        ///   Gets the utorrent service.
         /// </summary>
-        /// <returns>A <see cref="IUtorrentService"/> object.</returns>
+        /// <returns> A <see cref="IUtorrentService" /> object. </returns>
         public IUtorrentService GetService()
         {
             var uTorrentCustomBinding = GetCustomBinding();
@@ -65,6 +69,8 @@ namespace Oleg.Kleyman.Utorrent.Core
             var serviceClient = channelFactory.CreateChannel();
             return serviceClient;
         }
+
+        #endregion
 
         private WebChannelFactory<IUtorrentService> GetChannelFactory(Binding uTorrentCustomBinding)
         {
@@ -84,16 +90,16 @@ namespace Oleg.Kleyman.Utorrent.Core
         {
             const string realm = "uTorrent";
             var customBinding = new CustomBinding(new WebMessageEncodingBindingElement
-                                                                                     {
-                                                                                         ContentTypeMapper = new JsonXmlContentTypeMapper()
-                                                                                     }, 
+                {
+                    ContentTypeMapper = new JsonXmlContentTypeMapper()
+                },
                                                   new HttpTransportBindingElement
-                                                                                {
-                                                                                    ManualAddressing = true,
-                                                                                    AuthenticationScheme = System.Net.AuthenticationSchemes.Basic,
-                                                                                    Realm = realm,
-                                                                                    AllowCookies = true
-                                                                                });
+                                                      {
+                                                          ManualAddressing = true,
+                                                          AuthenticationScheme = AuthenticationSchemes.Basic,
+                                                          Realm = realm,
+                                                          AllowCookies = true
+                                                      });
             return customBinding;
         }
     }

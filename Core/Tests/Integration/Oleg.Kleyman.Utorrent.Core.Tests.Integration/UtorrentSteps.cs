@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
-using Oleg.Kleyman.Tests.Core;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
@@ -10,16 +8,16 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
     [Binding]
     public class UtorrentSteps
     {
+        private string Key { get; set; }
+        private static IUtorrentService ServiceClient { get; set; }
+        private Torrent Torrent { get; set; }
+
         [BeforeFeature]
         public static void Setup()
         {
             var builder = new UtorrentServiceBuilder(new DefaultSettings());
             ServiceClient = builder.GetService();
         }
-
-        private string Key { get; set; }
-        private static IUtorrentService ServiceClient { get; set; }
-        private Torrent Torrent { get; set; }
 
         [When(@"I call the method GetKey")]
         public void WhenICallTheMethodGetKey()
@@ -45,7 +43,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         {
             Torrent = ServiceClient.GetTorrentFiles(Key, hash);
         }
-    
+
         [Then(@"It should return a torrent with build number ""(.*)""")]
         public void ThenItShouldReturnATorrentWithBuildNumber(int build)
         {
