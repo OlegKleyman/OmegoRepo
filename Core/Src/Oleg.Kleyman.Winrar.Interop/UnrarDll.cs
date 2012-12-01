@@ -70,21 +70,21 @@ namespace Oleg.Kleyman.Winrar.Interop
 
         #endregion
 
-        [DllImport(@"C:\test\unrar.dll")]
+        [DllImport(@"unrar.dll")]
         private static extern IntPtr RAROpenArchiveEx(ref RAROpenArchiveDataEx openArchiveData);
 
-        [DllImport(@"C:\test\unrar.dll")]
+        [DllImport(@"unrar.dll")]
         private static extern uint RARCloseArchive(IntPtr hArcData);
 
-        [DllImport(@"C:\test\unrar.dll")]
+        [DllImport(@"unrar.dll")]
         private static extern uint RARReadHeaderEx(IntPtr hArcData, out RARHeaderDataEx headerData);
 
-        [DllImport(@"C:\test\unrar.dll")]
+        [DllImport(@"unrar.dll")]
         private static extern uint RARProcessFileW(IntPtr hArcData, int operation,
                                                    [MarshalAs(UnmanagedType.LPWStr)] string destPath,
                                                    [MarshalAs(UnmanagedType.LPWStr)] string destName);
 
-        [DllImport(@"C:\test\unrar.dll")]
+        [DllImport(@"unrar.dll")]
         private static extern void RARSetCallback(IntPtr hArcData, CallbackProc callback, IntPtr userData);
     }
 }
