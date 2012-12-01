@@ -50,7 +50,7 @@ namespace Oleg.Kleyman.Core.Tests.Integration
                 fileSystem.GetDirectoryFileStructure(
                     @"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration");
 
-            var paths = new string[9];
+            var paths = new string[10];
             paths[0] = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test");
             paths[1] =
                 Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test\SecondLevel1");
@@ -69,6 +69,8 @@ namespace Oleg.Kleyman.Core.Tests.Integration
                 Path.GetFullPath(
                     @"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test1\SecondLevel1\ThirdLevel1");
             paths[8] =
+                Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test1\SecondLevel1\ThirdLevel1\filler");
+            paths[9] =
                 Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test1\SecondLevel2");
 
             Assert.AreEqual(paths[0], structure[0].FullName);
@@ -80,6 +82,7 @@ namespace Oleg.Kleyman.Core.Tests.Integration
             Assert.AreEqual(paths[6], structure[6].FullName);
             Assert.AreEqual(paths[7], structure[7].FullName);
             Assert.AreEqual(paths[8], structure[8].FullName);
+            Assert.AreEqual(paths[9], structure[9].FullName);
         }
 
         [Test]
