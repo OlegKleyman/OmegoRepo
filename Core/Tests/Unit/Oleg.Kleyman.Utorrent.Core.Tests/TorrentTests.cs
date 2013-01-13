@@ -69,5 +69,12 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
             var torrent = new Torrent();
             torrent.Files = new object[] { };
         }
+
+        [Test]
+        public void GetFilesShouldReturnNullWhenNotSet()
+        {
+            var torrent = new Torrent();
+            Assert.That(torrent.Files, Is.Null);
+        }
     }
 }
