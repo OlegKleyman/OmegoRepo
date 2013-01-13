@@ -142,7 +142,7 @@ namespace Oleg.Kleyman.Core
         public FileSystemInfo[] GetDirectoryTree(string target)
         {
             var directories = GetDirectories(target);
-            if (directories == null || !directories.Any())
+            if (!directories.Any())
             {
                 return null;
             }

@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveMemberTests.cs" />
     <Compile Include="ArchiveReaderTests.cs" />
     <Compile Include="ArchiveTests.cs" />
     <Compile Include="UnrarDllCustomMock.cs" />
