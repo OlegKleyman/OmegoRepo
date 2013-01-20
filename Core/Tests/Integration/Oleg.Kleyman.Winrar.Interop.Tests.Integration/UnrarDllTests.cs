@@ -9,7 +9,7 @@ using Oleg.Kleyman.Tests.Core;
 namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
 {
     [TestFixture]
-    public class UnrarDllTests : TestsBase
+    public sealed class UnrarDllTests : TestsBase, IDisposable
     {
         private ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
 
@@ -240,6 +240,11 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
 
             var result = unrarDll.RARCloseArchive(handle);
             Assert.AreEqual(0, result);
+        }
+
+        public void Dispose()
+        {
+            _manualResetEvent.Dispose();
         }
     }
 }

@@ -303,31 +303,3 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         }
     }
 }
-
-public class dsadsa : FileSystemInfo
-{
-    #region Overrides of FileSystemInfo
-
-    public override string Name
-    {
-        get { return "C:\\dsadas"; }
-    }
-
-    public override bool Exists
-    {
-        get { return false; }
-    }
-
-    public void Test()
-    {
-        FullPath = "C:\\sdadas";
-        Attributes = FileAttributes.Directory;
-    }
-
-    public override void Delete()
-    {
-        throw new NotImplementedException();
-    }
-
-    #endregion
-}
