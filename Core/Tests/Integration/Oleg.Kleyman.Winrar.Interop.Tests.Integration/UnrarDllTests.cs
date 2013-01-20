@@ -58,7 +58,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void ExtractToDirectoryTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             openData.OpenMode = 1;
@@ -78,7 +78,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void ExtractWithFoldersTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TestFolder.rar");
             openData.OpenMode = 1;
@@ -98,7 +98,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void MultiVolumeTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             openData.OpenMode = 1;
@@ -117,7 +117,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void RARCloseArchiveTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
             var handle = unrarDll.RAROpenArchiveEx(ref openData);
@@ -129,14 +129,13 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void RAROpenArchiveDataExCallBackTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             openData.OpenMode = 1;
             openData.Callback = RarCallBack;
 
             openData.UserData = Marshal.StringToCoTaskMemUni("test data");
-            ;
             var handle = unrarDll.RAROpenArchiveEx(ref openData);
             Assert.AreNotEqual(IntPtr.Zero, handle);
 
@@ -156,7 +155,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void RAROpenArchiveExTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
             var handle = unrarDll.RAROpenArchiveEx(ref openData);
@@ -167,7 +166,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void RARProcessFileWTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
             openData.OpenMode = 1;
@@ -184,7 +183,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void RARReadHeaderExTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFile.rar");
             var handle = unrarDll.RAROpenArchiveEx(ref openData);
@@ -222,7 +221,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
         [Test]
         public void RARSetCallbackTest()
         {
-            IUnrarDll unrarDll = new UnrarDll();
+            IUnrarDll unrarDll = new NativeMethods();
             var openData = new RAROpenArchiveDataEx();
             openData.ArcName = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             openData.OpenMode = 1;

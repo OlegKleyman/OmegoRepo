@@ -16,7 +16,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
 
         public override void Setup()
         {
-            UnrarDll = new UnrarDll();
+            UnrarDll = new NativeMethods();
             RarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             InvalidRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\test.txt");
             BrokenRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFileCorrupt.rar");

@@ -8,7 +8,7 @@ namespace Oleg.Kleyman.Core
     /// <summary>
     /// Represents an XPath behavior.
     /// </summary>
-    public class XPathBehaviorAttribute : Attribute, IOperationBehavior
+    public sealed class XPathBehaviorAttribute : Attribute, IOperationBehavior
     {
         /// <summary>
         /// Gets the XPath expression used by this object.

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace Oleg.Kleyman.Core.Linq
 {
     public static class UInt32
     {
-        [DllImport("kernel32", CallingConvention = CallingConvention.StdCall, SetLastError = true)]
-        private static extern int DosDateTimeToFileTime(ushort dateValue, ushort timeValue, out long fileTime);
-
         /// <summary>
         ///   Converts a DOS date and time to a managed <see cref="DateTime" /> .
         /// </summary>
@@ -18,7 +14,7 @@ namespace Oleg.Kleyman.Core.Linq
             var dateValue = (ushort) ((source & 0xFFFF0000) >> 16);
             var timeValue = (ushort) (source & 0xFFFF);
             long fileTime;
-            DosDateTimeToFileTime(dateValue, timeValue, out fileTime);
+            NativeMethods.DosDateTimeToFileTime(dateValue, timeValue, out fileTime);
             var date = DateTime.FromFileTime(fileTime);
 
             return date;

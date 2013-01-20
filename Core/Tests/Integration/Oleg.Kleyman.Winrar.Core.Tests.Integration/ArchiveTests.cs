@@ -17,7 +17,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
 
         public override void Setup()
         {
-            UnrarDll = new UnrarDll();
+            UnrarDll = new NativeMethods();
             Handle = new UnrarHandle(UnrarDll);
             FileSystem = new FileSystem();
             Unrar = new Unrar(Handle, FileSystem);

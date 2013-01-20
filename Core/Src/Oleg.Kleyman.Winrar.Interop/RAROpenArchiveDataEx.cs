@@ -7,21 +7,36 @@ namespace Oleg.Kleyman.Winrar.Interop
     ///   Represents the unmanaged RAROpenArchiveDataEx struct.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-// ReSharper disable InconsistentNaming
+    // ReSharper disable InconsistentNaming
     public struct RAROpenArchiveDataEx
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
+        : IDisposable
     {
-        [MarshalAs(UnmanagedType.LPStr)] public string ArcName;
-        [MarshalAs(UnmanagedType.LPWStr)] public string ArcNameW;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string ArcName;
+        [MarshalAs(UnmanagedType.LPWStr)]
+        public string ArcNameW;
         public uint OpenMode;
         public uint OpenResult;
-        [MarshalAs(UnmanagedType.LPStr)] public string CmtBuf;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string CmtBuf;
         public uint CmtBufSize;
         public uint CmtSize;
         public uint CmtState;
         public uint Flags;
         public CallbackProc Callback;
-        public IntPtr UserData;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)] public uint[] Reserved;
+        private IntPtr _userData;
+        public IntPtr UserData
+        {
+            get { return _userData; }
+            set { _userData = value; }
+        }
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+        public uint[] Reserved;
+
+        public void Dispose()
+        {
+            _userData = IntPtr.Zero;
+        }
     }
 }

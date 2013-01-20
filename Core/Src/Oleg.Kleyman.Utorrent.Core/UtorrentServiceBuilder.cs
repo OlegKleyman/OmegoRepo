@@ -11,7 +11,7 @@ namespace Oleg.Kleyman.Utorrent.Core
     /// <summary>
     /// Represents a utorrent service builder.
     /// </summary>
-    public class UtorrentServiceBuilder : IUtorrentServiceBuilder
+    public sealed class UtorrentServiceBuilder : IUtorrentServiceBuilder, IDisposable
     {
         /// <summary>
         /// Gets or sets the service URL.
@@ -31,6 +31,10 @@ namespace Oleg.Kleyman.Utorrent.Core
         {
             set
             {
+                if (_password != null)
+                {
+                    _password.Dispose();
+                }
                 _password = new SecureString();
 
                 foreach (var character in value)
@@ -95,6 +99,11 @@ namespace Oleg.Kleyman.Utorrent.Core
                                                                                     AllowCookies = true
                                                                                 });
             return customBinding;
+        }
+
+        public void Dispose()
+        {
+            _password.Dispose();
         }
     }
 }

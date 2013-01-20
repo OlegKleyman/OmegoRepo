@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Oleg.Kleyman.Winrar.Interop
 {
-    public class UnrarDll : IUnrarDll
+    public sealed class NativeMethods : IUnrarDll
     {
         #region IUnrarDll Members
 
