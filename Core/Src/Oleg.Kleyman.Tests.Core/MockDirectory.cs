@@ -1,10 +1,15 @@
 using System;
 using System.IO;
+using System.Runtime.Serialization;
 
 namespace Oleg.Kleyman.Tests.Core
 {
-    public class MockDirectory : FileSystemInfo
+    [Serializable]
+    public sealed class MockDirectory : FileSystemInfo
     {
+        private MockDirectory(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        [NonSerialized]
         private string _name;
 
         public MockDirectory(string path)
@@ -30,7 +35,7 @@ namespace Oleg.Kleyman.Tests.Core
 
         private string GetDirectoryName()
         {
-            var candidates = FullPath.Split(new[] {'\\'}, StringSplitOptions.RemoveEmptyEntries);
+            var candidates = FullPath.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
             return candidates[candidates.GetUpperBound(0)];
         }
 
