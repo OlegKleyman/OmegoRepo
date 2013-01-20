@@ -4,7 +4,7 @@ using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
-    public class UnrarHandle : IUnrarHandle
+    public sealed class UnrarHandle : IUnrarHandle
     {
         private OpenMode _mode;
         private IUnrarDll _unrarDll;
