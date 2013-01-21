@@ -7,21 +7,13 @@ namespace Oleg.Kleyman.Core.Tests
     [TestFixture]
     public class JsonXmlContentTypeMapperTests : TestsBase
     {
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-
         }
 
-        #endregion
-
-        [Test]
-        public void GetMessageFormatForContentTypeShouldReturnJsonContentType()
+        private static JsonXmlContentTypeMapper GetJsonXmlContentTypeMapper()
         {
-            var contentTypeMapper = GetJsonXmlContentTypeMapper();
-            var result = contentTypeMapper.GetMessageFormatForContentType("text/javascript");
-            Assert.AreEqual(WebContentFormat.Json, result);
+            return new JsonXmlContentTypeMapper();
         }
 
         [Test]
@@ -32,9 +24,12 @@ namespace Oleg.Kleyman.Core.Tests
             Assert.AreEqual(WebContentFormat.Default, result);
         }
 
-        private static JsonXmlContentTypeMapper GetJsonXmlContentTypeMapper()
+        [Test]
+        public void GetMessageFormatForContentTypeShouldReturnJsonContentType()
         {
-            return new JsonXmlContentTypeMapper();
+            var contentTypeMapper = GetJsonXmlContentTypeMapper();
+            var result = contentTypeMapper.GetMessageFormatForContentType("text/javascript");
+            Assert.AreEqual(WebContentFormat.Json, result);
         }
     }
 }

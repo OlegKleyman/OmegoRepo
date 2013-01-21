@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Security;
 using NUnit.Framework;
-using Oleg.Kleyman.Tests.Core;
 using Oleg.Kleyman.Core.Linq;
+using Oleg.Kleyman.Tests.Core;
 
 namespace Oleg.Kleyman.Core.Tests
 {
     [TestFixture]
     public class SecureStringTests : TestsBase
     {
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-
         }
-
-        #endregion
 
         [Test]
         public void ToUnsecureStringShouldConvertCorrectly()
@@ -33,9 +28,9 @@ namespace Oleg.Kleyman.Core.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException), 
-                           ExpectedMessage = "Value cannot be null.\r\nParameter name: secureString", 
-                           MatchType = MessageMatch.Exact)]
+        [ExpectedException(typeof (ArgumentNullException),
+            ExpectedMessage = "Value cannot be null.\r\nParameter name: secureString",
+            MatchType = MessageMatch.Exact)]
         public void ToUnsecureStringShouldThrowExceptionWhenArgumentIsNull()
         {
             SecureStringExtensions.ToUnsecureString(null);

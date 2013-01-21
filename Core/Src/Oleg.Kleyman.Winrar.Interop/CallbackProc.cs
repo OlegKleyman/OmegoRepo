@@ -3,7 +3,7 @@
 namespace Oleg.Kleyman.Winrar.Interop
 {
     /// <summary>
-    ///   A delegate for the unrar callback.
+    ///     A delegate for the unrar callback.
     /// </summary>
     /// <param name="msg"> The callback message. </param>
     /// <param name="userData"> The user data associated with the callback. </param>

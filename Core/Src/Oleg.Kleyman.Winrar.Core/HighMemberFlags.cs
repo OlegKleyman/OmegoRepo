@@ -1,7 +1,7 @@
 ﻿namespace Oleg.Kleyman.Winrar.Core
 {
     /// <summary>
-    ///   Represents the high flags of the archive member.
+    ///     Represents the high flags of the archive member.
     /// </summary>
     public enum HighMemberFlags : uint
     {

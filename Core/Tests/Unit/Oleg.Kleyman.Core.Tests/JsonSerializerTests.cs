@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Oleg.Kleyman.Tests.Core;
 
 namespace Oleg.Kleyman.Core.Tests
@@ -12,7 +8,6 @@ namespace Oleg.Kleyman.Core.Tests
     {
         public override void Setup()
         {
-            
         }
 
         [Test]

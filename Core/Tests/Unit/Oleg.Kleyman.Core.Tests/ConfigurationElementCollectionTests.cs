@@ -13,10 +13,10 @@ namespace Oleg.Kleyman.Core.Tests
         public void Setup()
         {
             PropertyNameValues = new Dictionary<string, object>
-                                     {
-                                         {"value", "test"},
-                                         {"key", "someKey"}
-                                     };
+                {
+                    {"value", "test"},
+                    {"key", "someKey"}
+                };
         }
 
         [Test]

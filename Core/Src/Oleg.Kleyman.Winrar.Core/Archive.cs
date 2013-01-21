@@ -12,24 +12,24 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   Gets the <see cref="IUnrar" /> object that the instance is interfacing with.
+        ///     Gets the <see cref="IUnrar" /> object that the instance is interfacing with.
         /// </summary>
         public IUnrar Unrar { get; private set; }
 
         #region IArchive Members
 
         /// <summary>
-        ///   Gets the files in the archive.
+        ///     Gets the files in the archive.
         /// </summary>
         public ReadOnlyCollection<ArchiveMember> Files { get; private set; }
 
         /// <summary>
-        ///   Gets the file path of the archive.
+        ///     Gets the file path of the archive.
         /// </summary>
         public string FilePath { get; private set; }
 
         /// <summary>
-        ///   Extracts the contents of the archive.
+        ///     Extracts the contents of the archive.
         /// </summary>
         /// <param name="destination"> The destination file path for extraction. </param>
         /// <returns> The extracted members. </returns>
@@ -42,12 +42,17 @@ namespace Oleg.Kleyman.Winrar.Core
         #endregion
 
         /// <summary>
-        ///   Gets the unrar Archive.
+        ///     Gets the unrar Archive.
         /// </summary>
-        /// <param name="unrar"> <see cref="IUnrar" /> to use when getting the Archive </param>
+        /// <param name="unrar">
+        ///     <see cref="IUnrar" /> to use when getting the Archive
+        /// </param>
         /// <returns> The Archive. </returns>
         /// <remarks>
-        ///   This method changes the Mode property of the Handle in the <see cref="IUnrar" /> object to <see cref="OpenMode.Extract" /> .
+        ///     This method changes the Mode property of the Handle in the <see cref="IUnrar" /> object to
+        ///     <see
+        ///         cref="OpenMode.Extract" />
+        ///     .
         /// </remarks>
         public static IArchive Open(IUnrar unrar)
         {
@@ -81,9 +86,9 @@ namespace Oleg.Kleyman.Winrar.Core
         private static Archive GetArchive(IUnrar unrar)
         {
             var archive = new Archive(unrar)
-                              {
-                                  FilePath = unrar.Handle.RarFilePath
-                              };
+                {
+                    FilePath = unrar.Handle.RarFilePath
+                };
             return archive;
         }
 

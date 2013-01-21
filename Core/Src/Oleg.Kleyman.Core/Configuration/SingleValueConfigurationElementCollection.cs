@@ -7,7 +7,7 @@ namespace Oleg.Kleyman.Core.Configuration
         where T : ConfigurationElement
     {
         /// <summary>
-        ///   Constructions ConfigurationElementCollection with a range of ConfigurationElements.
+        ///     Constructions ConfigurationElementCollection with a range of ConfigurationElements.
         /// </summary>
         /// <param name="elements"> ConfigurationElements to create the ConfigurationElementCollection object with. </param>
         public SingleValueConfigurationElementCollection(IEnumerable<T> elements) : base(elements)
@@ -15,10 +15,10 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        ///   Default constructor
+        ///     Default constructor
         /// </summary>
         /// <remarks>
-        ///   Needed for runtime to initialize configuration.
+        ///     Needed for runtime to initialize configuration.
         /// </remarks>
         protected SingleValueConfigurationElementCollection()
         {
@@ -27,12 +27,12 @@ namespace Oleg.Kleyman.Core.Configuration
         #region Overrides of ConfigurationElementCollection
 
         /// <summary>
-        ///   Gets the key of the specified element.
+        ///     Gets the key of the specified element.
         /// </summary>
         /// <param name="element"> The element to get the key of. </param>
         /// <returns> Returns the same singleton object irrelevent of the argument used. </returns>
         /// <remarks>
-        ///   Since the class is for single value collections then a key is irrelevant as such this method will always return the same object of type Singleton.
+        ///     Since the class is for single value collections then a key is irrelevant as such this method will always return the same object of type Singleton.
         /// </remarks>
         protected override object GetElementKey(ConfigurationElement element)
         {
@@ -42,10 +42,10 @@ namespace Oleg.Kleyman.Core.Configuration
         #endregion
 
         /// <summary>
-        ///   Gets whether or not an exception is thrown if multiple ConfigurationElements have the same key.
+        ///     Gets whether or not an exception is thrown if multiple ConfigurationElements have the same key.
         /// </summary>
         /// <remarks>
-        ///   Returns false.
+        ///     Returns false.
         /// </remarks>
         protected override bool ThrowOnDuplicate
         {

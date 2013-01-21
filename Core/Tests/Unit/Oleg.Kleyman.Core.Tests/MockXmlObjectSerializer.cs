@@ -11,7 +11,6 @@ namespace Oleg.Kleyman.Core.Tests
 
         public override void WriteStartObject(XmlDictionaryWriter writer, object graph)
         {
-            
         }
 
         public override void WriteObjectContent(XmlDictionaryWriter writer, object graph)

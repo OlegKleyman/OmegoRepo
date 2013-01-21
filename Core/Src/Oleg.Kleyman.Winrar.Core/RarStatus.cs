@@ -1,7 +1,7 @@
 namespace Oleg.Kleyman.Winrar.Core
 {
     /// <summary>
-    ///   Represents a rar status.
+    ///     Represents a rar status.
     /// </summary>
     public enum RarStatus
     {

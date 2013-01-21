@@ -5,7 +5,7 @@ using Oleg.Kleyman.Core.Configuration;
 namespace Oleg.Kleyman.Core
 {
     /// <summary>
-    ///   Represents a rar archive extractor.
+    ///     Represents a rar archive extractor.
     /// </summary>
     public class RarExtractor : Extractor
     {
@@ -20,52 +20,62 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        ///   Initializes the <see cref="RarExtractor" /> object.
+        ///     Initializes the <see cref="RarExtractor" /> object.
         /// </summary>
         /// <param name="unrarPath"> The path to the unrar executable. </param>
-        /// <param name="fileSystem"> The <see cref="IFileSystem" /> object to interface with. </param>
-        /// <param name="processManager"> The <see cref="IProcessManager" /> object to interface with. </param>
+        /// <param name="fileSystem">
+        ///     The <see cref="IFileSystem" /> object to interface with.
+        /// </param>
+        /// <param name="processManager">
+        ///     The <see cref="IProcessManager" /> object to interface with.
+        /// </param>
         public RarExtractor(string unrarPath, IFileSystem fileSystem, IProcessManager processManager)
             : this(new RarExtractorSettings(unrarPath), fileSystem, processManager)
         {
         }
 
         /// <summary>
-        ///   Initializes the <see cref="RarExtractor" /> object.
+        ///     Initializes the <see cref="RarExtractor" /> object.
         /// </summary>
-        /// <param name="settings"> The <see cref="IRarExtractorSettings" /> object to use for this instance. </param>
-        /// <param name="fileSystem"> The <see cref="IFileSystem" /> object to interface with. </param>
-        /// <param name="processManager"> The <see cref="IProcessManager" /> object to interface with. </param>
+        /// <param name="settings">
+        ///     The <see cref="IRarExtractorSettings" /> object to use for this instance.
+        /// </param>
+        /// <param name="fileSystem">
+        ///     The <see cref="IFileSystem" /> object to interface with.
+        /// </param>
+        /// <param name="processManager">
+        ///     The <see cref="IProcessManager" /> object to interface with.
+        /// </param>
         public RarExtractor(IRarExtractorSettings settings, IFileSystem fileSystem, IProcessManager processManager)
         {
             Settings = settings;
             FileSystem = fileSystem;
             ProcessManager = processManager;
             _processInfo = new ProcessStartInfo(settings.UnrarPath)
-                               {
-                                   CreateNoWindow = true,
-                                   UseShellExecute = false,
-                                   WindowStyle = ProcessWindowStyle.Hidden
-                               };
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
         }
 
         /// <summary>
-        ///   Gets the <see cref="IFileSystem" /> object that this instance is using.
+        ///     Gets the <see cref="IFileSystem" /> object that this instance is using.
         /// </summary>
         public IFileSystem FileSystem { get; private set; }
 
         /// <summary>
-        ///   Gets the settings for this instance.
+        ///     Gets the settings for this instance.
         /// </summary>
         public IRarExtractorSettings Settings { get; private set; }
 
         /// <summary>
-        ///   Gets the <see cref="IProcessManager" /> object for this instance.
+        ///     Gets the <see cref="IProcessManager" /> object for this instance.
         /// </summary>
         protected IProcessManager ProcessManager { get; private set; }
 
         /// <summary>
-        ///   Gets the default <see cref="RarExtractor" /> object.
+        ///     Gets the default <see cref="RarExtractor" /> object.
         /// </summary>
         public static RarExtractor Default
         {
@@ -85,11 +95,13 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        ///   Extracts an object.
+        ///     Extracts an object.
         /// </summary>
         /// <param name="target"> The path to the object to extract. </param>
         /// <param name="destination"> The extraction destination. </param>
-        /// <returns> The extracted <see cref="IFileSystemMember" /> object. </returns>
+        /// <returns>
+        ///     The extracted <see cref="IFileSystemMember" /> object.
+        /// </returns>
         /// <exception cref="FileNotFoundException">Thrown when the unrar executable is not found.</exception>
         public override IFileSystemMember Extract(string target, string destination)
         {

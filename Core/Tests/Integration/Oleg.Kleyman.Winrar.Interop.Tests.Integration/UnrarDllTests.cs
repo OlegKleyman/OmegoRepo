@@ -11,7 +11,7 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
     [TestFixture]
     public sealed class UnrarDllTests : TestsBase, IDisposable
     {
-        private ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
 
         public override void Setup()
         {
@@ -53,6 +53,11 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             Assert.AreEqual("test data", Marshal.PtrToStringUni(userData));
             _callBackSuccess = true;
             return 1;
+        }
+
+        public void Dispose()
+        {
+            _manualResetEvent.Dispose();
         }
 
         [Test]
@@ -240,11 +245,6 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
 
             var result = unrarDll.RARCloseArchive(handle);
             Assert.AreEqual(0, result);
-        }
-
-        public void Dispose()
-        {
-            _manualResetEvent.Dispose();
         }
     }
 }

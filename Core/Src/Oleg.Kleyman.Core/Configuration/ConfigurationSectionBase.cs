@@ -6,12 +6,12 @@ using Oleg.Kleyman.Core.Linq;
 namespace Oleg.Kleyman.Core.Configuration
 {
     /// <summary>
-    ///   Represents a configuration section.
+    ///     Represents a configuration section.
     /// </summary>
     public abstract class ConfigurationSectionBase : ConfigurationSection
     {
         /// <summary>
-        ///   Creates configuration section based on keys and values of an IDictionary.
+        ///     Creates configuration section based on keys and values of an IDictionary.
         /// </summary>
         /// <param name="values"> The property names and values to set. </param>
         /// <exception cref="ArgumentNullException">Thrown when the values argument is null.</exception>
@@ -26,14 +26,14 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        ///   Default constructor. Does nothing
+        ///     Default constructor. Does nothing
         /// </summary>
         protected ConfigurationSectionBase()
         {
         }
 
         /// <summary>
-        ///   Creates a range of properties.
+        ///     Creates a range of properties.
         /// </summary>
         /// <param name="values"> The property names and values to create. </param>
         protected void CreatePropertiesWithValue(IEnumerable<KeyValuePair<string, object>> values)

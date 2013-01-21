@@ -7,37 +7,37 @@ namespace Oleg.Kleyman.Winrar.Core
     public class ArchiveMember
     {
         /// <summary>
-        ///   Gets the high member flags.
+        ///     Gets the high member flags.
         /// </summary>
         public HighMemberFlags HighFlags { get; internal set; }
 
         /// <summary>
-        ///   Gets the unpacked size of the file in bytes.
+        ///     Gets the unpacked size of the file in bytes.
         /// </summary>
         public long UnpackedSize { get; internal set; }
 
         /// <summary>
-        ///   Gets the packed size of the file in bytes.
+        ///     Gets the packed size of the file in bytes.
         /// </summary>
         public long PackedSize { get; internal set; }
 
         /// <summary>
-        ///   Gets the last modification date of the file.
+        ///     Gets the last modification date of the file.
         /// </summary>
         public DateTime LastModificationDate { get; internal set; }
 
         /// <summary>
-        ///   Gets the name of the file.
+        ///     Gets the name of the file.
         /// </summary>
         public string Name { get; internal set; }
 
         /// <summary>
-        ///   Gets the archive volume name that the file is in.
+        ///     Gets the archive volume name that the file is in.
         /// </summary>
         public string Volume { get; internal set; }
 
         /// <summary>
-        ///   Gets the low member flags.
+        ///     Gets the low member flags.
         /// </summary>
         public LowMemberFlags LowFlags { get; internal set; }
 

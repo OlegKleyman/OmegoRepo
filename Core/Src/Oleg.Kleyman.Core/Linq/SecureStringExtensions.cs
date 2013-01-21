@@ -5,12 +5,12 @@ using System.Security;
 namespace Oleg.Kleyman.Core.Linq
 {
     /// <summary>
-    /// <see cref="SecureString"/> extension methods.
+    ///     <see cref="SecureString" /> extension methods.
     /// </summary>
     public static class SecureStringExtensions
     {
         /// <summary>
-        /// Converts a <see cref="SecureString"/> object to a managed <see cref="string"/>.
+        ///     Converts a <see cref="SecureString" /> object to a managed <see cref="string" />.
         /// </summary>
         /// <param name="secureString"></param>
         /// <returns></returns>

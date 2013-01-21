@@ -3,7 +3,7 @@
 namespace Oleg.Kleyman.Core
 {
     /// <summary>
-    ///   Represents an equality comparer to compare if two objects are equal.
+    ///     Represents an equality comparer to compare if two objects are equal.
     /// </summary>
     /// <typeparam name="T"> The type of objects to compare. </typeparam>
     public class EqualityComparer<T> : System.Collections.Generic.EqualityComparer<T>
@@ -11,7 +11,7 @@ namespace Oleg.Kleyman.Core
         private const string CANNOT_BE_NULL = "Value cannot be null.";
 
         /// <summary>
-        ///   Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="compareHandler"> Handler to handle the comparison of objects. </param>
         public EqualityComparer(Func<T, T, bool> compareHandler)
@@ -20,12 +20,12 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        ///   Gets or sets the comparer handler to use for compare operations.
+        ///     Gets or sets the comparer handler to use for compare operations.
         /// </summary>
         public Func<T, T, bool> CompareHandler { get; set; }
 
         /// <summary>
-        ///   Determines if two arguments are equal.
+        ///     Determines if two arguments are equal.
         /// </summary>
         /// <param name="x"> The first object to compare. </param>
         /// <param name="y"> The second object to compare. </param>
@@ -33,7 +33,7 @@ namespace Oleg.Kleyman.Core
         /// <exception cref="System.ArgumentNullException">Thrown when either of the arguments is null.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the compare handle is null.</exception>
         /// <example>
-        ///   var comparer = new EqualityComparer&lt;int&gt;((x, y) => x == y); var valuesAreEqual = comparer.Equals(5, 5); Debug.WriteLine(valuesAreEqual); //writes true to the debug window
+        ///     var comparer = new EqualityComparer&lt;int&gt;((x, y) => x == y); var valuesAreEqual = comparer.Equals(5, 5); Debug.WriteLine(valuesAreEqual); //writes true to the debug window
         /// </example>
         public override bool Equals(T x, T y)
         {
@@ -52,13 +52,13 @@ namespace Oleg.Kleyman.Core
         }
 
         /// <summary>
-        ///   Retreives the Hash Code of an object.
+        ///     Retreives the Hash Code of an object.
         /// </summary>
         /// <param name="target"> Target object to retreive the hash code from. </param>
         /// <returns> Integer Hash Code of target object. </returns>
         /// <exception cref="ArgumentNullException">Thrown when the target argument is null.</exception>
         /// <example>
-        ///   var comparer = new EqualityComparer&lt;int&gt;((x, y) => x == y); var hashCode = comparer.GetHashCode(5); Debug.WriteLine(hashCode); //writes 5 to the debug window
+        ///     var comparer = new EqualityComparer&lt;int&gt;((x, y) => x == y); var hashCode = comparer.GetHashCode(5); Debug.WriteLine(hashCode); //writes 5 to the debug window
         /// </example>
         public override int GetHashCode(T target)
         {

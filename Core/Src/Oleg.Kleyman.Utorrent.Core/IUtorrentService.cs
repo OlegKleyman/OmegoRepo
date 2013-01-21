@@ -14,9 +14,9 @@ namespace Oleg.Kleyman.Utorrent.Core
 
         [OperationContract]
         [WebGet(UriTemplate = "/?token={key}&action=getfiles&hash={hash}",
-                   RequestFormat = WebMessageFormat.Json,
-                   ResponseFormat = WebMessageFormat.Json,
-                   BodyStyle = WebMessageBodyStyle.Bare)]
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare)]
         Torrent GetTorrentFiles(string key, string hash);
     }
 }

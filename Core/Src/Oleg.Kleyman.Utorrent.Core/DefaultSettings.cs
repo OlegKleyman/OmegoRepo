@@ -7,12 +7,20 @@ namespace Oleg.Kleyman.Utorrent.Core
     {
         #region Implementation of ISettingsProvider
 
-        public Uri Url { get { return new Uri(Settings.Default.Url); } }
-        
-        public string Username { get { return Settings.Default.Username; } }
-        
-        public string Password { get { return Settings.Default.Password; } }
+        public Uri Url
+        {
+            get { return new Uri(Settings.Default.Url); }
+        }
 
+        public string Username
+        {
+            get { return Settings.Default.Username; }
+        }
+
+        public string Password
+        {
+            get { return Settings.Default.Password; }
+        }
 
         #endregion
     }

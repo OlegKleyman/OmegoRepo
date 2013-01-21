@@ -1,6 +1,4 @@
-﻿using System;
-using System.Web.Script.Serialization;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Oleg.Kleyman.Tests.Core;
 
 namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
@@ -8,14 +6,9 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
     [TestFixture]
     public class UtorrentServiceTests : TestsBase
     {
-        #region Overrides of TestsBase
-
         public override void Setup()
         {
-
         }
-
-        #endregion
 
         private static UtorrentServiceBuilder GetUtorrentServiceBuilder()
         {
@@ -46,7 +39,6 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
             Assert.AreEqual(2, torrent.TorrentFiles.Length);
             Assert.AreEqual("daa-alvh-1080p.mkv", torrent.TorrentFiles[0].Name);
             Assert.AreEqual("daa-alvh-1080p.nfo", torrent.TorrentFiles[1].Name);
-
         }
     }
 }

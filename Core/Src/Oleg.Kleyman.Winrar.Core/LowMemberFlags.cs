@@ -3,7 +3,7 @@ using System;
 namespace Oleg.Kleyman.Winrar.Core
 {
     /// <summary>
-    ///   Represents the low flags of the archive member.
+    ///     Represents the low flags of the archive member.
     /// </summary>
     [Flags]
     public enum LowMemberFlags

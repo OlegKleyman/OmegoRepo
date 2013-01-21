@@ -16,10 +16,10 @@ namespace Oleg.Kleyman.Core.Tests.Integration
         {
             var processManager = new ProcessManager();
             var processInfo = new ProcessStartInfo("cmd")
-                                  {
-                                      CreateNoWindow = true,
-                                      WindowStyle = ProcessWindowStyle.Hidden
-                                  };
+                {
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
             var process = processManager.Start(processInfo);
             Assert.IsInstanceOf<SystemProcess>(process);
             Assert.IsFalse(process.HasExited);
