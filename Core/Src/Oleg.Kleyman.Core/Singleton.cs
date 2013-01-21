@@ -5,14 +5,14 @@ namespace Oleg.Kleyman.Core
     /// </summary>
     public class Singleton
     {
-        private static readonly Singleton __instance;
+        private static readonly Singleton r__instance;
 
         /// <summary>
         ///     Default static constructor.
         /// </summary>
         static Singleton()
         {
-            __instance = new Singleton();
+            r__instance = new Singleton();
         }
 
         private Singleton()
@@ -24,7 +24,7 @@ namespace Oleg.Kleyman.Core
         /// </summary>
         public static Singleton Instance
         {
-            get { return __instance; }
+            get { return r__instance; }
         }
     }
 }

@@ -28,8 +28,14 @@ namespace Oleg.Kleyman.Utorrent.Core
             }
         }
 
+        /// <summary>
+        /// Gets the torrent <see cref="Hash"/>
+        /// </summary>
         public TorrentHash Hash { get; private set; }
 
+        /// <summary>
+        /// Gets an array of <see cref="TorrentFile"/>s.
+        /// </summary>
         public TorrentFile[] TorrentFiles { get; private set; }
 
         private void SetProperties(object[] value)

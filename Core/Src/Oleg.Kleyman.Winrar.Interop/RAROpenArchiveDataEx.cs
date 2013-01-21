@@ -12,11 +12,14 @@ namespace Oleg.Kleyman.Winrar.Interop
         // ReSharper restore InconsistentNaming
         : IDisposable
     {
-        [MarshalAs(UnmanagedType.LPStr)] public string ArcName;
-        [MarshalAs(UnmanagedType.LPWStr)] public string ArcNameW;
+        [MarshalAs(UnmanagedType.LPStr)] 
+        public string ArcName;
+        [MarshalAs(UnmanagedType.LPWStr)] 
+        public string ArcNameW;
         public uint OpenMode;
         public uint OpenResult;
-        [MarshalAs(UnmanagedType.LPStr)] public string CmtBuf;
+        [MarshalAs(UnmanagedType.LPStr)] 
+        public string CmtBuf;
         public uint CmtBufSize;
         public uint CmtSize;
         public uint CmtState;
@@ -24,17 +27,25 @@ namespace Oleg.Kleyman.Winrar.Interop
         public CallbackProc Callback;
         private IntPtr _userData;
 
+        /// <summary>
+        /// Gets or sets user data.
+        /// </summary>
         public IntPtr UserData
         {
             get { return _userData; }
             set { _userData = value; }
         }
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)] public uint[] Reserved;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)] 
+        public uint[] Reserved;
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            _userData = IntPtr.Zero;
+            _userData = IntPtr.Zero; //releases the pointer handle
         }
     }
 }
