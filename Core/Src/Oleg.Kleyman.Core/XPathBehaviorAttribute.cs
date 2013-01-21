@@ -31,6 +31,10 @@ namespace Oleg.Kleyman.Core
             throw new NotSupportedException();
         }
 
+        /// <summary>
+        /// Implements a modification or extension of the client across an operation.
+        /// </summary>
+        /// <param name="operationDescription">The operation being examined. Use for examination only. If the operation description is modified, the results are undefined.</param><param name="clientOperation">The run-time object that exposes customization properties for the operation described by <paramref name="operationDescription"/>.</param>
         public void ApplyClientBehavior(OperationDescription operationDescription, ClientOperation clientOperation)
         {
             clientOperation.Formatter = new XPathFormatter(clientOperation.Formatter, XpathExpression);

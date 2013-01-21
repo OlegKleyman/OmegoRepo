@@ -99,9 +99,9 @@ namespace Oleg.Kleyman.Utorrent.Core
         {
             const string realm = "uTorrent";
             var customBinding = new CustomBinding(new WebMessageEncodingBindingElement
-                {
-                    ContentTypeMapper = new JsonXmlContentTypeMapper()
-                },
+                                                  {
+                                                      ContentTypeMapper = new JsonXmlContentTypeMapper()
+                                                  },
                                                   new HttpTransportBindingElement
                                                       {
                                                           ManualAddressing = true,
