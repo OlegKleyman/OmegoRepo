@@ -57,7 +57,6 @@
     <Compile Include="IRarExtractorSettings.cs" />
     <Compile Include="Configuration\RarExtractorConfigurationSection.cs" />
     <Compile Include="IFileSystemMember.cs" />
-    <Compile Include="JsonSerializer.cs" />
     <Compile Include="JsonXmlContentTypeMapper.cs" />
     <Compile Include="Linq\NativeMethods.cs" />
     <Compile Include="Linq\SecureStringExtensions.cs" />
