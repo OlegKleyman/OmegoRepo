@@ -9,15 +9,11 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
     [TestFixture]
     public class ArchiveReaderTests : TestsBase
     {
-        #region Setup/Teardown
-
         [SetUp]
         public void TestSetup()
         {
             UnrarHandleMock.SetupGet(x => x.Mode).Returns(OpenMode.List);
         }
-
-        #endregion
 
         private Mock<IUnrarHandle> UnrarHandleMock { get; set; }
         private Mock<IUnrarDll> UnrarDllMock { get; set; }
@@ -36,52 +32,52 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             UnrarHandleMock = new Mock<IUnrarHandle>();
             UnrarHandleMock.SetupGet(x => x.UnrarDll).Returns(UnrarDllMock.Object);
             _test1TxtFileHeaderData = new RARHeaderDataEx
-                                          {
-                                              ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡ㅴ爮牡",
-                                              ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar",
-                                              CmtBuf = null,
-                                              CmtBufSize = 1,
-                                              CmtSize = 0,
-                                              CmtState = 0,
-                                              FileAttr = 32,
-                                              FileCRC = 2631502099,
-                                              FileName = "整瑳⸲硴t",
-                                              FileNameW = "test2.txt",
-                                              FileTime = 1087152912,
-                                              Flags = 37058,
-                                              HostOS = 2,
-                                              Method = 48,
-                                              PackSize = 3145642,
-                                              PackSizeHigh = 0,
-                                              Reserved = new uint[1024],
-                                              UnpSize = 5293080,
-                                              UnpSizeHigh = 0,
-                                              UnpVer = 20
-                                          };
+                {
+                    ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡ㅴ爮牡",
+                    ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part1.rar",
+                    CmtBuf = null,
+                    CmtBufSize = 1,
+                    CmtSize = 0,
+                    CmtState = 0,
+                    FileAttr = 32,
+                    FileCRC = 2631502099,
+                    FileName = "整瑳⸲硴t",
+                    FileNameW = "test2.txt",
+                    FileTime = 1087152912,
+                    Flags = 37058,
+                    HostOS = 2,
+                    Method = 48,
+                    PackSize = 3145642,
+                    PackSizeHigh = 0,
+                    Reserved = new uint[1024],
+                    UnpSize = 5293080,
+                    UnpSizeHigh = 0,
+                    UnpVer = 20
+                };
 
             _test2TxtFileHeaderData = new RARHeaderDataEx
-                                          {
-                                              ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡㉴爮牡",
-                                              ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part2.rar",
-                                              CmtBuf = null,
-                                              CmtBufSize = 1,
-                                              CmtSize = 0,
-                                              CmtState = 0,
-                                              FileAttr = 32,
-                                              FileCRC = 462830299,
-                                              FileName = "整瑳琮瑸",
-                                              FileNameW = "test.txt",
-                                              FileTime = 1087152892,
-                                              Flags = 37056,
-                                              HostOS = 2,
-                                              Method = 48,
-                                              PackSize = 297540,
-                                              PackSizeHigh = 0,
-                                              Reserved = new uint[1024],
-                                              UnpSize = 297540,
-                                              UnpSizeHigh = 0,
-                                              UnpVer = 20
-                                          };
+                {
+                    ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡㉴爮牡",
+                    ArcNameW = "C:\\GitRepos\\MainDefault\\Common\\Test\\Test.part2.rar",
+                    CmtBuf = null,
+                    CmtBufSize = 1,
+                    CmtSize = 0,
+                    CmtState = 0,
+                    FileAttr = 32,
+                    FileCRC = 462830299,
+                    FileName = "整瑳琮瑸",
+                    FileNameW = "test.txt",
+                    FileTime = 1087152892,
+                    Flags = 37056,
+                    HostOS = 2,
+                    Method = 48,
+                    PackSize = 297540,
+                    PackSizeHigh = 0,
+                    Reserved = new uint[1024],
+                    UnpSize = 297540,
+                    UnpSizeHigh = 0,
+                    UnpVer = 20
+                };
         }
 
         [Test]

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace Oleg.Kleyman.Winrar.Interop
 {
     /// <summary>
-    ///   Represents the unmanaged RARHeaderDataEx struct.
+    ///     Represents the unmanaged RARHeaderDataEx struct.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
 // ReSharper disable InconsistentNaming

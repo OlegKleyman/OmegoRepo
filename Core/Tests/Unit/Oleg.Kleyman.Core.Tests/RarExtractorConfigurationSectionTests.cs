@@ -14,9 +14,9 @@ namespace Oleg.Kleyman.Core.Tests
         public void Setup()
         {
             PropertyNameValues = new Dictionary<string, object>
-                                     {
-                                         {"unrarPath", "test"}
-                                     };
+                {
+                    {"unrarPath", "test"}
+                };
         }
 
         [Test]

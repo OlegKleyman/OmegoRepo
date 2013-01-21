@@ -69,7 +69,8 @@ namespace Oleg.Kleyman.Core.Tests.Integration
                 Path.GetFullPath(
                     @"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test1\SecondLevel1\ThirdLevel1");
             paths[8] =
-                Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test1\SecondLevel1\ThirdLevel1\filler");
+                Path.GetFullPath(
+                    @"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test1\SecondLevel1\ThirdLevel1\filler");
             paths[9] =
                 Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Core.Tests.Integration\Test1\SecondLevel2");
 

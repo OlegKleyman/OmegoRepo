@@ -10,9 +10,11 @@ namespace Oleg.Kleyman.Winrar.Core
         private IUnrarDll _unrarDll;
 
         /// <summary>
-        ///   Creates the UnrarHandle object.
+        ///     Creates the UnrarHandle object.
         /// </summary>
-        /// <param name="unrarDll"> The <see cref="IUnrarDll" /> object to interface commands to. </param>
+        /// <param name="unrarDll">
+        ///     The <see cref="IUnrarDll" /> object to interface commands to.
+        /// </param>
         public UnrarHandle(IUnrarDll unrarDll)
         {
             UnrarDll = unrarDll;
@@ -20,9 +22,11 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   Creates the UnrarHandle object.
+        ///     Creates the UnrarHandle object.
         /// </summary>
-        /// <param name="unrarDll"> The <see cref="IUnrarDll" /> object to interface commands to. </param>
+        /// <param name="unrarDll">
+        ///     The <see cref="IUnrarDll" /> object to interface commands to.
+        /// </param>
         /// <param name="rarFilePath"> The path to the rar archive to use. </param>
         public UnrarHandle(IUnrarDll unrarDll, string rarFilePath)
             : this(unrarDll)
@@ -33,7 +37,7 @@ namespace Oleg.Kleyman.Winrar.Core
         #region Implementation of IDisposable
 
         /// <summary>
-        ///   Disposes the UnrarHandle object.
+        ///     Disposes the UnrarHandle object.
         /// </summary>
         public void Dispose()
         {
@@ -51,7 +55,7 @@ namespace Oleg.Kleyman.Winrar.Core
         public IntPtr Handle { get; private set; }
 
         /// <summary>
-        ///   Gets or sets the open mode for the handle.
+        ///     Gets or sets the open mode for the handle.
         /// </summary>
         public OpenMode Mode
         {
@@ -68,7 +72,7 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   Gets or Sets the UnrarDll for unrarDll operations.
+        ///     Gets or Sets the UnrarDll for unrarDll operations.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when the handle is still open.</exception>
         public IUnrarDll UnrarDll
@@ -87,17 +91,17 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   Gets or sets the RarFilePath
+        ///     Gets or sets the RarFilePath
         /// </summary>
         public string RarFilePath { get; set; }
 
         /// <summary>
-        ///   Gets whether the handle to the rar archive is open.
+        ///     Gets whether the handle to the rar archive is open.
         /// </summary>
         public bool IsOpen { get; private set; }
 
         /// <summary>
-        ///   Closes the handle to the rar archive.
+        ///     Closes the handle to the rar archive.
         /// </summary>
         /// <exception cref="UnrarException">Thrown when the handle cannot be closed.</exception>
         public void Close()
@@ -121,7 +125,7 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   Opens the handle to the archive
+        ///     Opens the handle to the archive
         /// </summary>
         /// <exception cref="UnrarException">Thrown when the archive was unable to be opened.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the handle is already open, the UnrarDll or RarFilePath properties are null or an empty string.</exception>
@@ -129,10 +133,10 @@ namespace Oleg.Kleyman.Winrar.Core
         {
             ValidatePrerequisites();
             var openData = new RAROpenArchiveDataEx
-                               {
-                                   ArcName = RarFilePath,
-                                   OpenMode = (uint) Mode
-                               };
+                {
+                    ArcName = RarFilePath,
+                    OpenMode = (uint) Mode
+                };
 
             Handle = UnrarDll.RAROpenArchiveEx(ref openData);
 

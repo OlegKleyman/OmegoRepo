@@ -15,7 +15,7 @@ namespace Oleg.Kleyman.Winrar.Core
         #region Implementation of IArchiveReader
 
         /// <summary>
-        ///   Reads the next file in the archive.
+        ///     Reads the next file in the archive.
         /// </summary>
         /// <returns> The next Archive Member. </returns>
         /// <exception cref="UnrarException">Thrown when the header data of the archive is unable to be read.</exception>
@@ -27,7 +27,7 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   Gets the status of the Archive.
+        ///     Gets the status of the Archive.
         /// </summary>
         public RarStatus Status { get; private set; }
 
@@ -53,7 +53,7 @@ namespace Oleg.Kleyman.Winrar.Core
         #endregion
 
         /// <summary>
-        ///   Gets the <see cref="IUnrarHandle" /> that's used for operations.
+        ///     Gets the <see cref="IUnrarHandle" /> that's used for operations.
         /// </summary>
         public IUnrarHandle Handle { get; private set; }
 

@@ -7,10 +7,11 @@ namespace Oleg.Kleyman.Tests.Core
     [Serializable]
     public sealed class MockDirectory : FileSystemInfo
     {
-        private MockDirectory(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        [NonSerialized] private string _name;
 
-        [NonSerialized]
-        private string _name;
+        private MockDirectory(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
 
         public MockDirectory(string path)
         {
@@ -35,7 +36,7 @@ namespace Oleg.Kleyman.Tests.Core
 
         private string GetDirectoryName()
         {
-            var candidates = FullPath.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            var candidates = FullPath.Split(new[] {'\\'}, StringSplitOptions.RemoveEmptyEntries);
             return candidates[candidates.GetUpperBound(0)];
         }
 

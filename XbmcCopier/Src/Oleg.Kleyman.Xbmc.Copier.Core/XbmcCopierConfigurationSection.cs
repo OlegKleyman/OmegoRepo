@@ -62,7 +62,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         /// <summary>
-        ///   Gets the default <see cref="ISettingsProvider" /> for the Xbmx configuration from the config file.
+        ///     Gets the default <see cref="ISettingsProvider" /> for the Xbmx configuration from the config file.
         /// </summary>
         public static ISettingsProvider DefaultSettings
         {
@@ -83,7 +83,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         #region ISettingsProvider Members
 
         /// <summary>
-        ///   Gets the TV path location from the config.
+        ///     Gets the TV path location from the config.
         /// </summary>
         [ConfigurationProperty(TV_PATH_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
         string ISettingsProvider.TvPath
@@ -92,7 +92,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         /// <summary>
-        ///   Gets the movie path location from the config.
+        ///     Gets the movie path location from the config.
         /// </summary>
         [ConfigurationProperty(MOVIE_PATH_PROPERTY_NAME, IsDefaultCollection = false, IsKey = false)]
         string ISettingsProvider.MoviesPath
@@ -101,7 +101,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         /// <summary>
-        ///   Gets the movie filters to use from the config file.
+        ///     Gets the movie filters to use from the config file.
         /// </summary>
         Regex[] ISettingsProvider.MovieFilters
         {
@@ -120,7 +120,7 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core
         }
 
         /// <summary>
-        ///   Gets the tv filters to use from the config file.
+        ///     Gets the tv filters to use from the config file.
         /// </summary>
         Regex[] ISettingsProvider.TvFilters
         {

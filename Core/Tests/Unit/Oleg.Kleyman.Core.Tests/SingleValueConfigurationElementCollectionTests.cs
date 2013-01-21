@@ -18,9 +18,9 @@ namespace Oleg.Kleyman.Core.Tests
         public void Setup()
         {
             PropertyNameValues = new Dictionary<string, object>
-                                     {
-                                         {"value", "test"}
-                                     };
+                {
+                    {"value", "test"}
+                };
             MockSingleValueConfigurationElementCollection =
                 new Mock<SingleValueConfigurationElementCollection<SingleValueConfigurationSection>>();
         }

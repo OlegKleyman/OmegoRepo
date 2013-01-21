@@ -8,15 +8,19 @@ using Oleg.Kleyman.Winrar.Interop;
 namespace Oleg.Kleyman.Winrar.Core
 {
     /// <summary>
-    ///   Represents a store of Unrar operations.
+    ///     Represents a store of Unrar operations.
     /// </summary>
     public class Unrar : IUnrar
     {
         /// <summary>
-        ///   Initializes the <see cref="Unrar" /> object.
+        ///     Initializes the <see cref="Unrar" /> object.
         /// </summary>
-        /// <param name="handle"> The <see cref="IUnrarHandle" /> to use for operations. </param>
-        /// <param name="fileSystem"> The <see cref="IFileSystem" /> to use for file system operations. </param>
+        /// <param name="handle">
+        ///     The <see cref="IUnrarHandle" /> to use for operations.
+        /// </param>
+        /// <param name="fileSystem">
+        ///     The <see cref="IFileSystem" /> to use for file system operations.
+        /// </param>
         public Unrar(IUnrarHandle handle, IFileSystem fileSystem)
         {
             Handle = handle;
@@ -24,29 +28,33 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   The <see cref="IFileSystem" /> to use for file system operations.
+        ///     The <see cref="IFileSystem" /> to use for file system operations.
         /// </summary>
         public IFileSystem FileSystem { get; set; }
 
         #region IUnrar Members
 
         /// <summary>
-        ///   The <see cref="IUnrarHandle" /> to use for operations.
+        ///     The <see cref="IUnrarHandle" /> to use for operations.
         /// </summary>
         public IUnrarHandle Handle { get; set; }
 
         /// <summary>
-        ///   Invoked when a compressed member is extracted.
+        ///     Invoked when a compressed member is extracted.
         /// </summary>
         public event EventHandler<UnrarEventArgs> MemberExtracted;
 
         /// <summary>
-        ///   Executes the archive reader.
+        ///     Executes the archive reader.
         /// </summary>
-        /// <returns> An <see cref="IArchiveReader" /> . </returns>
-        /// <exception cref="InvalidOperationException">Thrown when the handle is not open or the handle mode is
-        ///   <see cref="OpenMode.Extract" />
-        ///   .</exception>
+        /// <returns>
+        ///     An <see cref="IArchiveReader" /> .
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown when the handle is not open or the handle mode is
+        ///     <see cref="OpenMode.Extract" />
+        ///     .
+        /// </exception>
         public IArchiveReader ExecuteReader()
         {
             ThrowExceptionOnHandleNull();
@@ -56,10 +64,12 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///   Extracts the archive.
+        ///     Extracts the archive.
         /// </summary>
         /// <param name="destinationPath"> The destination folder to extract to. If it does not exist then it will be created. </param>
-        /// <returns> A <see cref="FileSystemInfo" /> object containing directory information of the destination. </returns>
+        /// <returns>
+        ///     A <see cref="FileSystemInfo" /> object containing directory information of the destination.
+        /// </returns>
         /// <exception cref="InvalidOperationException">Thrown when the Handle or FileSystem properties are null.</exception>
         public IFileSystemMember[] Extract(string destinationPath)
         {

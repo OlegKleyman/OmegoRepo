@@ -3,7 +3,7 @@
 namespace Oleg.Kleyman.Core.Linq
 {
     /// <summary>
-    /// Represents methods in external code.
+    ///     Represents methods in external code.
     /// </summary>
     public static class NativeMethods
     {

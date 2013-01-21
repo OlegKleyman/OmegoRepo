@@ -8,7 +8,7 @@ namespace Oleg.Kleyman.Winrar.Interop
         #region IUnrarDll Members
 
         /// <summary>
-        ///   Sets the callback method of unrar operations.
+        ///     Sets the callback method of unrar operations.
         /// </summary>
         /// <param name="hArcData"> The handle of the archive. </param>
         /// <param name="callback"> The callback method. </param>
@@ -19,7 +19,7 @@ namespace Oleg.Kleyman.Winrar.Interop
         }
 
         /// <summary>
-        ///   Processes an archive member.
+        ///     Processes an archive member.
         /// </summary>
         /// <param name="handle"> An open handle to the target archive. </param>
         /// <param name="operation"> The operation to use when processing the member. </param>
@@ -27,7 +27,7 @@ namespace Oleg.Kleyman.Winrar.Interop
         /// <param name="destName"> The full path to where the member will be extracted. </param>
         /// <returns> The sucess or error identifier of the operation. </returns>
         /// <remarks>
-        ///   If destName parameter is defined the it overrides the destPath parameter.
+        ///     If destName parameter is defined the it overrides the destPath parameter.
         /// </remarks>
         uint IUnrarDll.RARProcessFileW(IntPtr handle, int operation, string destPath, string destName)
         {
@@ -35,12 +35,12 @@ namespace Oleg.Kleyman.Winrar.Interop
         }
 
         /// <summary>
-        ///   Closes the handle to the archive. Archive handle must be open to use this method. If it's closed then it fails hard without a managed exception.
+        ///     Closes the handle to the archive. Archive handle must be open to use this method. If it's closed then it fails hard without a managed exception.
         /// </summary>
         /// <param name="hArcData"> The archive handle. </param>
         /// <returns> The success status of the handle closing. </returns>
         /// <remarks>
-        ///   0 if success. If failed returns 17.
+        ///     0 if success. If failed returns 17.
         /// </remarks>
         uint IUnrarDll.RARCloseArchive(IntPtr hArcData)
         {
@@ -48,17 +48,19 @@ namespace Oleg.Kleyman.Winrar.Interop
         }
 
         /// <summary>
-        ///   Opens a handle to the target archive.
+        ///     Opens a handle to the target archive.
         /// </summary>
         /// <param name="openArchiveData"> The information data of the target archive to open. </param>
-        /// <returns> A <see cref="IntPtr" /> handle to the archive. </returns>
+        /// <returns>
+        ///     A <see cref="IntPtr" /> handle to the archive.
+        /// </returns>
         IntPtr IUnrarDll.RAROpenArchiveEx(ref RAROpenArchiveDataEx openArchiveData)
         {
             return RAROpenArchiveEx(ref openArchiveData);
         }
 
         /// <summary>
-        ///   Reads the next header of the archive.
+        ///     Reads the next header of the archive.
         /// </summary>
         /// <param name="handle"> An open handle to the target archive. </param>
         /// <param name="headerData"> The header data to be populated on sucess. </param>

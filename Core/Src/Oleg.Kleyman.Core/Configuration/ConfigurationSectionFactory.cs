@@ -7,11 +7,13 @@ namespace Oleg.Kleyman.Core.Configuration
     public class ConfigurationSectionFactory<T> where T : ConfigurationSection
     {
         /// <summary>
-        ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by file path.
+        ///     Gets a <see cref="System.Configuration.ConfigurationSection" /> by file path.
         /// </summary>
         /// <param name="configurationFilePath"> UNC path to the configuration file </param>
         /// <param name="sectionName"> The name of the configuration section to load. </param>
-        /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
+        /// <returns>
+        ///     A <see cref="System.Configuration.ConfigurationSection" /> object.
+        /// </returns>
         /// <exception cref="ArgumentNullException">Thrown when the configurationFilePath or sectionName argument is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the configurationFilePath or sectionName argument is an empty string.</exception>
         /// <exception cref="ConfigurationErrorsException">Thrown when the configurationFilePath does not exist.</exception>
@@ -22,9 +24,9 @@ namespace Oleg.Kleyman.Core.Configuration
             ThrowExceptionOnInvalidArguments(sectionName);
 
             var fileMap = new ExeConfigurationFileMap
-                              {
-                                  ExeConfigFilename = configurationFilePath
-                              };
+                {
+                    ExeConfigFilename = configurationFilePath
+                };
 
             var configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
             return GetConfigurationSectionByConfiguration(configuration, sectionName);
@@ -53,12 +55,18 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
+        ///     Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
         /// </summary>
-        /// <param name="configuration"> The <see cref="Oleg.Kleyman.Core.Configuration" /> object containing the <see
-        ///    cref="System.Configuration.ConfigurationSection" /> to load. </param>
+        /// <param name="configuration">
+        ///     The <see cref="Oleg.Kleyman.Core.Configuration" /> object containing the
+        ///     <see
+        ///         cref="System.Configuration.ConfigurationSection" />
+        ///     to load.
+        /// </param>
         /// <param name="sectionName"> The name of the configuration section to load. </param>
-        /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
+        /// <returns>
+        ///     A <see cref="System.Configuration.ConfigurationSection" /> object.
+        /// </returns>
         /// <exception cref="ArgumentNullException">Thrown when the configuration or sectionName argument is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the sectionName argument is an empty string.</exception>
         /// <exception cref="ConfigurationErrorsException">Thrown when the configuration section is not found.</exception>
@@ -114,10 +122,12 @@ namespace Oleg.Kleyman.Core.Configuration
         }
 
         /// <summary>
-        ///   Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
+        ///     Gets a <see cref="System.Configuration.ConfigurationSection" /> by <see cref="Oleg.Kleyman.Core.Configuration" /> .
         /// </summary>
         /// <param name="sectionName"> The name of the configuration section to load. </param>
-        /// <returns> A <see cref="System.Configuration.ConfigurationSection" /> object. </returns>
+        /// <returns>
+        ///     A <see cref="System.Configuration.ConfigurationSection" /> object.
+        /// </returns>
         /// <exception cref="ArgumentNullException">Thrown when the sectionName argument is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the sectionName argument is an empty string.</exception>
         /// <exception cref="ConfigurationErrorsException">Thrown when the configuration section is not found.</exception>
