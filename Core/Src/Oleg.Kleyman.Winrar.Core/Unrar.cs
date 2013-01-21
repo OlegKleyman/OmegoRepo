@@ -81,7 +81,7 @@ namespace Oleg.Kleyman.Winrar.Core
 
         #endregion
 
-        protected void OnMemberExtracted(UnrarEventArgs e)
+        protected virtual void OnMemberExtracted(UnrarEventArgs e)
         {
             var handler = MemberExtracted;
             if (handler != null)

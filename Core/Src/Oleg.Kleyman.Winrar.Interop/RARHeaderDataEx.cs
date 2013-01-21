@@ -10,10 +10,14 @@ namespace Oleg.Kleyman.Winrar.Interop
     public struct RARHeaderDataEx
 // ReSharper restore InconsistentNaming
     {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 512)] public string ArcName;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string ArcNameW;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 512)] public string FileName;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] public string FileNameW;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 512)] 
+        public string ArcName;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] 
+        public string ArcNameW;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 512)] 
+        public string FileName;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 1024)] 
+        public string FileNameW;
         public uint Flags;
         public uint PackSize;
         public uint PackSizeHigh;
@@ -25,10 +29,12 @@ namespace Oleg.Kleyman.Winrar.Interop
         public uint UnpVer;
         public uint Method;
         public uint FileAttr;
-        [MarshalAs(UnmanagedType.LPStr)] public string CmtBuf;
+        [MarshalAs(UnmanagedType.LPStr)] 
+        public string CmtBuf;
         public uint CmtBufSize;
         public uint CmtSize;
         public uint CmtState;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1024)] public uint[] Reserved;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1024)] 
+        public uint[] Reserved;
     }
 }

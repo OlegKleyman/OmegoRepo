@@ -31,14 +31,16 @@ namespace Oleg.Kleyman.Winrar.Core
         /// </summary>
         public RarStatus Status { get; private set; }
 
+        #endregion
+
         private RarStatus SetHeaderDataAndProcessFile()
         {
             var status = Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out _headerData);
-            ValidateRarStatus((RarStatus) status);
+            ValidateRarStatus((RarStatus)status);
 
-            Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int) ArchiveMemberOperation.Skip, null, null);
+            Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int)ArchiveMemberOperation.Skip, null, null);
 
-            return (RarStatus) status;
+            return (RarStatus)status;
         }
 
         private void ValidateRarStatus(RarStatus status)
@@ -49,8 +51,6 @@ namespace Oleg.Kleyman.Winrar.Core
                 throw new UnrarException(unableToReadHeaderDataMessage, status);
             }
         }
-
-        #endregion
 
         /// <summary>
         ///     Gets the <see cref="IUnrarHandle" /> that's used for operations.

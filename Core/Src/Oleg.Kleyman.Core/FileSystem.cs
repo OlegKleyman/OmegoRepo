@@ -147,7 +147,7 @@ namespace Oleg.Kleyman.Core
             target = Path.GetFullPath(target);
             var directoryNames = Directory.GetDirectories(target);
             var directories = from directoryName in directoryNames
-                              select new DirectoryInfo(directoryName);
+                              select (FileSystemInfo)new DirectoryInfo(directoryName);
 
             return directories.ToArray();
         }
@@ -193,7 +193,7 @@ namespace Oleg.Kleyman.Core
             target = Path.GetFullPath(target);
             var filePaths = Directory.GetFiles(target);
             var files = from file in filePaths
-                        select new FileInfo(file);
+                        select (FileSystemInfo)new FileInfo(file);
             return files.ToArray();
         }
 

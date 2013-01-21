@@ -31,7 +31,7 @@ namespace Oleg.Kleyman.Winrar.Interop
         ///     Reads the next header of the archive.
         /// </summary>
         /// <param name="handle"> An open handle to the target archive. </param>
-        /// <param name="headerData"> The header data to be populated on sucess. </param>
+        /// <param name="headerData"> The header data to be populated on success. </param>
         /// <returns> The status of the header read operation. </returns>
         uint RARReadHeaderEx(IntPtr handle, out RARHeaderDataEx headerData);
 

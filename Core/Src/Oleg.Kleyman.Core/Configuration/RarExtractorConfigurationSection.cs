@@ -10,11 +10,11 @@ namespace Oleg.Kleyman.Core.Configuration
     {
         private const string UNRAR_PATH_PROPERTY_NAME = "unrarPath";
         private static IRarExtractorSettings __defaultSettings;
-        private static readonly object __syncLock;
+        private static readonly object r__syncLock;
 
         static RarExtractorConfigurationSection()
         {
-            __syncLock = new object();
+            r__syncLock = new object();
         }
 
 // ReSharper disable UnusedMember.Local
@@ -46,7 +46,7 @@ namespace Oleg.Kleyman.Core.Configuration
         {
             get
             {
-                lock (__syncLock)
+                lock (r__syncLock)
                 {
                     return __defaultSettings ?? (__defaultSettings = GetExtractor());
                 }

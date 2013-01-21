@@ -9,14 +9,14 @@ namespace Oleg.Kleyman.Core
     /// </summary>
     public class RarExtractor : Extractor
     {
-        private static readonly object __syncRoot;
+        private static readonly object r__syncRoot;
         private static RarExtractor __defaultRarExtractor;
 
         private readonly ProcessStartInfo _processInfo;
 
         static RarExtractor()
         {
-            __syncRoot = new object();
+            r__syncRoot = new object();
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Oleg.Kleyman.Core
         {
             get
             {
-                lock (__syncRoot)
+                lock (r__syncRoot)
                 {
                     if (__defaultRarExtractor == null)
                     {
