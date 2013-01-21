@@ -25,11 +25,16 @@ namespace Oleg.Kleyman.Winrar.Interop
         public uint CmtState;
         public uint Flags;
         public CallbackProc Callback;
+        
+        /// <summary>
+        /// Represents the UserData member of the unrar.dll. Must be private to limit pointer manipulation.
+        /// </summary>
         private IntPtr _userData;
 
         /// <summary>
         /// Gets or sets user data.
         /// </summary>
+        /// Cannot use auto property because there must be a known data member to marshal to unmanaged code.
         public IntPtr UserData
         {
             get { return _userData; }
