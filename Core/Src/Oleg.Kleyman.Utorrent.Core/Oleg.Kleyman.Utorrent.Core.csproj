@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayToObjectBehaviorAttribute.cs" />
+    <Compile Include="ArrayToObjectFormatter.cs" />
     <Compile Include="DefaultSettings.cs" />
     <Compile Include="ISettingsProvider.cs" />
     <Compile Include="IUtorrentService.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="TorrentHash.cs" />
     <Compile Include="TorrentHashValidator.cs" />
     <Compile Include="UTorrentBase.cs" />
+    <Compile Include="UtorrentList.cs" />
     <Compile Include="UtorrentServiceBuilder.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>

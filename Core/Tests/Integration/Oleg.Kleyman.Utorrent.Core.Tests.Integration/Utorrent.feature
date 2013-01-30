@@ -16,3 +16,8 @@ Scenario: Get a torrent
 		| Name               |
 		| daa-alvh-1080p.mkv |
 		| daa-alvh-1080p.nfo |
+
+Scenario: Update RSS Feeds
+	Given I have attained an API key
+	And Retrieved all RSS feeds
+	Then I want to update all RSS feeds

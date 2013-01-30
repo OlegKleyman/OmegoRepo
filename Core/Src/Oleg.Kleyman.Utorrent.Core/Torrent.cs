@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -38,9 +39,9 @@ namespace Oleg.Kleyman.Utorrent.Core
         /// </summary>
         public TorrentFile[] TorrentFiles { get; private set; }
 
-        private void SetProperties(object[] value)
+        private void SetProperties(IList<object> value)
         {
-            if (value.Length == 0)
+            if (value.Count == 0)
             {
                 const string invalidPropertyArrayMessage = "Invalid property array.";
                 throw new InvalidOperationException(invalidPropertyArrayMessage);

@@ -8,8 +8,8 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
     [Binding]
     public class UtorrentSteps
     {
-        private string Key { get; set; }
-        private static IUtorrentService ServiceClient { get; set; }
+        internal static string Key { get; set; }
+        internal static IUtorrentService ServiceClient { get; set; }
         private Torrent Torrent { get; set; }
 
         [BeforeFeature]

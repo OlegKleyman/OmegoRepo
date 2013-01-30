@@ -107,7 +107,8 @@ namespace Oleg.Kleyman.Utorrent.Core
                                                           ManualAddressing = true,
                                                           AuthenticationScheme = AuthenticationSchemes.Basic,
                                                           Realm = realm,
-                                                          AllowCookies = true
+                                                          AllowCookies = true,
+                                                          MaxReceivedMessageSize = int.MaxValue
                                                       });
             return customBinding;
         }
