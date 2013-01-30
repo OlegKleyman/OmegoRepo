@@ -31,5 +31,17 @@ namespace Oleg.Kleyman.Utorrent.Core
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare)]
         Torrent GetTorrentFiles(string key, string hash);
+
+        /// <summary>
+        /// Gets the UTorrent list.
+        /// </summary>
+        /// <param name="key">The session key for UTorrent operations.</param>
+        /// <returns>A <see cref="UTorrentList"/> object with service information.</returns>
+        [OperationContract]
+        [WebGet(UriTemplate = "/?token={key}&list=1",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare)]
+        UTorrentList GetList(string key);
     }
 }
