@@ -22,20 +22,32 @@ namespace Oleg.Kleyman.Utorrent.Core
                 throw new ArgumentNullException(feedParamName);
             }
 
-            _list = new object[1][];
-            _list[0] = new object[7];
-            _list[0][0] = feed.Id;
-            _list[0][6] = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", feed.Name,
-                                        Uri.UnescapeDataString(feed.Url.AbsoluteUri));
+            RssFeed = feed;
 
         }
 
+        private object[][] _list;
+
         /// <summary>
-        /// Contains the rssfeed array
+        /// Gets or sets the RssFeed property of this object. Converts an object array to <see cref="UtorrentRssFeed"/>
+        /// or gets the object array representation of the RssFeed property.
         /// </summary>
-        /// <remarks>UTorrent api returns everything in an array. This mess should not be exposed to the public API. Use RssFeed property instead.</remarks>
+        /// <remarks>
+        /// UTorrent api returns everything in an array. This mess should not be exposed to the public API. 
+        /// Use RssFeed property when accessing the public API instead. This property cannot be unit tested.
+        /// </remarks>
         [DataMember(Name = "rssfeeds")]
-        private readonly object[][] _list;
+        private object[][] List
+        {
+            get { return _list ?? (_list = new[] { RssFeed.ToArray() }); }
+            set
+            {
+                //only setting the RssFeed property here.
+                //This is needed for cleanliness because the Utorrent API
+                //returns an object array.
+                RssFeed = (UtorrentRssFeed)value[0];
+            }
+        }
 
         private UtorrentRssFeed _rssFeed;
 
@@ -44,18 +56,12 @@ namespace Oleg.Kleyman.Utorrent.Core
         /// </summary>
         public UtorrentRssFeed RssFeed
         {
-            get { return (UtorrentRssFeed)_rssFeed.Clone(); }
-        }
-
-        /// <summary>
-        /// Initializes the object.
-        /// </summary>
-        /// <param name="context">Argument not required.</param>
-        [OnDeserialized]
-        public void Initialize(StreamingContext context)
-        {
-            _rssFeed = (UtorrentRssFeed)_list[0];
-            
+            get
+            {
+                //Returning the cloned object so it doesn't get modified by the consumer.
+                return (UtorrentRssFeed)_rssFeed.Clone();
+            }
+            private set { _rssFeed = value; }
         }
     }
 }

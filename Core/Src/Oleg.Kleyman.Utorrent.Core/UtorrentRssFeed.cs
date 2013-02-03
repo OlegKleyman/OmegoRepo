@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Oleg.Kleyman.Utorrent.Core
 {
@@ -10,7 +9,6 @@ namespace Oleg.Kleyman.Utorrent.Core
     public class UtorrentRssFeed : ICloneable
     {
         private const int NAME_INDEX = 0;
-        private const int URL_BEGINNING_INDEX = 1;
         private const int ID_INDEX = 0;
         private const int NAME_URL_INDEX = 6;
         private const int URL_INDEX = 1;
@@ -52,12 +50,18 @@ namespace Oleg.Kleyman.Utorrent.Core
         /// </summary>
         /// <param name="targetFeed">The target <see cref="object"/> array to cast.</param>
         /// <returns>A <see cref="UtorrentRssFeed"/> object</returns>
+        /// <exception cref="InvalidCastException">When the target array format is invalid.</exception>
         public static explicit operator UtorrentRssFeed(object[] targetFeed)
         {
             var feed = new UtorrentRssFeed();
 
-            ThrowExceptionIfFeedArrayIsInvalid(targetFeed);
-            //The properties of the rss feed are kept in an array and thus the mess.
+            var validator = new UtorrentRssFeedObjectValidator(targetFeed);
+
+            if (!validator.Validate())
+            {
+                throw new InvalidCastException(validator.Message);
+            }
+
             feed.Id = (int)targetFeed[ID_INDEX];
 
             //The name and URL are kept in a single array element delimeted by a "|" character
@@ -67,57 +71,40 @@ namespace Oleg.Kleyman.Utorrent.Core
             return feed;
         }
 
-        private static void ThrowExceptionIfFeedArrayIsInvalid(IList<object> targetFeed)
-        {
-            if (targetFeed.Count < 7)
-            {
-                const string invalidLengthMessage = "Invalid length";
-                throw new InvalidCastException(invalidLengthMessage);
-            }
-
-            ThrowExceptionIfFeedArrayIndexesAreNull(targetFeed);
-        }
-
-        private static void ThrowExceptionIfFeedArrayIndexesAreNull(IList<object> targetFeed)
-        {
-            if (targetFeed[ID_INDEX] == null)
-            {
-                var idIndexIsNullMessage = string.Format(CultureInfo.InvariantCulture, "ID index {0} is null", ID_INDEX);
-                throw new InvalidCastException(idIndexIsNullMessage);
-            }
-
-            if (targetFeed[NAME_URL_INDEX] == null)
-            {
-                var nameUrlIndexIsNullMessage = string.Format(CultureInfo.InvariantCulture, "Name/Url index {0} is null", NAME_URL_INDEX);
-                throw new InvalidCastException(nameUrlIndexIsNullMessage);
-            }
-
-            if (!(targetFeed[ID_INDEX] is int))
-            {
-                var idIndexIsInvalidTypeMessage = string.Format(CultureInfo.InvariantCulture, "ID index {0} must be an int", ID_INDEX);
-                throw new InvalidCastException(idIndexIsInvalidTypeMessage);
-            }
-
-            if (!(targetFeed[NAME_URL_INDEX] is string))
-            {
-                var nameUrlIndexIsInvalidTypeMessage = string.Format(CultureInfo.InvariantCulture, 
-                                                                     "Name/Url index {0} must be a string", 
-                                                                     NAME_URL_INDEX);
-                throw new InvalidCastException(nameUrlIndexIsInvalidTypeMessage);
-            }
-        }
-
         private static void SetNameUrl(UtorrentRssFeed feed, string nameUrlContent)
         {
+            //The properties of the rss feed are kept in an array and thus the mess.
+
             //The name and URL are delimeted by a "|" character
             //The "|" character can be stored in the URL of the RSS feed in UTorrent
             //even though it's not a valid character in URLs. Thus the split string array
-            //must be limited to 2 elements.
+            //must be limited to 2 elements because array must only contain the name and URL.
             const int maximumAmountOfElements = 2;
             var nameUrl = nameUrlContent.Split(new[] { '|' }, maximumAmountOfElements);
+            if (nameUrl.Length != 2)
+            {
+                const string invalidFormatPipeMessage = "Name/URL value format is invalid expected \"|\" symbol";
+                throw new InvalidCastException(invalidFormatPipeMessage);
+            }
+
             feed.Name = nameUrl[NAME_INDEX];
 
-            feed.Url = new Uri(nameUrl[URL_INDEX]);
+            Uri url;
+            if (!Uri.TryCreate(nameUrl[URL_INDEX], UriKind.Absolute, out url))
+            {
+                throw new InvalidCastException("Invalid URL");
+            }
+            feed.Url = url;
+        }
+
+        /// <summary>
+        /// Serializes the current object instance into an object array
+        /// compatible with the UTorrent API.
+        /// </summary>
+        /// <returns></returns>
+        public object[] ToArray()
+        {
+            return new object[] { Id, null, null, null, null, null, Url.AbsoluteUri };
         }
     }
 }
