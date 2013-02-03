@@ -60,6 +60,7 @@
     <Compile Include="TorrentHashValidator.cs" />
     <Compile Include="UTorrentBase.cs" />
     <Compile Include="UtorrentList.cs" />
+    <Compile Include="UtorrentRssFeed.cs" />
     <Compile Include="UtorrentServiceBuilder.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>

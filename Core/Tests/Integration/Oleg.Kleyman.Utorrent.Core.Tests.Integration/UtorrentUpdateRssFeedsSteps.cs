@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ServiceModel;
+using System.ServiceModel.Web;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 
@@ -13,6 +15,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         public void GivenRetrievedAllRssFeeds()
         {
             UTorrentList = UtorrentSteps.ServiceClient.GetList(UtorrentSteps.Key);
+            Assert.That(UTorrentList.BuildNumber, Is.EqualTo(27498));
             Assert.That(UTorrentList.RssFeed, Is.Not.Null);
             Assert.That(UTorrentList.RssFeed.Name, Is.EqualTo("television"));
             Assert.That(UTorrentList.RssFeed.Id, Is.EqualTo(1));
@@ -22,7 +25,8 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         [Then(@"I want to update all RSS feeds")]
         public void ThenIWantToUpdateAllRssFeeds()
         {
-            ScenarioContext.Current.Pending();
+            var result = UtorrentSteps.ServiceClient.UpdateRssFeed(UtorrentSteps.Key, UTorrentList.RssFeed.Id);
+            Assert.That(result.BuildNumber, Is.EqualTo(27498));
         }
     }
 }
