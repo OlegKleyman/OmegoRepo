@@ -43,5 +43,9 @@ namespace Oleg.Kleyman.Utorrent.Core
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare)]
         UTorrentList GetList(string key);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/?token={key}&action=rss-update&feed-id={id}&update=1")]
+        UTorrentBase UpdateRssFeed(string key, int id);
     }
 }
