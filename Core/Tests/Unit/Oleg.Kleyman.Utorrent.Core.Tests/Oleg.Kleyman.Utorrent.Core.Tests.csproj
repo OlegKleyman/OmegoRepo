@@ -54,6 +54,7 @@
     <Compile Include="TorrentHashValidatorTests.cs" />
     <Compile Include="TorrentTests.cs" />
     <Compile Include="UTorrentListTests.cs" />
+    <Compile Include="UtorrentRssFeedObjectValidatorTests.cs" />
     <Compile Include="UTorrentRssFeedTests.cs" />
     <Compile Include="UtorrentServiceBuilderTests.cs" />
   </ItemGroup>
