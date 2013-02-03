@@ -101,18 +101,12 @@ namespace Oleg.Kleyman.Winrar.Core
 
         private IFileSystemMember[] ExtractArchive(string destinationPath)
         {
-            RarStatus result;
             var contents = new Collection<IFileSystemMember>();
-            do
+            IFileSystemMember content;
+            while (ExtractMember(destinationPath, out content) != RarStatus.EndOfArchive)
             {
-                IFileSystemMember content;
-                result = ExtractMember(destinationPath, out content);
-
-                if (result != RarStatus.EndOfArchive)
-                {
-                    contents.Add(content);
-                }
-            } while (result != RarStatus.EndOfArchive);
+                contents.Add(content);
+            }
 
             return contents.ToArray();
         }
@@ -120,7 +114,7 @@ namespace Oleg.Kleyman.Winrar.Core
         private RarStatus ExtractMember(string destinationPath, out IFileSystemMember content)
         {
             RARHeaderDataEx headerData;
-            var result = (RarStatus) Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out headerData);
+            var result = (RarStatus)Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out headerData);
             content = default(IFileSystemMember);
             if (result == RarStatus.Success)
             {
@@ -138,7 +132,7 @@ namespace Oleg.Kleyman.Winrar.Core
         {
             ProcessFile(destinationPath);
 
-            var member = (ArchiveMember) headerData;
+            var member = (ArchiveMember)headerData;
             var extractedPath = Path.Combine(destinationPath, member.Name);
             var content = GetExtractedPath(extractedPath, member.HighFlags);
             OnMemberExtracted(new UnrarEventArgs(member));
@@ -147,15 +141,7 @@ namespace Oleg.Kleyman.Winrar.Core
 
         private IFileSystemMember GetExtractedPath(string extractedPath, HighMemberFlags memberFlags)
         {
-            IFileSystemMember content;
-            if (memberFlags == HighMemberFlags.DirectoryRecord)
-            {
-                content = FileSystem.GetDirectory(extractedPath);
-            }
-            else
-            {
-                content = FileSystem.GetFileByPath(extractedPath);
-            }
+            IFileSystemMember content = memberFlags == HighMemberFlags.DirectoryRecord ? FileSystem.GetDirectory(extractedPath) : FileSystem.GetFileByPath(extractedPath);
 
             return content;
         }
@@ -164,7 +150,7 @@ namespace Oleg.Kleyman.Winrar.Core
         {
             var result =
                 (RarStatus)
-                Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int) ArchiveMemberOperation.Extract, destinationPath,
+                Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int)ArchiveMemberOperation.Extract, destinationPath,
                                                 null);
             if (result != RarStatus.Success)
             {
