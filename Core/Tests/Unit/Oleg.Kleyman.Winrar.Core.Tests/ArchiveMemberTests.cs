@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using Moq;
 using NUnit.Framework;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Tests.Core;
 using Oleg.Kleyman.Winrar.Interop;
 

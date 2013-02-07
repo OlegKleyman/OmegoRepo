@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveMemberTests.cs" />
     <Compile Include="ArchiveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnrarHandleTests.cs" />
