@@ -4,6 +4,9 @@ using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
+    /// <summary>
+    /// Represents an archive file or directory member
+    /// </summary>
     public class ArchiveMember
     {
         /// <summary>

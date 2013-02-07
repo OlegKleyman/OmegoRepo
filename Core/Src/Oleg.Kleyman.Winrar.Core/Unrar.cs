@@ -12,6 +12,8 @@ namespace Oleg.Kleyman.Winrar.Core
     /// </summary>
     public class Unrar : IUnrar
     {
+        private readonly RarMemberExtractor _rarMemberExtractor;
+
         /// <summary>
         ///     Initializes the <see cref="Unrar" /> object.
         /// </summary>
@@ -25,6 +27,7 @@ namespace Oleg.Kleyman.Winrar.Core
         {
             Handle = handle;
             FileSystem = fileSystem;
+            _rarMemberExtractor = new RarMemberExtractor(Handle, FileSystem);
         }
 
         /// <summary>
@@ -102,61 +105,20 @@ namespace Oleg.Kleyman.Winrar.Core
         private IFileSystemMember[] ExtractArchive(string destinationPath)
         {
             var contents = new Collection<IFileSystemMember>();
-            IFileSystemMember content;
-            while (ExtractMember(destinationPath, out content) != RarStatus.EndOfArchive)
+
+            var member = _rarMemberExtractor.Extract(destinationPath);
+
+            var systemFactory = new FileSystemMemberFactory(FileSystem);
+
+            while (_rarMemberExtractor.Status != RarStatus.EndOfArchive)
             {
-                contents.Add(content);
+                OnMemberExtracted(new UnrarEventArgs(member));
+                var fileMember = systemFactory.GetFileMember(member, destinationPath);
+                contents.Add(fileMember);
+                member = _rarMemberExtractor.Extract(destinationPath);
             }
 
             return contents.ToArray();
-        }
-
-        private RarStatus ExtractMember(string destinationPath, out IFileSystemMember content)
-        {
-            RARHeaderDataEx headerData;
-            var result = (RarStatus)Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out headerData);
-            content = default(IFileSystemMember);
-            if (result == RarStatus.Success)
-            {
-                content = ProcessFile(destinationPath, headerData);
-            }
-            else if (result != RarStatus.EndOfArchive)
-            {
-                const string unableToReadHeaderData = "Unable to read header data.";
-                throw new UnrarException(unableToReadHeaderData, result);
-            }
-            return result;
-        }
-
-        private IFileSystemMember ProcessFile(string destinationPath, RARHeaderDataEx headerData)
-        {
-            ProcessFile(destinationPath);
-
-            var member = (ArchiveMember)headerData;
-            var extractedPath = Path.Combine(destinationPath, member.Name);
-            var content = GetExtractedPath(extractedPath, member.HighFlags);
-            OnMemberExtracted(new UnrarEventArgs(member));
-            return content;
-        }
-
-        private IFileSystemMember GetExtractedPath(string extractedPath, HighMemberFlags memberFlags)
-        {
-            IFileSystemMember content = memberFlags == HighMemberFlags.DirectoryRecord ? FileSystem.GetDirectory(extractedPath) : FileSystem.GetFileByPath(extractedPath);
-
-            return content;
-        }
-
-        private void ProcessFile(string destinationPath)
-        {
-            var result =
-                (RarStatus)
-                Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int)ArchiveMemberOperation.Extract, destinationPath,
-                                                null);
-            if (result != RarStatus.Success)
-            {
-                const string unableToExtractFileMessage = "Unable to extract file.";
-                throw new UnrarException(unableToExtractFileMessage, result);
-            }
         }
 
         private void ThrowExceptionOnFileSystemNull()

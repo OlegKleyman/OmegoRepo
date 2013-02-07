@@ -56,6 +56,7 @@
     <Compile Include="ArchiveMemberTests.cs" />
     <Compile Include="ArchiveReaderTests.cs" />
     <Compile Include="ArchiveTests.cs" />
+    <Compile Include="FileSystemMemberFactoryTests.cs" />
     <Compile Include="UnrarDllCustomMock.cs" />
     <Compile Include="UnrarExceptionTests.cs" />
     <Compile Include="UnrarHandleTests.cs" />
