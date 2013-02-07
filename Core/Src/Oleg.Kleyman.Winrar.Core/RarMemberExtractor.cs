@@ -7,8 +7,7 @@ namespace Oleg.Kleyman.Winrar.Core
     {
         public IUnrarHandle Handle { get; set; }
         public IFileSystem FileSystem { get; set; }
-
-        public RarStatus Status { get; private set; }
+        public ArchiveMember CurrentMember { get; private set; }
 
         public RarMemberExtractor(IUnrarHandle handle, IFileSystem fileSystem)
         {
@@ -16,7 +15,7 @@ namespace Oleg.Kleyman.Winrar.Core
             FileSystem = fileSystem;
         }
 
-        public ArchiveMember Extract(string destinationPath)
+        public RarStatus Extract(string destinationPath)
         {
             RARHeaderDataEx headerData;
             var result = (RarStatus)Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out headerData);
@@ -24,15 +23,16 @@ namespace Oleg.Kleyman.Winrar.Core
             if (result == RarStatus.Success)
             {
                 var fileProcessor = new RarFileProcessor(Handle, FileSystem);
-                fileProcessor.ProcessFile(destinationPath, headerData);
+                fileProcessor.ProcessFile(destinationPath);
             }
             else if (result != RarStatus.EndOfArchive)
             {
                 const string unableToReadHeaderData = "Unable to read header data.";
                 throw new UnrarException(unableToReadHeaderData, result);
             }
-            Status = result;
-            return (ArchiveMember)headerData;
+
+            CurrentMember = (ArchiveMember) headerData;
+            return result;
         }
     }
 }

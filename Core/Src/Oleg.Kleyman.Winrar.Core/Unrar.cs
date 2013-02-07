@@ -105,17 +105,14 @@ namespace Oleg.Kleyman.Winrar.Core
         private IFileSystemMember[] ExtractArchive(string destinationPath)
         {
             var contents = new Collection<IFileSystemMember>();
-
-            var member = _rarMemberExtractor.Extract(destinationPath);
-
+            
             var systemFactory = new FileSystemMemberFactory(FileSystem);
 
-            while (_rarMemberExtractor.Status != RarStatus.EndOfArchive)
+            while (_rarMemberExtractor.Extract(destinationPath) != RarStatus.EndOfArchive)
             {
-                OnMemberExtracted(new UnrarEventArgs(member));
-                var fileMember = systemFactory.GetFileMember(member, destinationPath);
+                OnMemberExtracted(new UnrarEventArgs(_rarMemberExtractor.CurrentMember));
+                var fileMember = systemFactory.GetFileMember(_rarMemberExtractor.CurrentMember, destinationPath);
                 contents.Add(fileMember);
-                member = _rarMemberExtractor.Extract(destinationPath);
             }
 
             return contents.ToArray();
