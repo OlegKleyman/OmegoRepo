@@ -50,6 +50,9 @@
     <Compile Include="ArchiveReader.cs" />
     <Compile Include="IArchive.cs" />
     <Compile Include="IArchiveReader.cs" />
+    <Compile Include="IFileProcessor.cs" />
+    <Compile Include="IFileSystemMemberFactory.cs" />
+    <Compile Include="IMemberExtractor.cs" />
     <Compile Include="IUnrar.cs" />
     <Compile Include="IUnrarHandle.cs" />
     <Compile Include="LowMemberFlags.cs" />

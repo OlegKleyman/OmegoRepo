@@ -9,17 +9,18 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
     [TestFixture]
     public class ArchiveReaderTests : TestsBase
     {
+        private Mock<IUnrarHandle> UnrarHandleMock { get; set; }
+        private Mock<IUnrarDll> UnrarDllMock { get; set; }
+        private Mock<IMemberExtractor> MockMemberExtractor { get; set; }
+        private RARHeaderDataEx _test2TxtFileHeaderData;
+        private RARHeaderDataEx _test1TxtFileHeaderData;
+        private RARHeaderDataEx _defaultHeaderData;
+
         [SetUp]
         public void TestSetup()
         {
             UnrarHandleMock.SetupGet(x => x.Mode).Returns(OpenMode.List);
         }
-
-        private Mock<IUnrarHandle> UnrarHandleMock { get; set; }
-        private Mock<IUnrarDll> UnrarDllMock { get; set; }
-        private RARHeaderDataEx _test2TxtFileHeaderData;
-        private RARHeaderDataEx _test1TxtFileHeaderData;
-        private RARHeaderDataEx _defaultHeaderData;
 
         public override void Setup()
         {
@@ -30,6 +31,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         {
             UnrarDllMock = new Mock<IUnrarDll>();
             UnrarHandleMock = new Mock<IUnrarHandle>();
+            MockMemberExtractor = new Mock<IMemberExtractor>();
             UnrarHandleMock.SetupGet(x => x.UnrarDll).Returns(UnrarDllMock.Object);
             _test1TxtFileHeaderData = new RARHeaderDataEx
                 {
@@ -80,12 +82,17 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
                 };
         }
 
+        private Unrar GetUnrarObject()
+        {
+            return new Unrar(UnrarHandleMock.Object, MockMemberExtractor.Object, null);
+        }
+
         [Test]
         [ExpectedException(typeof (UnrarException), ExpectedMessage = "Unable to read header data.",
             MatchType = MessageMatch.Exact)]
         public void OpenArchiveCorruptTest()
         {
-            var unrar = new Unrar(UnrarHandleMock.Object, null);
+            var unrar = GetUnrarObject();
             UnrarHandleMock.SetupGet(x => x.IsOpen).Returns(true);
 
             var reader = unrar.ExecuteReader();
@@ -101,7 +108,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         {
             UnrarHandleMock.SetupGet(x => x.IsOpen).Returns(true);
             UnrarHandleMock.SetupGet(x => x.Mode).Returns(OpenMode.Extract);
-            var unrar = new Unrar(UnrarHandleMock.Object, null);
+            var unrar = GetUnrarObject();
 
             unrar.ExecuteReader();
         }
@@ -112,7 +119,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         public void ReadHandleNotOpenTest()
         {
             UnrarHandleMock.SetupGet(x => x.IsOpen).Returns(false);
-            var unrar = new Unrar(UnrarHandleMock.Object, null);
+            var unrar = GetUnrarObject();
 
             unrar.ExecuteReader();
         }
@@ -120,7 +127,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void ReadTest()
         {
-            var unrar = new Unrar(UnrarHandleMock.Object, null);
+            var unrar = GetUnrarObject();
             UnrarHandleMock.SetupGet(x => x.IsOpen).Returns(true);
 
             var reader = unrar.ExecuteReader();
