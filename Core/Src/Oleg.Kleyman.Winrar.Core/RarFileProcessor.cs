@@ -4,7 +4,7 @@ using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
-    public class RarFileProcessor
+    public class RarFileProcessor : IFileProcessor
     {
         /// <summary>
         /// Gets the <see cref="IFileSystem"/>  provider for this object.
@@ -41,13 +41,12 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        /// Processes a <see cref="RARHeaderDataEx"/> value.
+        /// Processes a file or folder in a Rar archive.
         /// </summary>
         /// <param name="destinationPath">The target destination to extract to.</param>
-        /// <returns>The extraction status.</returns>
         /// <exception cref="InvalidOperationException">Thrown when the <see cref="IUnrarHandle"/> object is not open.</exception>
         /// <exception cref="UnrarException">Thrown when file could not be extracted.</exception>
-        public RarStatus ProcessFile(string destinationPath)
+        public void ProcessFile(string destinationPath)
         {
             if (!Handle.IsOpen)
             {
@@ -63,8 +62,6 @@ namespace Oleg.Kleyman.Winrar.Core
                 const string unableToExtractFileMessage = "Unable to extract file.";
                 throw new UnrarException(unableToExtractFileMessage, result);
             }
-
-            return result;
         }
     }
 }

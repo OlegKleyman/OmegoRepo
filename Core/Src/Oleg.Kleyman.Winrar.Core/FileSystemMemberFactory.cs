@@ -7,7 +7,7 @@ namespace Oleg.Kleyman.Winrar.Core
     /// <summary>
     /// Represents a file system factory for the <see cref="IFileSystem"/> interface.
     /// </summary>
-    public class FileSystemMemberFactory
+    public class FileSystemMemberFactory : IFileSystemMemberFactory
     {
         private IFileSystem _fileSystem;
         /// <summary>
@@ -45,7 +45,7 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        /// Gets the <see cref="IFileSystemMember"/> object for this instance.
+        /// Gets the <see cref="IFileSystemMember"/> object for the <see cref="ArchiveMember"/>.
         /// </summary>
         /// <param name="archiveMember">The archive member to interface with</param>
         /// <param name="destinationPath">The destination path.</param>

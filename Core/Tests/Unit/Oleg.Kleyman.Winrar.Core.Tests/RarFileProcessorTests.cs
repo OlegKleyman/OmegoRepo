@@ -65,8 +65,8 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         public void ProcessFileShouldCompleteSuccessfully()
         {
             var fileProcessor = GetFileProcessor();
-            var result = fileProcessor.ProcessFile(@"C:\validExtractPath");
-            Assert.That(result, Is.EqualTo(RarStatus.Success));
+            fileProcessor.ProcessFile(@"C:\validExtractPath");
+            Assert.Pass("If it reached this point then the test completed successfully.");
         }
 
         [Test]

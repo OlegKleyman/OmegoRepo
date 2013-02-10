@@ -12,7 +12,7 @@ namespace Oleg.Kleyman.Winrar.Core
     /// </summary>
     public class Unrar : IUnrar
     {
-        private readonly RarMemberExtractor _rarMemberExtractor;
+        public IFileSystemMemberFactory FileFactory { get; set; }
 
         /// <summary>
         ///     Initializes the <see cref="Unrar" /> object.
@@ -20,20 +20,14 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <param name="handle">
         ///     The <see cref="IUnrarHandle" /> to use for operations.
         /// </param>
-        /// <param name="fileSystem">
-        ///     The <see cref="IFileSystem" /> to use for file system operations.
-        /// </param>
-        public Unrar(IUnrarHandle handle, IFileSystem fileSystem)
+        /// <param name="extractor">The <see cref="IMemberExtractor"/> object to use for operations.</param>
+        /// <param name="fileFactory">The <see cref="IFileSystemMemberFactory"/> object to use for operations.</param>
+        public Unrar(IUnrarHandle handle, IMemberExtractor extractor, IFileSystemMemberFactory fileFactory)
         {
             Handle = handle;
-            FileSystem = fileSystem;
-            _rarMemberExtractor = new RarMemberExtractor(Handle, FileSystem);
+            Extractor = extractor;
+            FileFactory = fileFactory;
         }
-
-        /// <summary>
-        ///     The <see cref="IFileSystem" /> to use for file system operations.
-        /// </summary>
-        public IFileSystem FileSystem { get; set; }
 
         #region IUnrar Members
 
@@ -41,6 +35,8 @@ namespace Oleg.Kleyman.Winrar.Core
         ///     The <see cref="IUnrarHandle" /> to use for operations.
         /// </summary>
         public IUnrarHandle Handle { get; set; }
+
+        public IMemberExtractor Extractor { get; set; }
 
         /// <summary>
         ///     Invoked when a compressed member is extracted.
@@ -105,14 +101,12 @@ namespace Oleg.Kleyman.Winrar.Core
         private IFileSystemMember[] ExtractArchive(string destinationPath)
         {
             var contents = new Collection<IFileSystemMember>();
-            
-            var systemFactory = new FileSystemMemberFactory(FileSystem);
 
-            while (_rarMemberExtractor.Extract(destinationPath) != RarStatus.EndOfArchive)
+            while (Extractor.Extract(destinationPath) != RarStatus.EndOfArchive)
             {
-                OnMemberExtracted(new UnrarEventArgs(_rarMemberExtractor.CurrentMember));
-                var fileMember = systemFactory.GetFileMember(_rarMemberExtractor.CurrentMember, destinationPath);
+                var fileMember = FileFactory.GetFileMember(Extractor.CurrentMember, destinationPath);
                 contents.Add(fileMember);
+                OnMemberExtracted(new UnrarEventArgs(Extractor.CurrentMember));
             }
 
             return contents.ToArray();
@@ -120,9 +114,9 @@ namespace Oleg.Kleyman.Winrar.Core
 
         private void ThrowExceptionOnFileSystemNull()
         {
-            if (FileSystem == null)
+            if (FileFactory == null)
             {
-                const string filesystemCannotBeNullMessage = "FileSystem cannot be null.";
+                const string filesystemCannotBeNullMessage = "FileFactory cannot be null.";
                 throw new InvalidOperationException(filesystemCannotBeNullMessage);
             }
         }
