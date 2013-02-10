@@ -17,9 +17,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         public void SetupTest()
         {
             UnrarHandleMock.SetupGet(x => x.IsOpen).Returns(true);
-            UnrarDllMock.Setup(x => x.RARReadHeaderEx(new IntPtr(1111), out _test1FileHeaderData)).Returns(0);
-            UnrarDllMock.Setup(x => x.RARProcessFileW(new IntPtr(1111), 2, FILE_PATH_TO_EXTRACTION_FOLDER, null)).
-                         Returns(0);
         }
 
         private RARHeaderDataEx _test2FileHeaderData;
@@ -27,11 +24,8 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private RARHeaderDataEx _test3FileHeaderData;
         private RARHeaderDataEx _test4FileHeaderData;
         private Mock<IUnrarHandle> UnrarHandleMock { get; set; }
-        private Mock<IUnrarDll> UnrarDllMock { get; set; }
         private Mock<IMemberExtractor> MockMemberExtractor { get; set; }
         private Mock<IFileSystemMemberFactory> MockFileSystemMemberFactory { get; set; }
-
-        private const string FILE_PATH_TO_EXTRACTION_FOLDER = @"C:\GitRepos\MainDefault\Common\Test\";
 
         public override void Setup()
         {
@@ -41,14 +35,13 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
 
         private void SetupMocks()
         {
-            UnrarDllMock = new Mock<IUnrarDll>();
             UnrarHandleMock = new Mock<IUnrarHandle>();
             MockMemberExtractor = new Mock<IMemberExtractor>();
             MockFileSystemMemberFactory = new Mock<IFileSystemMemberFactory>();
 
             SetupFileSystem();
             SetupUnrarHandle();
-            SetupUnrarDll();
+            SetupHeaderData();
             SetupMemberExtractor();
             SetupFileFactory();
         }
@@ -56,13 +49,31 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private void SetupFileFactory()
         {
             var mockTestFileTxtFileMember = new Mock<IFileSystemMember>();
+            var mockTestTxtFileMember = new Mock<IFileSystemMember>();
+            var mockInnerTestFolderFileMember = new Mock<IFileSystemMember>();
+            var mockTestFolderFileMember = new Mock<IFileSystemMember>();
             mockTestFileTxtFileMember.SetupGet(x => x.FullName)
                                      .Returns("C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\testFile.txt");
+            mockTestTxtFileMember.SetupGet(x => x.FullName)
+                                     .Returns("C:\\GitRepos\\MainDefault\\Common\\Test\\test.txt");
+            mockInnerTestFolderFileMember.SetupGet(x => x.FullName)
+                                     .Returns("C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\InnerTestFolder");
+            mockInnerTestFolderFileMember.SetupGet(x => x.Attributes).Returns(FileAttributes.Directory);
+            mockTestFolderFileMember.SetupGet(x => x.FullName)
+                                     .Returns("C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder");
+            mockTestFolderFileMember.SetupGet(x => x.Attributes).Returns(FileAttributes.Directory);
+
             MockFileSystemMemberFactory.Setup(
                 x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "TestFolder\\testFile.txt"), @"C:\GitRepos\MainDefault\Common\Test\")).Returns(mockTestFileTxtFileMember.Object);
+            MockFileSystemMemberFactory.Setup(
+                x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "test.txt"), @"C:\GitRepos\MainDefault\Common\Test\")).Returns(mockTestTxtFileMember.Object);
+            MockFileSystemMemberFactory.Setup(
+                x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "TestFolder\\InnerTestFolder"), @"C:\GitRepos\MainDefault\Common\Test\")).Returns(mockInnerTestFolderFileMember.Object);
+            MockFileSystemMemberFactory.Setup(
+                x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "TestFolder"), @"C:\GitRepos\MainDefault\Common\Test\")).Returns(mockTestFolderFileMember.Object);
         }
 
-        private void SetupUnrarDll()
+        private void SetupHeaderData()
         {
             _test1FileHeaderData = new RARHeaderDataEx
                 {
@@ -159,7 +170,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
                     UnpSizeHigh = 0,
                     UnpVer = 20
                 };
-            UnrarDllMock.Setup(x => x.RARReadHeaderEx(new IntPtr(1111), out _test1FileHeaderData)).Returns(0);
         }
 
         private void SetupMemberExtractor()
@@ -174,7 +184,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
 
         private void SetupUnrarHandle()
         {
-            UnrarHandleMock.SetupGet(x => x.UnrarDll).Returns(UnrarDllMock.Object);
             UnrarHandleMock.Setup(x => x.Handle).Returns(new IntPtr(1111));
         }
 
@@ -301,26 +310,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             Assert.AreEqual(FileAttributes.Directory, extractedContents[2].Attributes);
             Assert.AreEqual("C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder", extractedContents[3].FullName);
             Assert.AreEqual(FileAttributes.Directory, extractedContents[3].Attributes);
-        }
-
-        [Test]
-        [ExpectedException(typeof (UnrarException), ExpectedMessage = "Unable to extract file.",
-            MatchType = MessageMatch.Exact)]
-        public void ExtractUnableToProcessFileErrorTest()
-        {
-            UnrarDllMock.Setup(x => x.RARProcessFileW(new IntPtr(1111), 2, FILE_PATH_TO_EXTRACTION_FOLDER, null)).
-                         Returns(12);
-
-            var unrar = GetUnrarObject();
-            try
-            {
-                unrar.Extract(@"C:\GitRepos\MainDefault\Common\Test\");
-            }
-            catch (UnrarException ex)
-            {
-                Assert.AreEqual(RarStatus.BadData, ex.Status);
-                throw;
-            }
         }
     }
 }
