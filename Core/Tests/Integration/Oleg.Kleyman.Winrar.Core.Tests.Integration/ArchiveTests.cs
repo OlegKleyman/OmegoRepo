@@ -24,7 +24,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             Handle = new UnrarHandle(UnrarDll);
             FileSystem = new FileSystem();
             FileFactory = new FileSystemMemberFactory(FileSystem);
-            Processor = new RarFileProcessor(Handle, FileSystem);
+            Processor = new RarFileProcessor(Handle);
             MemberExtractor = new RarMemberExtractor(Handle, Processor);
             
             Unrar = new Unrar(Handle, MemberExtractor, FileFactory);
@@ -40,7 +40,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             {
                 Handle.Mode = OpenMode.List;
                 Handle.Open();
-                var archive = Archive.Open(Unrar);
+                var archive = Archive.Open(Unrar, MemberExtractor);
                 extractedMembers =
                     archive.Extract(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Winrar.Core.Tests.Integration\Testing");
             }
@@ -83,7 +83,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             {
                 Handle.Mode = OpenMode.List;
                 Handle.Open();
-                archive = Archive.Open(Unrar);
+                archive = Archive.Open(Unrar, MemberExtractor);
             }
 
             Assert.AreEqual(4, archive.Files.Count);

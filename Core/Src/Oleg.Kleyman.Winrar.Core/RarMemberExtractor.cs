@@ -1,5 +1,4 @@
 using System;
-using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core

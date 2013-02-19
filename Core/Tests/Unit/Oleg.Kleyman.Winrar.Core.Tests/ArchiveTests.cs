@@ -26,13 +26,15 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private Mock<IUnrarHandle> MockUnrarHandle { get; set; }
         private Mock<IUnrar> MockUnrar { get; set; }
         private Mock<IArchiveReader> MockArchiveReader { get; set; }
+        private Mock<IMemberExtractor> MockExtractor { get; set; }
 
         public override void Setup()
         {
-            AttributesToAvoidReplicating.Add(typeof (FileIOPermissionAttribute));
+            AttributesToAvoidReplicating.Add(typeof(FileIOPermissionAttribute));
             MockUnrarHandle = new Mock<IUnrarHandle>();
             MockUnrar = new Mock<IUnrar>();
             MockArchiveReader = new Mock<IArchiveReader>();
+            MockExtractor = new Mock<IMemberExtractor>();
 
             SetupUnrarHandle();
 
@@ -91,25 +93,34 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
                 };
 
             var readCallCounter = 1;
-            MockArchiveReader.Setup(x => x.Read()).Returns(() =>
+
+            MockExtractor.Setup(x => x.Extract(null)).Returns(() =>
                 {
+                    var status = RarStatus.Success;
                     switch (readCallCounter)
                     {
                         case 1:
                             readCallCounter++;
-                            return members[0];
+                            MockExtractor.SetupGet(x => x.CurrentMember).Returns(members[0]);
+                            break;
                         case 2:
-                            MockArchiveReader.SetupGet(x => x.Status).
-                                              Returns(RarStatus.EndOfArchive);
+                            readCallCounter++;
+                            MockExtractor.SetupGet(x => x.CurrentMember).Returns(members[1]);
+                            break;
+                        case 3:
+                            readCallCounter++;
+                            MockExtractor.SetupGet(x => x.CurrentMember).Returns((ArchiveMember) null);
+                            status = RarStatus.EndOfArchive;
                             readCallCounter = 1;
-                            return members[1];
+                            break;
+                        default:
+                            throw new ApplicationException(
+                                    string.Format("readCallCounter was at an unknown value {0}", readCallCounter));
                     }
 
-                    throw new ApplicationException(
-                        string.Format(
-                            "readCallCounter was at an unknown value {0}",
-                            readCallCounter));
-                });
+                    return status;
+                }
+                );
 
 
             SetupUnrar();
@@ -117,7 +128,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
 
         private void SetupUnrar()
         {
-            MockUnrar.Setup(x => x.ExecuteReader()).Returns(MockArchiveReader.Object);
             MockUnrar.SetupGet(x => x.Handle).Returns(MockUnrarHandle.Object);
             var mockMembers = new[]
                 {
@@ -151,7 +161,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void ExtractTest()
         {
-            var archive = Archive.Open(MockUnrar.Object);
+            var archive = Archive.Open(MockUnrar.Object, MockExtractor.Object);
 
             var extractedContents = archive.Extract(@"C:\GitRepos\MainDefault\Common\Test\");
 
@@ -169,7 +179,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void OpenUnrarTest()
         {
-            var archive = Archive.Open(MockUnrar.Object);
+            var archive = Archive.Open(MockUnrar.Object, MockExtractor.Object);
             Assert.AreEqual(2, archive.Files.Count);
 
 

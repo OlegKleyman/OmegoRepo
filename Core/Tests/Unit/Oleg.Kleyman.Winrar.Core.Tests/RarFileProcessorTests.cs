@@ -58,7 +58,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         }
         private RarFileProcessor GetFileProcessor()
         {
-            return new RarFileProcessor(MockUnrarHandle.Object, MockFileSystem.Object);
+            return new RarFileProcessor(MockUnrarHandle.Object);
         }
 
         [Test]
@@ -90,15 +90,8 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void ConstructorShouldThrowArgumentNullExceptionWhenTheHandleArgumentIsNull()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => new RarFileProcessor(null, null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new RarFileProcessor(null));
             Assert.That(ex.ParamName, Is.EqualTo("handle"));
-        }
-
-        [Test]
-        public void ConstructorShouldThrowArgumentNullExceptionWhenTheFileSystemArgumentIsNull()
-        {
-            var ex = Assert.Throws<ArgumentNullException>(() => new RarFileProcessor(MockUnrarHandle.Object, null));
-            Assert.That(ex.ParamName, Is.EqualTo("fileSystem"));
         }
     }
 }

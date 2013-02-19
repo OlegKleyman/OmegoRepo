@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchiveMemberTests.cs" />
+    <Compile Include="ArchiveReaderBuilderTests.cs" />
     <Compile Include="ArchiveReaderTests.cs" />
     <Compile Include="ArchiveTests.cs" />
     <Compile Include="FileSystemMemberFactoryTests.cs" />

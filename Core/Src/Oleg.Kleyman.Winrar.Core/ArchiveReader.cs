@@ -1,15 +1,18 @@
 using System;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
     public class ArchiveReader : IArchiveReader
     {
-        private RARHeaderDataEx _headerData;
-
-        internal ArchiveReader(IUnrarHandle handle)
+        /// <summary>
+        /// Initializes a <see cref="ArchiveReader"/> object.
+        /// </summary>
+        /// <param name="extractor">The <see cref="IMemberExtractor"/> used to read the archive.</param>
+        private ArchiveReader(IMemberExtractor extractor)
         {
-            Handle = handle;
+            Extractor = extractor;
         }
 
         #region Implementation of IArchiveReader
@@ -21,8 +24,9 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <exception cref="UnrarException">Thrown when the header data of the archive is unable to be read.</exception>
         public ArchiveMember Read()
         {
-            Status = SetHeaderDataAndProcessFile();
-            var member = Status == RarStatus.EndOfArchive ? null : (ArchiveMember) _headerData;
+            Status = Extractor.Extract(null);
+            
+            var member = Status == RarStatus.EndOfArchive ? null : Extractor.CurrentMember;
             return member;
         }
 
@@ -33,48 +37,36 @@ namespace Oleg.Kleyman.Winrar.Core
 
         #endregion
 
-        private RarStatus SetHeaderDataAndProcessFile()
-        {
-            var status = Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out _headerData);
-            ValidateRarStatus((RarStatus)status);
+        public IMemberExtractor Extractor { get; set; }
 
-            Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int)ArchiveMemberOperation.Skip, null, null);
+        //private void ValidatePrerequisites()
+        //{
+        //    if (!Handle.IsOpen)
+        //    {
+        //        const string handleIsNotOpenMessage = "Handle must be open.";
+        //        throw new InvalidOperationException(handleIsNotOpenMessage);
+        //    }
 
-            return (RarStatus)status;
-        }
-
-        private void ValidateRarStatus(RarStatus status)
-        {
-            if (status != RarStatus.Success && status != RarStatus.EndOfArchive)
-            {
-                const string unableToReadHeaderDataMessage = "Unable to read header data.";
-                throw new UnrarException(unableToReadHeaderDataMessage, status);
-            }
-        }
+        //    if (Handle.Mode == OpenMode.Extract)
+        //    {
+        //        const string modeMustBeListMessage = "Handle mode must be OpenMode.List.";
+        //        throw new InvalidOperationException(modeMustBeListMessage);
+        //    }
+        //}
 
         /// <summary>
-        ///     Gets the <see cref="IUnrarHandle" /> that's used for operations.
+        /// Retrieves a <see cref="IArchiveReader"/> object.
         /// </summary>
-        public IUnrarHandle Handle { get; private set; }
-
-        internal void ValidateHandle()
+        /// <param name="extractor">A <see cref="IMemberExtractor"/> to use for operations.</param>
+        /// <returns>A <see cref="IArchiveReader"/> object.</returns>
+        public static IArchiveReader Execute(IMemberExtractor extractor)
         {
-            ValidatePrerequisites();
-        }
-
-        private void ValidatePrerequisites()
-        {
-            if (!Handle.IsOpen)
+            if (extractor == null)
             {
-                const string handleIsNotOpenMessage = "Handle must be open.";
-                throw new InvalidOperationException(handleIsNotOpenMessage);
+                const string extractorParamName = "extractor";
+                throw new ArgumentNullException(extractorParamName);
             }
-
-            if (Handle.Mode == OpenMode.Extract)
-            {
-                const string modeMustBeListMessage = "Handle mode must be OpenMode.List.";
-                throw new InvalidOperationException(modeMustBeListMessage);
-            }
+            return new ArchiveReader(extractor);
         }
     }
 }

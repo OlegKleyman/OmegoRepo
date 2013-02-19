@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Archive.cs" />
     <Compile Include="ArchiveMemberOperation.cs" />
+    <Compile Include="ArchiveReaderBuilder.cs" />
     <Compile Include="FileSystemMemberFactory.cs" />
     <Compile Include="HighMemberFlags.cs" />
     <Compile Include="ArchiveReader.cs" />
