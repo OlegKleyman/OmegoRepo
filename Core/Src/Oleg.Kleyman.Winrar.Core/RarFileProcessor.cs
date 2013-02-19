@@ -1,16 +1,9 @@
 using System;
-using Oleg.Kleyman.Core;
-using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
     public class RarFileProcessor : IFileProcessor
     {
-        /// <summary>
-        /// Gets the <see cref="IFileSystem"/>  provider for this object.
-        /// </summary>
-        public IFileSystem FileSystem { get; private set; }
-
         /// <summary>
         /// Gets the <see cref="IUnrarHandle"/> for this object.
         /// </summary>
@@ -20,9 +13,8 @@ namespace Oleg.Kleyman.Winrar.Core
         /// Initializes an instance of <see cref="RarFileProcessor"/>.
         /// </summary>
         /// <param name="handle">The <see cref="IUnrarHandle"/> object to use for operations.</param>
-        /// <param name="fileSystem">The <see cref="IFileSystem"/> object to use for operations.</param>
         /// <exception cref="ArgumentNullException">Thrown when either the handle or fileSystem argument is null.</exception>
-        public RarFileProcessor(IUnrarHandle handle, IFileSystem fileSystem)
+        public RarFileProcessor(IUnrarHandle handle)
         {
             if (handle == null)
             {
@@ -30,13 +22,6 @@ namespace Oleg.Kleyman.Winrar.Core
                 throw new ArgumentNullException(handleParamName);
             }
 
-            if (fileSystem == null)
-            {
-                const string fileSystemParamName = "fileSystem";
-                throw new ArgumentNullException(fileSystemParamName);
-            }
-
-            FileSystem = fileSystem;
             Handle = handle;
         }
 

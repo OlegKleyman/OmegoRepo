@@ -14,14 +14,6 @@ namespace Oleg.Kleyman.Winrar.Core
         IUnrarHandle Handle { get; set; }
 
         /// <summary>
-        ///     Executes the archive reader.
-        /// </summary>
-        /// <returns>
-        ///     An <see cref="IArchiveReader" /> .
-        /// </returns>
-        IArchiveReader ExecuteReader();
-
-        /// <summary>
         ///     Extracts the archive.
         /// </summary>
         /// <param name="destinationPath"> The destination folder to extract to. If it does not exist then it will be created. </param>

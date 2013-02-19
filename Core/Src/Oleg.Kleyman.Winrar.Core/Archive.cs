@@ -47,6 +47,7 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <param name="unrar">
         ///     <see cref="IUnrar" /> to use when getting the Archive
         /// </param>
+        /// <param name="extractor">The <see cref="IMemberExtractor"/> to use for operations.</param>
         /// <returns> The Archive. </returns>
         /// <remarks>
         ///     This method changes the Mode property of the Handle in the <see cref="IUnrar" /> object to
@@ -54,10 +55,10 @@ namespace Oleg.Kleyman.Winrar.Core
         ///         cref="OpenMode.Extract" />
         ///     .
         /// </remarks>
-        public static IArchive Open(IUnrar unrar)
+        public static IArchive Open(IUnrar unrar, IMemberExtractor extractor)
         {
             var archive = GetArchive(unrar);
-            var reader = unrar.ExecuteReader();
+            var reader = ArchiveReader.Execute(extractor);
 
             FillArchive(archive, reader);
 

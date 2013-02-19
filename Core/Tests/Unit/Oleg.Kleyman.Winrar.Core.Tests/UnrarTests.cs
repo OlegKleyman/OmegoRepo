@@ -204,14 +204,17 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             mockFileSystemInfo4.SetupGet(x => x.Attributes).Returns(FileAttributes.Directory);
 
             MockFileSystemMemberFactory.Setup(
-                x => x.GetFileMember(It.IsAny<ArchiveMember>(), "C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\testFile.txt")).Returns(
+                x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "TestFolder\\testFile.txt"), "C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\testFile.txt")).Returns(
                     mockFileSystemInfo1.Object);
-            MockFileSystemMemberFactory.Setup(x => x.GetFileMember(It.IsAny<ArchiveMember>(), "C:\\GitRepos\\MainDefault\\Common\\Test\\test.txt")).Returns(
+
+            MockFileSystemMemberFactory.Setup(x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "test.txt"), "C:\\GitRepos\\MainDefault\\Common\\Test\\test.txt")).Returns(
                 mockFileSystemInfo2.Object);
+
             MockFileSystemMemberFactory.Setup(
-                x => x.GetFileMember(It.IsAny<ArchiveMember>(), "C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\InnerTestFolder")).Returns(
+                x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "TestFolder\\InnerTestFolder"), "C:\\GitRepos\\MainDefault\\Common\\Test\\TestFolder\\InnerTestFolder")).Returns(
                     mockFileSystemInfo3.Object);
-            MockFileSystemMemberFactory.Setup(x => x.GetFileMember(It.IsAny<ArchiveMember>(), @"C:\GitRepos\MainDefault\Common\Test\TestFolder")).Returns(
+
+            MockFileSystemMemberFactory.Setup(x => x.GetFileMember(It.Is((ArchiveMember y) => y.Name == "TestFolder"), @"C:\GitRepos\MainDefault\Common\Test\TestFolder")).Returns(
                 mockFileSystemInfo4.Object);
         }
 
@@ -239,42 +242,13 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
                     break;
             }
         }
-
-        [Test]
-        [ExpectedException(typeof (InvalidOperationException), ExpectedMessage = "Handle cannot be null.",
-            MatchType = MessageMatch.Exact)]
-        public void ExecuteReaderHandleCannotBeNullErrorTest()
-        {
-            var unrar = new Unrar(null, MockMemberExtractor.Object, MockFileSystemMemberFactory.Object);
-            unrar.ExecuteReader();
-        }
-
-        [Test]
-        public void ExecuteReaderTest()
-        {
-            var unrar = new Unrar(UnrarHandleMock.Object, MockMemberExtractor.Object, null);
-
-            var reader = unrar.ExecuteReader();
-
-
-            Assert.AreEqual(RarStatus.Success, reader.Status);
-        }
-
+        
         [Test]
         [ExpectedException(typeof (InvalidOperationException), ExpectedMessage = "FileFactory cannot be null.",
             MatchType = MessageMatch.Exact)]
         public void ExtractFileSystemCannotBeNullTest()
         {
             var unrar = new Unrar(UnrarHandleMock.Object, MockMemberExtractor.Object, null);
-            unrar.Extract(@"C:\GitRepos\MainDefault\Common\Test\");
-        }
-
-        [Test]
-        [ExpectedException(typeof (InvalidOperationException), ExpectedMessage = "Handle cannot be null.",
-            MatchType = MessageMatch.Exact)]
-        public void ExtractHandleCannotBeNullErrorTest()
-        {
-            var unrar = new Unrar(null, MockMemberExtractor.Object, MockFileSystemMemberFactory.Object);
             unrar.Extract(@"C:\GitRepos\MainDefault\Common\Test\");
         }
 
