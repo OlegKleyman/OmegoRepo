@@ -56,6 +56,7 @@
     <Compile Include="IMemberExtractor.cs" />
     <Compile Include="IUnrar.cs" />
     <Compile Include="IUnrarHandle.cs" />
+    <Compile Include="IUnrarWrapper.cs" />
     <Compile Include="LowMemberFlags.cs" />
     <Compile Include="OpenMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="UnrarException.cs" />
     <Compile Include="UnrarEventArgs.cs" />
     <Compile Include="UnrarHandle.cs" />
+    <Compile Include="UnrarWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">

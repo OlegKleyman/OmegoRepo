@@ -17,7 +17,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [SetUp]
         public void SetupTest()
         {
-            MockArchiveReader.SetupGet(x => x.Status).Returns(RarStatus.Success);
             MockUnrarHandle.Object.Open();
         }
 
@@ -25,7 +24,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private const string FILE_PATH_TO_EXTRACTION_FOLDER = @"C:\GitRepos\MainDefault\Common\Test\";
         private Mock<IUnrarHandle> MockUnrarHandle { get; set; }
         private Mock<IUnrar> MockUnrar { get; set; }
-        private Mock<IArchiveReader> MockArchiveReader { get; set; }
         private Mock<IMemberExtractor> MockExtractor { get; set; }
 
         public override void Setup()
@@ -33,7 +31,6 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
             AttributesToAvoidReplicating.Add(typeof(FileIOPermissionAttribute));
             MockUnrarHandle = new Mock<IUnrarHandle>();
             MockUnrar = new Mock<IUnrar>();
-            MockArchiveReader = new Mock<IArchiveReader>();
             MockExtractor = new Mock<IMemberExtractor>();
 
             SetupUnrarHandle();
