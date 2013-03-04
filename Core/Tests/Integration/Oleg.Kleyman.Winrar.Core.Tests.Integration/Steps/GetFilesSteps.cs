@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Oleg.Kleyman.Winrar.Core.Tests.Integration.Steps
 {
@@ -20,17 +21,17 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration.Steps
         [Then(@"I should get the following list back")]
         public void ThenIShouldGetTheFollowingListBack(Table table)
         {
-            var count = 0;
-            foreach (var row in table.Rows)
+            var members = table.CreateSet<ArchiveMember>().ToArray();
+
+            for (var count = 0; count < members.Length; count++)
             {
-                Assert.That(Members.ElementAt(count).HighFlags, Is.EqualTo(Enum.Parse(typeof(HighMemberFlags), row["HighFlags"])));
-                Assert.That(Members.ElementAt(count).LastModificationDate, Is.EqualTo(DateTime.Parse(row["LastModificationDate"])));
-                Assert.That(Members.ElementAt(count).LowFlags, Is.EqualTo(Enum.Parse(typeof(LowMemberFlags), row["LowFlags"])));
-                Assert.That(Members.ElementAt(count).Name, Is.EqualTo(row["Name"]));
-                Assert.That(Members.ElementAt(count).PackedSize, Is.EqualTo(long.Parse(row["PackedSize"])));
-                Assert.That(Members.ElementAt(count).UnpackedSize, Is.EqualTo(long.Parse(row["UnpackedSize"])));
-                Assert.That(Members.ElementAt(count).Volume, Is.EqualTo(row["Volume"]));
-                count++;
+                Assert.That(Members.ElementAt(count).HighFlags, Is.EqualTo(members[count].HighFlags));
+                Assert.That(Members.ElementAt(count).LastModificationDate, Is.EqualTo(members[count].LastModificationDate));
+                Assert.That(Members.ElementAt(count).LowFlags, Is.EqualTo(members[count].LowFlags));
+                Assert.That(Members.ElementAt(count).Name, Is.EqualTo(members[count].Name));
+                Assert.That(Members.ElementAt(count).PackedSize, Is.EqualTo(members[count].PackedSize));
+                Assert.That(Members.ElementAt(count).UnpackedSize, Is.EqualTo(members[count].UnpackedSize));
+                Assert.That(Members.ElementAt(count).Volume, Is.EqualTo(members[count].Volume));
             }
         }
     }
