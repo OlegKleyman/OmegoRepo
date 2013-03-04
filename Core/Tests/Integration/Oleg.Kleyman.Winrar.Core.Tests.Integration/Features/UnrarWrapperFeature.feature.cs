@@ -78,7 +78,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.And("I instantiate an UnrarWrapper object", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 9
  testRunner.When("I call the the Open method with ..\\..\\..\\..\\..\\..\\Common\\Test\\Oleg.Kleyman.Winrar" +
-                    ".Core.Tests.Integration\\TestFolder.rar archive path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+                    ".Core.Tests.Integration\\TestFolder.rar archive path for List", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 10
  testRunner.Then("I should receive a greater than 0 IntPtr handle back", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 11
@@ -102,7 +102,7 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.And("I instantiate an UnrarWrapper object", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 17
  testRunner.When("I call the the Open method with ..\\..\\..\\..\\..\\..\\Common\\Test\\Oleg.Kleyman.Winrar" +
-                    ".Core.Tests.Integration\\TestFolder.rar archive path", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+                    ".Core.Tests.Integration\\TestFolder.rar archive path for List", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 18
  testRunner.And("I call the GetFiles method", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
@@ -152,6 +152,53 @@ this.ScenarioSetup(scenarioInfo);
                         "None"});
 #line 19
  testRunner.Then("I should get the following list back", ((string)(null)), table1, "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Files should extract when Extract all is called.")]
+        public virtual void FilesShouldExtractWhenExtractAllIsCalled_()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Files should extract when Extract all is called.", ((string[])(null)));
+#line 26
+this.ScenarioSetup(scenarioInfo);
+#line 27
+ testRunner.Given("I have an instance of the NativeMethods object", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 28
+ testRunner.And("I instantiate an UnrarWrapper object", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 29
+ testRunner.When("I call the the Open method with ..\\..\\..\\..\\..\\..\\Common\\Test\\Oleg.Kleyman.Winrar" +
+                    ".Core.Tests.Integration\\TestFolder.rar archive path for Extract", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 30
+ testRunner.When("I call extract all", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "FullName",
+                        "Attributes",
+                        "Exists"});
+            table2.AddRow(new string[] {
+                        "..\\..\\..\\..\\..\\..\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\" +
+                            "TestFolder\\testFile.txt",
+                        "Archive",
+                        "true"});
+            table2.AddRow(new string[] {
+                        "..\\..\\..\\..\\..\\..\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\" +
+                            "test.txt",
+                        "Archive",
+                        "true"});
+            table2.AddRow(new string[] {
+                        "..\\..\\..\\..\\..\\..\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\" +
+                            "TestFolder\\InnerTestFolder",
+                        "Directory",
+                        "true"});
+            table2.AddRow(new string[] {
+                        "..\\..\\..\\..\\..\\..\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\" +
+                            "TestFolder",
+                        "Directory",
+                        "true"});
+#line 31
+ testRunner.Then("I should receive the following list of FileSystemMembers back", ((string)(null)), table2, "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
