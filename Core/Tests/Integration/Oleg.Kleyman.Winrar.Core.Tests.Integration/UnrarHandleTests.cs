@@ -13,10 +13,12 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         private string RarFilePath { get; set; }
         private string InvalidRarFilePath { get; set; }
         private string BrokenRarFilePath { get; set; }
+        protected IUnrarWrapper Wrapper { get; set; }
 
         public override void Setup()
         {
             UnrarDll = new NativeMethods();
+            Wrapper = new UnrarWrapper(UnrarDll);
             RarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             InvalidRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\test.txt");
             BrokenRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFileCorrupt.rar");
@@ -27,38 +29,14 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             MatchType = MessageMatch.Exact)]
         public void CloseAlreadyOpenExceptionTest()
         {
-            var unrarHandle = new UnrarHandle(UnrarDll, BrokenRarFilePath);
+            var unrarHandle = new UnrarHandle(Wrapper, BrokenRarFilePath);
             unrarHandle.Close();
         }
-
-        //[Test]
-        //[ExpectedException(typeof(UnrarException), ExpectedMessage = "Unable to read header data.", MatchType = MessageMatch.Exact)]
-        //public void OpenArchiveCorruptTest()
-        //{
-        //    var unrarHandle = new UnrarHandle(UnrarDll, BrokenRarFilePath);
-        //    unrarHandle.Open();
-        //    try
-        //    {
-        //        unrarHandle.GetArchive();
-        //    }
-        //    catch (UnrarException ex)
-        //    {
-        //        Assert.AreEqual(RarStatus.BadData, ex.Status);
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        if(unrarHandle.IsOpen)
-        //        {
-        //            unrarHandle.Close();
-        //        }
-        //    }
-        //}
 
         [Test]
         public void CloseTest()
         {
-            var unrarHandle = new UnrarHandle(UnrarDll, RarFilePath);
+            var unrarHandle = new UnrarHandle(Wrapper, RarFilePath);
             unrarHandle.Open();
             unrarHandle.Close(); //No exception assumes success
         }
@@ -66,7 +44,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         [Test]
         public void DisposeTest()
         {
-            using (var unrarHandle = new UnrarHandle(UnrarDll, RarFilePath))
+            using (var unrarHandle = new UnrarHandle(Wrapper, RarFilePath))
             {
                 unrarHandle.Open();
             }
@@ -77,7 +55,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         [Test]
         public void OpenArchiveTest()
         {
-            var unrarHandle = new UnrarHandle(UnrarDll, RarFilePath);
+            var unrarHandle = new UnrarHandle(Wrapper, RarFilePath);
             unrarHandle.Open();
 
             unrarHandle.Close();
@@ -88,7 +66,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             MatchType = MessageMatch.Exact)]
         public void OpenArchiveUnknownFormatTest()
         {
-            var unrarHandle = new UnrarHandle(UnrarDll, InvalidRarFilePath);
+            var unrarHandle = new UnrarHandle(Wrapper, InvalidRarFilePath);
             try
             {
                 unrarHandle.Open();

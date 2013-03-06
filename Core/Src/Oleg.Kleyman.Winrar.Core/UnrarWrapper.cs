@@ -34,6 +34,13 @@ namespace Oleg.Kleyman.Winrar.Core
                 };
 
             var handle = UnrarDll.RAROpenArchiveEx(ref openData);
+
+            if (((RarStatus) openData.OpenResult) != RarStatus.Success)
+            {
+                const string unableToOpenArchiveMessage = "Unable to open archive.";
+                throw new UnrarException(unableToOpenArchiveMessage, (RarStatus)openData.OpenResult);
+            }
+
             return handle;
         }
 
@@ -44,8 +51,16 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <returns>The status of the close operation.</returns>
         public RarStatus Close(IntPtr handle)
         {
-            var status = UnrarDll.RARCloseArchive(handle);
-            return (RarStatus)status;
+            var status = (RarStatus) UnrarDll.RARCloseArchive(handle);
+
+            if (status != RarStatus.Success)
+            {
+                const string unableToCloseArchiveMessage =
+                    "Unable to close archive. Possibly because it's already closed.";
+                throw new UnrarException(unableToCloseArchiveMessage, status);
+            }
+
+            return status;
         }
 
         /// <summary>
@@ -59,8 +74,15 @@ namespace Oleg.Kleyman.Winrar.Core
 
             var members = new List<ArchiveMember>();
             
-            while ((RarStatus)UnrarDll.RARReadHeaderEx(handle, out headerData) != RarStatus.EndOfArchive)
+            RarStatus result;
+            
+            while ((result = (RarStatus)UnrarDll.RARReadHeaderEx(handle, out headerData)) != RarStatus.EndOfArchive)
             {
+                if (result != RarStatus.Success)
+                {
+                    const string unableToReadHeaderData = "Unable to read header data.";
+                    throw new UnrarException(unableToReadHeaderData, result);
+                }
                 UnrarDll.RARProcessFileW(handle, (int)ArchiveMemberOperation.Extract, null, null);
                 members.Add((ArchiveMember)headerData);
             }
@@ -80,9 +102,16 @@ namespace Oleg.Kleyman.Winrar.Core
             RARHeaderDataEx headerData;
 
             var members = new List<IFileSystemMember>();
-            
-            while ((RarStatus)UnrarDll.RARReadHeaderEx(handle, out headerData) != RarStatus.EndOfArchive)
+            RarStatus result;
+
+            while ((result = (RarStatus)UnrarDll.RARReadHeaderEx(handle, out headerData)) != RarStatus.EndOfArchive)
             {
+                if (result != RarStatus.Success)
+                {
+                    const string unableToReadHeaderData = "Unable to read header data.";
+                    throw new UnrarException(unableToReadHeaderData, result);
+                }
+
                 var fullExtractionPath = Path.GetFullPath(Path.Combine(destinationPath, headerData.FileNameW));
                 UnrarDll.RARProcessFileW(handle, (int)ArchiveMemberOperation.Extract, null, fullExtractionPath);
                 

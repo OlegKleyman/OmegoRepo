@@ -38,10 +38,10 @@ namespace Oleg.Kleyman.Winrar.Core
                 const string handleMustBeOpenMessage = "Unrar handle must be open to complete this operation.";
                 throw new InvalidOperationException(handleMustBeOpenMessage);
             }
-            var result =
-                (RarStatus)
-                Handle.UnrarDll.RARProcessFileW(Handle.Handle, (int)ArchiveMemberOperation.Extract, destinationPath,
-                                                null);
+            var result = RarStatus.BadData;
+                //(RarStatus)
+                //Handle.Wrapper.RARProcessFileW(Handle.Handle, (int)ArchiveMemberOperation.Extract, destinationPath,
+                //                                null);
             if (result != RarStatus.Success)
             {
                 const string unableToExtractFileMessage = "Unable to extract file.";

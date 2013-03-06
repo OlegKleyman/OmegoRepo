@@ -1,7 +1,6 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
-using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Tests.Core;
 using Oleg.Kleyman.Winrar.Interop;
 
@@ -15,14 +14,16 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private Mock<IUnrarHandle> MockUnrarHandle { get; set; }
         private Mock<IUnrarDll> MockUnrarDll { get; set; }
         private Mock<IFileProcessor> MockFileProcessor { get; set; }
+        private Mock<IUnrarWrapper> MockUnrarWrapper { get; set; }
 
         public override void Setup()
         {
             MockUnrarHandle = new Mock<IUnrarHandle>();
             MockUnrarDll = new Mock<IUnrarDll>();
+            MockUnrarWrapper = new Mock<IUnrarWrapper>();
             MockFileProcessor = new Mock<IFileProcessor>();
 
-            MockUnrarHandle.SetupGet(x => x.UnrarDll).Returns(MockUnrarDll.Object);
+            MockUnrarHandle.SetupGet(x => x.Wrapper).Returns(MockUnrarWrapper.Object);
             ValidHandle = new IntPtr(1337);
             InvalidHandle = new IntPtr(7331);
 // ReSharper disable RedundantAssignment - Even though this variable is use as an

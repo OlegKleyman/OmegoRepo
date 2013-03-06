@@ -1,4 +1,5 @@
 using System;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
@@ -84,21 +85,10 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <exception cref="UnrarException">Thrown when the member header is unable to be read.</exception>
         public RarStatus Extract(string destinationPath)
         {
-            RARHeaderDataEx headerData;
-            var result = (RarStatus)Handle.UnrarDll.RARReadHeaderEx(Handle.Handle, out headerData);
-
-            if (result == RarStatus.Success)
-            {
-                Processor.ProcessFile(destinationPath);
-            }
-            else if (result != RarStatus.EndOfArchive)
-            {
-                const string unableToReadHeaderData = "Unable to read header data.";
-                throw new UnrarException(unableToReadHeaderData, result);
-            }
-
-            CurrentMember = (ArchiveMember)headerData;
-            return result;
+            Handle.Wrapper.ExtractAll(new FileSystemMemberFactory(new FileSystem()), Handle.Handle, destinationPath);
+            
+            
+            return RarStatus.Success;
         }
     }
 }

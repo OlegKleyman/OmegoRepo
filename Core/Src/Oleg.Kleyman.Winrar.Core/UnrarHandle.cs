@@ -7,29 +7,25 @@ namespace Oleg.Kleyman.Winrar.Core
     public sealed class UnrarHandle : IUnrarHandle
     {
         private OpenMode _mode;
-        private IUnrarDll _unrarDll;
+        private IUnrarWrapper _wrapper;
 
         /// <summary>
         ///     Creates the UnrarHandle object.
         /// </summary>
-        /// <param name="unrarDll">
-        ///     The <see cref="IUnrarDll" /> object to interface commands to.
-        /// </param>
-        public UnrarHandle(IUnrarDll unrarDll)
+        /// <param name="wrapper"></param>
+        public UnrarHandle(IUnrarWrapper wrapper)
         {
-            UnrarDll = unrarDll;
+            _wrapper = wrapper;
             IsOpen = false;
         }
 
         /// <summary>
         ///     Creates the UnrarHandle object.
         /// </summary>
-        /// <param name="unrarDll">
-        ///     The <see cref="IUnrarDll" /> object to interface commands to.
-        /// </param>
+        /// <param name="wrapper"></param>
         /// <param name="rarFilePath"> The path to the rar archive to use. </param>
-        public UnrarHandle(IUnrarDll unrarDll, string rarFilePath)
-            : this(unrarDll)
+        public UnrarHandle(IUnrarWrapper wrapper, string rarFilePath)
+            : this(wrapper)
         {
             RarFilePath = rarFilePath;
         }
@@ -72,21 +68,21 @@ namespace Oleg.Kleyman.Winrar.Core
         }
 
         /// <summary>
-        ///     Gets or Sets the UnrarDll for unrarDll operations.
+        ///     Gets or Sets the Wrapper for unrarDll operations.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when the handle is still open.</exception>
-        public IUnrarDll UnrarDll
+        public IUnrarWrapper Wrapper
         {
-            get { return _unrarDll; }
+            get { return _wrapper; }
             set
             {
                 if (IsOpen)
                 {
-                    const string unrarDllCannotBeChangedMessage =
-                        "UnrarDll cannot be changed if the unrar handle is still open.";
-                    throw new InvalidOperationException(unrarDllCannotBeChangedMessage);
+                    const string unrarWrapperCannotBeChangedMessage =
+                        "Wrapper cannot be changed if the unrar handle is still open.";
+                    throw new InvalidOperationException(unrarWrapperCannotBeChangedMessage);
                 }
-                _unrarDll = value;
+                _wrapper = value;
             }
         }
 
@@ -108,13 +104,8 @@ namespace Oleg.Kleyman.Winrar.Core
         {
             if (IsOpen)
             {
-                var status = UnrarDll.RARCloseArchive(Handle);
-                if (status != (uint) RarStatus.Success)
-                {
-                    const string unableToCloseArchiveMessage =
-                        "Unable to close archive. Possibly because it's already closed.";
-                    throw new UnrarException(unableToCloseArchiveMessage, (RarStatus) status);
-                }
+                _wrapper.Close(Handle);
+                
                 IsOpen = false;
             }
             else
@@ -128,25 +119,13 @@ namespace Oleg.Kleyman.Winrar.Core
         ///     Opens the handle to the archive
         /// </summary>
         /// <exception cref="UnrarException">Thrown when the archive was unable to be opened.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when the handle is already open, the UnrarDll or RarFilePath properties are null or an empty string.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the handle is already open, the Wrapper or RarFilePath properties are null or an empty string.</exception>
         public void Open()
         {
             ValidatePrerequisites();
-            var openData = new RAROpenArchiveDataEx
-                {
-                    ArcName = RarFilePath,
-                    OpenMode = (uint) Mode
-                };
-
-            Handle = UnrarDll.RAROpenArchiveEx(ref openData);
-
+            
+            Handle = _wrapper.Open(RarFilePath, Mode);
             GC.ReRegisterForFinalize(this);
-
-            if (Handle == default(IntPtr))
-            {
-                const string unableToOpenArchiveMessage = "Unable to open archive.";
-                throw new UnrarException(unableToOpenArchiveMessage, (RarStatus) openData.OpenResult);
-            }
 
             IsOpen = true;
         }
@@ -166,9 +145,9 @@ namespace Oleg.Kleyman.Winrar.Core
                 const string objectIsOpenMessage = "Object is open and must be closed to open again.";
                 throw new InvalidOperationException(objectIsOpenMessage);
             }
-            if (UnrarDll == null)
+            if (Wrapper == null)
             {
-                const string unrarDllMustBeSetMessage = "UnrarDll must be set.";
+                const string unrarDllMustBeSetMessage = "Wrapper must be set.";
                 throw new InvalidOperationException(unrarDllMustBeSetMessage);
             }
 

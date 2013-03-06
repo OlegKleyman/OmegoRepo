@@ -9,10 +9,10 @@ namespace Oleg.Kleyman.Winrar.Core
     public interface IUnrarHandle : IDisposable
     {
         /// <summary>
-        ///     Gets or Sets the UnrarDll for unrarDll operations.
+        ///     Gets or Sets the Wrapper for unrarDll operations.
         /// </summary>
         /// <exception cref="InvalidOperationException" />
-        IUnrarDll UnrarDll { get; set; }
+        IUnrarWrapper Wrapper { get; set; }
 
         /// <summary>
         ///     Gets or sets the RarFilePath
