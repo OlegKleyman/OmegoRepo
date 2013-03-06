@@ -17,11 +17,13 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         private IMemberExtractor MemberExtractor { get; set; }
         private IFileSystem FileSystem { get; set; }
         private IFileSystemMemberFactory FileFactory { get; set; }
+        protected IUnrarWrapper Wrapper { get; set; }
 
         public override void Setup()
         {
             UnrarDll = new NativeMethods();
-            Handle = new UnrarHandle(UnrarDll);
+            Wrapper = new UnrarWrapper(UnrarDll);
+            Handle = new UnrarHandle(Wrapper);
             FileSystem = new FileSystem();
             FileFactory = new FileSystemMemberFactory(FileSystem);
             Processor = new RarFileProcessor(Handle);

@@ -13,15 +13,16 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private Mock<IUnrarHandle> MockUnrarHandle { get; set; }
         private Mock<IUnrarDll> MockUnrarDll { get; set; }
         private Mock<IFileSystem> MockFileSystem { get; set; }
-
+        private Mock<IUnrarWrapper> MockUnrarWrapper { get; set; }
         private RARHeaderDataEx MockHeaderData { get; set; }
 
         public override void Setup()
         {
             MockUnrarHandle = new Mock<IUnrarHandle>();
             MockUnrarDll = new Mock<IUnrarDll>();
+            MockUnrarWrapper = new Mock<IUnrarWrapper>();
             MockFileSystem = new Mock<IFileSystem>();
-            MockUnrarHandle.SetupGet(x => x.UnrarDll).Returns(MockUnrarDll.Object);
+            MockUnrarHandle.SetupGet(x => x.Wrapper).Returns(MockUnrarWrapper.Object);
             MockUnrarHandle.SetupGet(x => x.Handle).Returns(new IntPtr(1337));
             MockHeaderData = new RARHeaderDataEx
             {
