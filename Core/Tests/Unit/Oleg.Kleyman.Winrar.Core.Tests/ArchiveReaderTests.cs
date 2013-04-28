@@ -9,6 +9,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
     [TestFixture]
     public class ArchiveReaderTests : TestsBase
     {
+        protected Mock<IUnrarWrapper> MockWrapper { get; set; }
         private Mock<IMemberExtractor> MockMemberExtractor { get; set; }
 
         private RARHeaderDataEx _test2TxtFileHeaderData;
@@ -22,7 +23,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         private void SetupMocks()
         {
             MockMemberExtractor = new Mock<IMemberExtractor>();
-
+            MockWrapper = new Mock<IUnrarWrapper>();
             _test1TxtFileHeaderData = new RARHeaderDataEx
                 {
                     ArcName = "㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴敔瑳瀮牡ㅴ爮牡",
@@ -115,7 +116,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
 
         private IArchiveReader GetReader()
         {
-            return ArchiveReader.Execute(MockMemberExtractor.Object);
+            return ArchiveReader.Execute(MockWrapper.Object);
         }
 
         [Test]
@@ -128,7 +129,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void ExecuteShouldThrowExceptionWhenExtractorIsNull()
         {
-            var ex = Assert.Throws<ArgumentNullException>(() => ArchiveReader.Execute(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => ArchiveReader.Execute(MockWrapper.Object));
             Assert.That(ex.ParamName, Is.EqualTo("extractor"));
         }
     }

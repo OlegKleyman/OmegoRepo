@@ -41,3 +41,4 @@ using System.Runtime.InteropServices;
 
 //Make visible to tests assembly
 [assembly: InternalsVisibleTo("Oleg.Kleyman.Winrar.Core.Tests")]
+[assembly: InternalsVisibleTo("Oleg.Kleyman.Winrar.Core.Tests.Integration")]

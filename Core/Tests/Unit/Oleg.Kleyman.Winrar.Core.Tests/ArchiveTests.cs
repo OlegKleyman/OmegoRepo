@@ -158,7 +158,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void ExtractTest()
         {
-            var archive = Archive.Open(MockUnrar.Object, MockExtractor.Object);
+            var archive = Archive.Open(MockUnrar.Object);
 
             var extractedContents = archive.Extract(@"C:\GitRepos\MainDefault\Common\Test\");
 
@@ -176,7 +176,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests
         [Test]
         public void OpenUnrarTest()
         {
-            var archive = Archive.Open(MockUnrar.Object, MockExtractor.Object);
+            var archive = Archive.Open(MockUnrar.Object);
             Assert.AreEqual(2, archive.Files.Count);
 
 

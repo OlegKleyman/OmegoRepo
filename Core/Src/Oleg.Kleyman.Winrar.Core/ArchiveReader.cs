@@ -6,13 +6,15 @@ namespace Oleg.Kleyman.Winrar.Core
 {
     public class ArchiveReader : IArchiveReader
     {
+        public IUnrarWrapper Wrapper { get; private set; }
+
         /// <summary>
         /// Initializes a <see cref="ArchiveReader"/> object.
         /// </summary>
-        /// <param name="extractor">The <see cref="IMemberExtractor"/> used to read the archive.</param>
-        private ArchiveReader(IMemberExtractor extractor)
+        /// <param name="wrapper">The <see cref="IUnrarWrapper"/> to use for operations.</param>
+        private ArchiveReader(IUnrarWrapper wrapper)
         {
-            Extractor = extractor;
+            Wrapper = wrapper;
         }
 
         #region Implementation of IArchiveReader
@@ -24,9 +26,7 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <exception cref="UnrarException">Thrown when the header data of the archive is unable to be read.</exception>
         public ArchiveMember Read()
         {
-            Status = Extractor.Extract(null);
-            
-            var member = Status == RarStatus.EndOfArchive ? null : Extractor.CurrentMember;
+            var member = Wrapper.GetNextMember(IntPtr.Zero);
             return member;
         }
 
@@ -36,37 +36,20 @@ namespace Oleg.Kleyman.Winrar.Core
         public RarStatus Status { get; private set; }
 
         #endregion
-
-        public IMemberExtractor Extractor { get; set; }
-
-        //private void ValidatePrerequisites()
-        //{
-        //    if (!Handle.IsOpen)
-        //    {
-        //        const string handleIsNotOpenMessage = "Handle must be open.";
-        //        throw new InvalidOperationException(handleIsNotOpenMessage);
-        //    }
-
-        //    if (Handle.Mode == OpenMode.Extract)
-        //    {
-        //        const string modeMustBeListMessage = "Handle mode must be OpenMode.List.";
-        //        throw new InvalidOperationException(modeMustBeListMessage);
-        //    }
-        //}
-
+        
         /// <summary>
         /// Retrieves a <see cref="IArchiveReader"/> object.
         /// </summary>
-        /// <param name="extractor">A <see cref="IMemberExtractor"/> to use for operations.</param>
+        /// <param name="wrapper"></param>
         /// <returns>A <see cref="IArchiveReader"/> object.</returns>
-        public static IArchiveReader Execute(IMemberExtractor extractor)
+        public static IArchiveReader Execute(IUnrarWrapper wrapper)
         {
-            if (extractor == null)
+            if (wrapper == null)
             {
-                const string extractorParamName = "extractor";
-                throw new ArgumentNullException(extractorParamName);
+                const string wrapperParamName = "wrapper";
+                throw new ArgumentNullException(wrapperParamName);
             }
-            return new ArchiveReader(extractor);
+            return new ArchiveReader(wrapper);
         }
     }
 }

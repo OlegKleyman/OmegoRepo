@@ -52,6 +52,7 @@
     <Compile Include="Extractor.cs" />
     <Compile Include="FileCopier.cs" />
     <Compile Include="FileSystem.cs" />
+    <Compile Include="IPathBuilder.cs" />
     <Compile Include="IProcess.cs" />
     <Compile Include="IProcessManager.cs" />
     <Compile Include="IRarExtractorSettings.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="NoCoverageAttribute.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="FileSystemMember.cs" />
+    <Compile Include="PathBuilder.cs" />
     <Compile Include="SystemProcess.cs" />
     <Compile Include="ProcessManager.cs" />
     <Compile Include="ReflectiveStringTypeConverter.cs" />

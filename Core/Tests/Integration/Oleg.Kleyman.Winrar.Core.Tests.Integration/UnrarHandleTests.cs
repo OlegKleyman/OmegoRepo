@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
+using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Tests.Core;
 using Oleg.Kleyman.Winrar.Interop;
 
@@ -14,11 +15,16 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         private string InvalidRarFilePath { get; set; }
         private string BrokenRarFilePath { get; set; }
         protected IUnrarWrapper Wrapper { get; set; }
+        private IPathBuilder PathBuilder { get; set; }
+        private IPathBuilder DestinationPathBuilder { get; set; }
 
         public override void Setup()
         {
             UnrarDll = new NativeMethods();
-            Wrapper = new UnrarWrapper(UnrarDll);
+            PathBuilder = new PathBuilder();
+            DestinationPathBuilder = new DestinationPathBuilder(PathBuilder);
+            Wrapper = new UnrarWrapper(UnrarDll, DestinationPathBuilder);
+
             RarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Test.part1.rar");
             InvalidRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\test.txt");
             BrokenRarFilePath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\testFileCorrupt.rar");
