@@ -46,6 +46,8 @@
     <Compile Include="Archive.cs" />
     <Compile Include="ArchiveMemberOperation.cs" />
     <Compile Include="ArchiveReaderBuilder.cs" />
+    <Compile Include="DestinationPathBuilder.cs" />
+    <Compile Include="Extensions\RarStatusExtensions.cs" />
     <Compile Include="FileSystemMemberFactory.cs" />
     <Compile Include="HighMemberFlags.cs" />
     <Compile Include="ArchiveReader.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="ArchiveMember.cs" />
     <Compile Include="RarFileProcessor.cs" />
     <Compile Include="RarMemberExtractor.cs" />
+    <Compile Include="RarOperation.cs" />
     <Compile Include="RarStatus.cs" />
     <Compile Include="Unrar.cs" />
     <Compile Include="UnrarException.cs" />

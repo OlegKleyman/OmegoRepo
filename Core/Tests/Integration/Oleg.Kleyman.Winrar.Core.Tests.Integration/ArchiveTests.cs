@@ -18,11 +18,15 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
         private IFileSystem FileSystem { get; set; }
         private IFileSystemMemberFactory FileFactory { get; set; }
         protected IUnrarWrapper Wrapper { get; set; }
+        private IPathBuilder PathBuilder { get; set; }
+        private IPathBuilder DestinationPathBuilder { get; set; }
 
         public override void Setup()
         {
             UnrarDll = new NativeMethods();
-            Wrapper = new UnrarWrapper(UnrarDll);
+            PathBuilder = new PathBuilder();
+            DestinationPathBuilder = new DestinationPathBuilder(PathBuilder);
+            Wrapper = new UnrarWrapper(UnrarDll, DestinationPathBuilder);
             Handle = new UnrarHandle(Wrapper);
             FileSystem = new FileSystem();
             FileFactory = new FileSystemMemberFactory(FileSystem);
@@ -42,7 +46,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             {
                 Handle.Mode = OpenMode.List;
                 Handle.Open();
-                var archive = Archive.Open(Unrar, MemberExtractor);
+                var archive = Archive.Open(Unrar);
                 extractedMembers =
                     archive.Extract(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Winrar.Core.Tests.Integration\Testing");
             }
@@ -85,7 +89,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             {
                 Handle.Mode = OpenMode.List;
                 Handle.Open();
-                archive = Archive.Open(Unrar, MemberExtractor);
+                archive = Archive.Open(Unrar);
             }
 
             Assert.AreEqual(4, archive.Files.Count);

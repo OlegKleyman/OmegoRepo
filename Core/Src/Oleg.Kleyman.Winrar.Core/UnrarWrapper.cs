@@ -1,22 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Oleg.Kleyman.Core;
+using Oleg.Kleyman.Winrar.Core.Extensions;
 using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
     public class UnrarWrapper : IUnrarWrapper
     {
+        private static readonly IntPtr r__closedHandle;
         private IUnrarDll UnrarDll { get; set; }
+        private IPathBuilder PathBuilder { get; set; }
+        private IntPtr Handle { get; set; }
+
+        static UnrarWrapper()
+        {
+            r__closedHandle = default(IntPtr);
+        }
 
         /// <summary>
         /// Initializes the <see cref="UnrarWrapper"/> object.
         /// </summary>
         /// <param name="unrarDll">The <see cref="IUnrarDll"/> object to use for operations.</param>
-        public UnrarWrapper(IUnrarDll unrarDll)
+        /// <param name="pathBuilder"></param>
+        public UnrarWrapper(IUnrarDll unrarDll, IPathBuilder pathBuilder)
         {
             UnrarDll = unrarDll;
+            PathBuilder = pathBuilder;
         }
 
         /// <summary>
@@ -35,23 +45,28 @@ namespace Oleg.Kleyman.Winrar.Core
 
             var handle = UnrarDll.RAROpenArchiveEx(ref openData);
 
-            if (((RarStatus) openData.OpenResult) != RarStatus.Success)
+            if ((RarStatus)openData.OpenResult != RarStatus.Success)
             {
                 const string unableToOpenArchiveMessage = "Unable to open archive.";
                 throw new UnrarException(unableToOpenArchiveMessage, (RarStatus)openData.OpenResult);
             }
-
+            Handle = handle;
             return handle;
         }
 
         /// <summary>
         /// Closes the handle.
         /// </summary>
-        /// <param name="handle">The handle to the archive.</param>
+        /// <param name="handle"></param>
         /// <returns>The status of the close operation.</returns>
         public RarStatus Close(IntPtr handle)
         {
-            var status = (RarStatus) UnrarDll.RARCloseArchive(handle);
+            if (Handle == r__closedHandle)
+            {
+                const string handleNotOpenMessage = "Handle is not open.";
+                throw new InvalidOperationException(handleNotOpenMessage);
+            }
+            var status = (RarStatus)UnrarDll.RARCloseArchive(Handle);
 
             if (status != RarStatus.Success)
             {
@@ -59,67 +74,73 @@ namespace Oleg.Kleyman.Winrar.Core
                     "Unable to close archive. Possibly because it's already closed.";
                 throw new UnrarException(unableToCloseArchiveMessage, status);
             }
-
+            Handle = r__closedHandle;
             return status;
         }
 
         /// <summary>
         /// Gets the files and folders inside the archive.
         /// </summary>
-        /// <param name="handle">The handle to the archive.</param>
+        /// <param name="handle"></param>
         /// <returns>The archive members.</returns>
         public IEnumerable<ArchiveMember> GetFiles(IntPtr handle)
         {
-            RARHeaderDataEx headerData;
-
             var members = new List<ArchiveMember>();
-            
-            RarStatus result;
-            
-            while ((result = (RarStatus)UnrarDll.RARReadHeaderEx(handle, out headerData)) != RarStatus.EndOfArchive)
+            ArchiveMember member;
+
+            while ((member = GetNextMember(handle)) != null)
             {
-                if (result != RarStatus.Success)
-                {
-                    const string unableToReadHeaderData = "Unable to read header data.";
-                    throw new UnrarException(unableToReadHeaderData, result);
-                }
-                UnrarDll.RARProcessFileW(handle, (int)ArchiveMemberOperation.Extract, null, null);
-                members.Add((ArchiveMember)headerData);
+                members.Add(member);
             }
 
             return members;
         }
 
         /// <summary>
-        /// Etract the files in the archive.
+        /// Extract the files in the archive.
         /// </summary>
+        /// <param name="handle"></param>
         /// <param name="factory">The <see cref="IFileSystemMemberFactory"/> to get the extracted files from.</param>
-        /// <param name="handle">The handle to the archive.</param>
         /// <param name="destinationPath">The destination folder to extract to.</param>
         /// <returns>The extracted files.</returns>
-        public IEnumerable<IFileSystemMember> ExtractAll(IFileSystemMemberFactory factory, IntPtr handle, string destinationPath)
+        public IEnumerable<IFileSystemMember> ExtractAll(IntPtr handle, IFileSystemMemberFactory factory, string destinationPath)
+        {
+            var members = new List<IFileSystemMember>();
+
+            ArchiveMember archiveMember;
+            while ((archiveMember = GetNextMember(destinationPath)) != null)
+            {
+                var member = factory.GetFileMember(archiveMember, destinationPath);
+                members.Add(member);
+            }
+
+            return members;
+        }
+
+        private ArchiveMember GetNextMember(string destinationPath)
         {
             RARHeaderDataEx headerData;
 
-            var members = new List<IFileSystemMember>();
-            RarStatus result;
+            var result = (RarStatus)UnrarDll.RARReadHeaderEx(Handle, out headerData);
 
-            while ((result = (RarStatus)UnrarDll.RARReadHeaderEx(handle, out headerData)) != RarStatus.EndOfArchive)
+            if (result == RarStatus.EndOfArchive)
             {
-                if (result != RarStatus.Success)
-                {
-                    const string unableToReadHeaderData = "Unable to read header data.";
-                    throw new UnrarException(unableToReadHeaderData, result);
-                }
-
-                var fullExtractionPath = Path.GetFullPath(Path.Combine(destinationPath, headerData.FileNameW));
-                UnrarDll.RARProcessFileW(handle, (int)ArchiveMemberOperation.Extract, null, fullExtractionPath);
-                
-                var member = factory.GetFileMember((ArchiveMember) headerData, destinationPath);
-                members.Add(member);
+                return null;
             }
+
+            result.ThrowOnInvalidStatus(RarOperation.ReadHeader);
+            var fullExtractionPath = PathBuilder.Build(destinationPath, headerData.FileNameW);
             
-            return members;
+            result = (RarStatus) UnrarDll.RARProcessFileW(Handle, (int)ArchiveMemberOperation.Extract, null, fullExtractionPath);
+
+            result.ThrowOnInvalidStatus(RarOperation.Process);
+
+            return (ArchiveMember)headerData;
+        }
+
+        public ArchiveMember GetNextMember(IntPtr handle)
+        {
+            return GetNextMember(null);
         }
     }
 }

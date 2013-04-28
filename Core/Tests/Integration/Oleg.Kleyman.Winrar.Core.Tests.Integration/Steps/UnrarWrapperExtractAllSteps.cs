@@ -19,7 +19,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration.Steps
         [When(@"I call extract all")]
         public void WhenICallExtractAll()
         {
-            Members = UnrarWrapperSteps.Wrapper.ExtractAll(new FileSystemMemberFactory(new FileSystem()), UnrarWrapperSteps.Handle, @"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Winrar.Core.Tests.Integration\Testing");
+            Members = UnrarWrapperSteps.Wrapper.ExtractAll(UnrarWrapperSteps.Handle, new FileSystemMemberFactory(new FileSystem()), @"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Winrar.Core.Tests.Integration\Testing");
         }
 
         [Then(@"I should receive the following list of FileSystemMembers back")]
@@ -38,7 +38,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration.Steps
             }
         }
 
-        [AfterTestRun]
+        [AfterScenario("extraction")]
         public static void Teardown()
         {
             var fullPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Winrar.Core.Tests.Integration\Testing");

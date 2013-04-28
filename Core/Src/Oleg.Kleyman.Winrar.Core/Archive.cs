@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Oleg.Kleyman.Core;
+using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
@@ -47,7 +48,6 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <param name="unrar">
         ///     <see cref="IUnrar" /> to use when getting the Archive
         /// </param>
-        /// <param name="extractor">The <see cref="IMemberExtractor"/> to use for operations.</param>
         /// <returns> The Archive. </returns>
         /// <remarks>
         ///     This method changes the Mode property of the Handle in the <see cref="IUnrar" /> object to
@@ -55,10 +55,10 @@ namespace Oleg.Kleyman.Winrar.Core
         ///         cref="OpenMode.Extract" />
         ///     .
         /// </remarks>
-        public static IArchive Open(IUnrar unrar, IMemberExtractor extractor)
+        public static IArchive Open(IUnrar unrar)
         {
             var archive = GetArchive(unrar);
-            var reader = ArchiveReader.Execute(extractor);
+            var reader = ArchiveReader.Execute(new UnrarWrapper(new NativeMethods(), new DestinationPathBuilder(new PathBuilder())));
 
             FillArchive(archive, reader);
 

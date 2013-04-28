@@ -85,7 +85,7 @@ namespace Oleg.Kleyman.Winrar.Core
         /// <exception cref="UnrarException">Thrown when the member header is unable to be read.</exception>
         public RarStatus Extract(string destinationPath)
         {
-            Handle.Wrapper.ExtractAll(new FileSystemMemberFactory(new FileSystem()), Handle.Handle, destinationPath);
+            Handle.Wrapper.ExtractAll(IntPtr.Zero, new FileSystemMemberFactory(new FileSystem()), destinationPath);
             
             
             return RarStatus.Success;

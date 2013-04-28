@@ -1,4 +1,6 @@
 using System;
+using Oleg.Kleyman.Core;
+using Oleg.Kleyman.Winrar.Interop;
 
 namespace Oleg.Kleyman.Winrar.Core
 {
@@ -28,7 +30,7 @@ namespace Oleg.Kleyman.Winrar.Core
         public IArchiveReader GetReader()
         {
             
-            var reader = ArchiveReader.Execute(null);
+            var reader = ArchiveReader.Execute(new UnrarWrapper(new NativeMethods(), new DestinationPathBuilder(new PathBuilder())));
             return reader;
         }
     }

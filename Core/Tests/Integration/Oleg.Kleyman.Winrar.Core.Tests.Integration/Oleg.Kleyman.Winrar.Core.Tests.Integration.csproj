@@ -55,6 +55,7 @@
     <Compile Include="Steps\GetFilesSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\OpenCloseSteps.cs" />
+    <Compile Include="Steps\ReadNextMemberSteps.cs" />
     <Compile Include="Steps\UnrarWrapperExtractAllSteps.cs" />
     <Compile Include="Steps\UnrarWrapperSteps.cs" />
     <Compile Include="UnrarHandleTests.cs" />

@@ -10,7 +10,7 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration.Steps
     [Binding]
     public class GetFilesSteps
     {
-        protected IEnumerable<ArchiveMember> Members { get; set; }
+        internal static IEnumerable<ArchiveMember> Members { get; set; }
 
         [When(@"I call the GetFiles method")]
         public void WhenICallTheGetFilesMethod()

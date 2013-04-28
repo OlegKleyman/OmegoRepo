@@ -57,9 +57,11 @@
     <Compile Include="ArchiveReaderBuilderTests.cs" />
     <Compile Include="ArchiveReaderTests.cs" />
     <Compile Include="ArchiveTests.cs" />
+    <Compile Include="DestinationPathBuilderTests.cs" />
     <Compile Include="FileSystemMemberFactoryTests.cs" />
     <Compile Include="RarFileProcessorTests.cs" />
     <Compile Include="RarMemberExtractorTests.cs" />
+    <Compile Include="RarStatusExtensionsTests.cs" />
     <Compile Include="UnrarDllCustomMock.cs" />
     <Compile Include="UnrarExceptionTests.cs" />
     <Compile Include="UnrarHandleTests.cs" />
