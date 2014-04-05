@@ -26,8 +26,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
                     6300,
                     0,
                     0,
-                    -1,
-                    498125947598274559
+                    -1
                 };
 
             var file = (TorrentFile) properties;
@@ -59,8 +58,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
                     6300,
                     0,
                     0,
-                    -1,
-                    498125947598274559
+                    -1
                 };
             var file = (TorrentFile) properties;
         }
