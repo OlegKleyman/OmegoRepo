@@ -37,8 +37,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
                             6300,
                             0,
                             0,
-                            -1,
-                            498125947598274559
+                            -1
                         }
                 };
             var file2 = new object[]
@@ -56,8 +55,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests
                             6300,
                             0,
                             0,
-                            -1,
-                            498125947598274559
+                            -1
                         }
                 };
             torrent.Files = new object[] {"FB4F76083F21CC6AA6A2E2EB210D126C3CC090DC", file1, file2};
