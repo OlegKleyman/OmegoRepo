@@ -66,8 +66,11 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         public void ThenTheFileNamesShouldBe(Table table)
         {
             var files = table.CreateSet<TorrentFile>().ToArray();
-            Assert.AreEqual(files[0].Name, Torrent.TorrentFiles[0].Name);
-            Assert.AreEqual(files[1].Name, Torrent.TorrentFiles[1].Name);
+            Assert.That(files.Length, Is.EqualTo(Torrent.TorrentFiles.Length));
+            for (int i = 0; i < files.Length; i++)
+            {
+                Assert.AreEqual(files[i].Name, Torrent.TorrentFiles[i].Name);
+            }
         }
     }
 }
