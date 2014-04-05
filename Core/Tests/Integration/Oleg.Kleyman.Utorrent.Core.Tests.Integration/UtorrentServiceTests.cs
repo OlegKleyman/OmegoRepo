@@ -31,14 +31,13 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
             var utorrentServiceBuilder = GetUtorrentServiceBuilder();
             var serviceClient = utorrentServiceBuilder.GetService();
             var key = serviceClient.GetKey();
-            const string hash = "FB4F76083F21CC6AA6A2E2EB210D126C3CC090DC";
+            const string hash = "25A7640F5E8BDC73EBC08E28D8CD4B044CCEF182";
             var torrent = serviceClient.GetTorrentFiles(key, hash);
             Assert.AreEqual(30303, torrent.BuildNumber);
             Assert.AreEqual(2, torrent.Files.Length);
-            Assert.AreEqual("FB4F76083F21CC6AA6A2E2EB210D126C3CC090DC", torrent.Hash.Value);
-            Assert.AreEqual(2, torrent.TorrentFiles.Length);
-            Assert.AreEqual("daa-alvh-1080p.mkv", torrent.TorrentFiles[0].Name);
-            Assert.AreEqual("daa-alvh-1080p.nfo", torrent.TorrentFiles[1].Name);
+            Assert.AreEqual("25A7640F5E8BDC73EBC08E28D8CD4B044CCEF182", torrent.Hash.Value);
+            Assert.AreEqual(1, torrent.TorrentFiles.Length);
+            Assert.AreEqual("Минута славы - Мечты сбываются! - Второй полуфинал_bySat.mpg", torrent.TorrentFiles[0].Name);
         }
     }
 }

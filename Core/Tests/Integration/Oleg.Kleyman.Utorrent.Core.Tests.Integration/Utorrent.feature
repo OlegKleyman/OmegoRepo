@@ -8,14 +8,13 @@ Scenario: Get utorrent key
 
 Scenario: Get a torrent
 	Given I have attained an API key
-	When I call the method GetTorrentFile with a hash of "FB4F76083F21CC6AA6A2E2EB210D126C3CC090DC"
-	Then It should return a torrent with build number "27498"
-	And the torrent should have a hash value of "FB4F76083F21CC6AA6A2E2EB210D126C3CC090DC"
-	And the torrent should have a count of "2" files
+	When I call the method GetTorrentFile with a hash of "25A7640F5E8BDC73EBC08E28D8CD4B044CCEF182"
+	Then It should return a torrent with build number "30303"
+	And the torrent should have a hash value of "25A7640F5E8BDC73EBC08E28D8CD4B044CCEF182"
+	And the torrent should have a count of "1" files
 	And the file names should be
-		| Name               |
-		| daa-alvh-1080p.mkv |
-		| daa-alvh-1080p.nfo |
+		| Name                                                         |
+		| Минута славы - Мечты сбываются! - Второй полуфинал_bySat.mpg |
 
 Scenario: Update RSS Feeds
 	Given I have attained an API key
