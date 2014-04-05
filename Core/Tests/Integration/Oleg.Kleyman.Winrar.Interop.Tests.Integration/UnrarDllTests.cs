@@ -197,9 +197,10 @@ namespace Oleg.Kleyman.Winrar.Interop.Tests.Integration
             var headerData = new RARHeaderDataEx();
             var status = unrarDll.RARReadHeaderEx(handle, out headerData);
             Assert.AreEqual(0, status);
+            var expectedPath = Path.GetFullPath(@"..\..\..\..\..\..\");
 
-            Assert.AreEqual("㩃䝜瑩敒潰屳慍湩敄慦汵屴潃浭湯呜獥屴整瑳楆敬爮牡", headerData.ArcName);
-            Assert.AreEqual(@"C:\GitRepos\MainDefault\Common\Test\testFile.rar", headerData.ArcNameW);
+            Assert.AreEqual("㩃䝜瑩敒潰屳慍湩敄慦汵㉴䍜浯潭屮敔瑳瑜獥䙴汩⹥慲r", headerData.ArcName);
+            Assert.AreEqual(Path.Combine(expectedPath, @"Common\Test\testFile.rar"), headerData.ArcNameW);
             Assert.IsNull(headerData.CmtBuf);
             Assert.AreEqual(0, headerData.CmtBufSize);
             Assert.AreEqual(0, headerData.CmtSize);

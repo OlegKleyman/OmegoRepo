@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using Oleg.Kleyman.Core;
@@ -48,26 +49,28 @@ namespace Oleg.Kleyman.Winrar.Core.Tests.Integration
             Assert.AreEqual(4, extractedMembers.Length);
             Assert.AreEqual(FileAttributes.Archive, extractedMembers[0].Attributes);
             Assert.IsTrue(extractedMembers[0].Exists);
+            var expectedPath = Path.GetFullPath(@"..\..\..\..\..\..\");
+            
             Assert.AreEqual(
-                "C:\\GitRepos\\MainDefault\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\TestFolder\\testFile.txt",
+                Path.Combine(expectedPath, "Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\TestFolder\\testFile.txt"),
                 extractedMembers[0].FullName);
 
             Assert.AreEqual(FileAttributes.Archive, extractedMembers[1].Attributes);
             Assert.IsTrue(extractedMembers[1].Exists);
             Assert.AreEqual(
-                "C:\\GitRepos\\MainDefault\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\test.txt",
+                Path.Combine(expectedPath, "Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\test.txt"),
                 extractedMembers[1].FullName);
 
             Assert.AreEqual(FileAttributes.Directory, extractedMembers[2].Attributes);
             Assert.IsTrue(extractedMembers[2].Exists);
             Assert.AreEqual(
-                "C:\\GitRepos\\MainDefault\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\TestFolder\\InnerTestFolder",
+                Path.Combine(expectedPath, "Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\TestFolder\\InnerTestFolder"),
                 extractedMembers[2].FullName);
 
             Assert.AreEqual(FileAttributes.Directory, extractedMembers[3].Attributes);
             Assert.IsTrue(extractedMembers[3].Exists);
             Assert.AreEqual(
-                "C:\\GitRepos\\MainDefault\\Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\TestFolder",
+                Path.Combine(expectedPath, "Common\\Test\\Oleg.Kleyman.Winrar.Core.Tests.Integration\\Testing\\TestFolder"),
                 extractedMembers[3].FullName);
 
             Directory.Delete(@"..\..\..\..\..\..\Common\Test\Oleg.Kleyman.Winrar.Core.Tests.Integration\Testing", true);
