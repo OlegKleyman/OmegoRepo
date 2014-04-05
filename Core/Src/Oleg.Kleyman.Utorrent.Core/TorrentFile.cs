@@ -35,7 +35,7 @@ namespace Oleg.Kleyman.Utorrent.Core
 
         private static void ThrowInvalidCastExceptionIfInvalid(object[] properties)
         {
-            if (properties.Length != 13)
+            if (properties.Length != 12)
             {
                 var arrayWrongLengthMessage = string.Format("Unable to convert a {0} length array.", properties.Length);
                 throw new InvalidCastException(arrayWrongLengthMessage);
