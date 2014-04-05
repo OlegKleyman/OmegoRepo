@@ -33,7 +33,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
             var key = serviceClient.GetKey();
             const string hash = "FB4F76083F21CC6AA6A2E2EB210D126C3CC090DC";
             var torrent = serviceClient.GetTorrentFiles(key, hash);
-            Assert.AreEqual(27498, torrent.BuildNumber);
+            Assert.AreEqual(30303, torrent.BuildNumber);
             Assert.AreEqual(2, torrent.Files.Length);
             Assert.AreEqual("FB4F76083F21CC6AA6A2E2EB210D126C3CC090DC", torrent.Hash.Value);
             Assert.AreEqual(2, torrent.TorrentFiles.Length);
