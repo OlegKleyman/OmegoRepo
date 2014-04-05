@@ -2,22 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Ninject;
 using Oleg.Kleyman.Core;
 
 namespace Oleg.Kleyman.Xbmc.Copier.Core
 {
     public sealed class XbmcFileCopier : FileCopier
     {
-        public XbmcFileCopier(ISettingsProvider settings, XbmcFileCopierDependencies xbmcFileCopierDependencies)
+        public XbmcFileCopier(XbmcFileCopierDependencies dependencies, IKernel kernel)
         {
-            ConfigSettings = settings;
-            Dependencies = xbmcFileCopierDependencies;
+            ConfigSettings = kernel.Get<ISettingsProvider>();
+            Dependencies = dependencies;
         }
 
         public XbmcFileCopierDependencies Dependencies { get; set; }
-        private ISettingsProvider ConfigSettings { get; set; }
-
-
+        public ISettingsProvider ConfigSettings { get; set; }
+        
         public override Output Copy(Output output)
         {
             ThrowInvalidArgumentExceptionIfOutputIsInvalidType(output);

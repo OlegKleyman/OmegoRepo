@@ -101,6 +101,9 @@
     <Reference Include="CommonServiceLocator.NinjectAdapter">
       <HintPath>..\..\..\Common\Lib\Ninject\extensions\CommonServiceLocator.NinjectAdapter.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\..\Main\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -119,6 +122,10 @@
       <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
       <Name>Oleg.Kleyman.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Src\Oleg.Kleyman.Winrar.Core\Oleg.Kleyman.Winrar.Core.csproj">
+      <Project>{9E4749CF-3F04-4374-A6E3-91BAC775823A}</Project>
+      <Name>Oleg.Kleyman.Winrar.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Oleg.Kleyman.Xbmc.Copier.Core\Oleg.Kleyman.Xbmc.Copier.Core.csproj">
       <Project>{FB57E4D2-D4A3-40DC-918F-58AEF6D3E275}</Project>
       <Name>Oleg.Kleyman.Xbmc.Copier.Core</Name>
@@ -126,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
