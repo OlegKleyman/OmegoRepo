@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Ninject;
 using NUnit.Framework;
 using Oleg.Kleyman.Core;
 using Oleg.Kleyman.Tests.Core;
@@ -22,7 +23,9 @@ namespace Oleg.Kleyman.Xbmc.Copier.Core.Tests
         public void CopyTest()
         {
             var dependencies = new XbmcFileCopierDependencies(_extractor.Object, _fileSystem.Object);
-            var copier = new XbmcFileCopier(new TestSettings(), dependencies);
+            var kernel = new StandardKernel();
+            kernel.Bind<ISettingsProvider>().ToMethod(x => new TestSettings());
+            var copier = new XbmcFileCopier(dependencies, kernel);
             var release = new Release(ReleaseType.Tv, "Breaking Bad");
             var releaseOutput = new ReleaseOutput("Breaking.Bad.S01E07.720p.mkv", @"C:\TV", release);
             var output = copier.Copy(releaseOutput);
