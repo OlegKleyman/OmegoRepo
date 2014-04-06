@@ -73,11 +73,11 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration.Features
 #line 5
 this.ScenarioSetup(scenarioInfo);
 #line 6
- testRunner.Given("a TV torrent has finished downloading", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("a Tv torrent has finished downloading", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
  testRunner.When("the XbmcFilerCopier runs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
- testRunner.Then("the torrent should be downloaded to the .\\Work\\TV directory", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the torrent contents should be transfered to the .\\Work\\TV directory", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
