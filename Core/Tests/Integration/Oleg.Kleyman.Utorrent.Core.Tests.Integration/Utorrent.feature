@@ -19,7 +19,6 @@ Scenario: Get a torrent
 		| Name                                                         |
 		| Some.Show.S01E11.mkv |
 
-@ignore
 Scenario: Update RSS Feeds
 	Given Retrieved all RSS feeds
 	Then I want to update all RSS feeds

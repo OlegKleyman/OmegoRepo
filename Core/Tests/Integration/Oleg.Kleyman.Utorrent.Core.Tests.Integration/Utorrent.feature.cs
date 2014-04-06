@@ -123,18 +123,16 @@ this.FeatureBackground();
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Update RSS Feeds")]
-        [NUnit.Framework.IgnoreAttribute()]
         public virtual void UpdateRSSFeeds()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update RSS Feeds", new string[] {
-                        "ignore"});
-#line 23
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Update RSS Feeds", ((string[])(null)));
+#line 22
 this.ScenarioSetup(scenarioInfo);
 #line 5
 this.FeatureBackground();
-#line 24
+#line 23
  testRunner.Given("Retrieved all RSS feeds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 25
+#line 24
  testRunner.Then("I want to update all RSS feeds", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -145,17 +143,17 @@ this.FeatureBackground();
         public virtual void RemoveTorrent()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove torrent", ((string[])(null)));
-#line 27
+#line 26
 this.ScenarioSetup(scenarioInfo);
 #line 5
 this.FeatureBackground();
-#line 28
+#line 27
  testRunner.Given("I have attained an API key", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 29
+#line 28
  testRunner.And("I have a torrent with the hash of D4AD03979D0676F22A0724599FE96FC8BD610877", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 30
+#line 29
  testRunner.When("I call the Remove method on it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 31
+#line 30
  testRunner.Then("the torrent should be removed list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
