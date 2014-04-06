@@ -63,8 +63,8 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration.Steps
             }
         }
 
-        [Then(@"the torrent contents should be transfered to the ([\w\\.:\s]+) directory")]
-        public void ThenTheTorrentContentsShouldBeTransferedToThe_WorkTVDirectory(string location)
+        [Then(@"the torrent contents should be transfered to the (Other|Tv|Movie) directory")]
+        public void ThenTheTorrentContentsShouldBeTransferedToTheReleaseDirectory(ReleaseType releaseType)
         {
             ScenarioContext.Current.Pending();
         }

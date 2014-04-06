@@ -77,8 +77,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 7
  testRunner.When("the XbmcFilerCopier runs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
- testRunner.Then("the torrent contents should be transfered to the ..\\..\\..\\..\\..\\..\\Common\\Test\\To" +
-                    "rrentTest\\TV directory", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the torrent contents should be transfered to Tv directory", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
