@@ -44,16 +44,22 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration.Steps
                 "Release";
             #endif
 
-            var copierFilePath = Path.Combine(@"..\..\..\Src\Oleg.Kleyman.Xbmc.Copier\bin", buildConfiguration, "Oleg.Kleyman.Xbmc.Copier.exe");
-            var process = Process.Start(copierFilePath, ScenarioContext.Current.Get<string>(RELEASE_HASH_KEY));
+            var copierFilePath = Path.Combine(@"..\..\..\..\..\Src\Oleg.Kleyman.Xbmc.Copier\bin", buildConfiguration, "Oleg.Kleyman.Xbmc.Copier.exe");
+            var startInfo = new ProcessStartInfo(Path.GetFullPath(copierFilePath), ScenarioContext.Current.Get<string>(RELEASE_HASH_KEY))
+            {
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+            var process = Process.Start(startInfo);
             if (process == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not start process at path {0}", copierFilePath));
             }
-
-            if (!process.WaitForExit(30000))
+            var executionTime = TimeSpan.FromMilliseconds(30000);
+            if (!process.WaitForExit((int)executionTime.TotalMilliseconds))
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} did not finish in 30 seconds", copierFilePath));
+                process.Kill();
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} did not finish in {1} seconds", copierFilePath, executionTime.TotalSeconds));
             }
         }
 
