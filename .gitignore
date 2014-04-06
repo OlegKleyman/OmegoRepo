@@ -9,4 +9,6 @@ obj/
 *.dotsettings
 *.coverage
 packages/
-/Common/Test/TorrentTest/Utorrent/*.dat.old
+/Common/Test/TorrentTest/Utorrent/*
+!/Common/Test/TorrentTest/Utorrent/*.dat
+!/Common/Test/TorrentTest/Utorrent/*.exe
