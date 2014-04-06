@@ -12,6 +12,7 @@ namespace Oleg.Kleyman.Utorrent.Core
     public class Torrent : UTorrentBase
     {
         private object[] _files;
+        private TorrentFile[] _torrentFiles;
 
         /// <summary>
         ///     Gets or sets the torrent files.
@@ -37,7 +38,11 @@ namespace Oleg.Kleyman.Utorrent.Core
         /// <summary>
         /// Gets an array of <see cref="TorrentFile"/>s.
         /// </summary>
-        public TorrentFile[] TorrentFiles { get; private set; }
+        public TorrentFile[] TorrentFiles
+        {
+            get { return _torrentFiles ?? (_torrentFiles = new TorrentFile[]{}); }
+            private set { _torrentFiles = value; }
+        }
 
         private void SetProperties(IList<object> value)
         {
