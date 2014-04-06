@@ -47,5 +47,9 @@ namespace Oleg.Kleyman.Utorrent.Core
         [OperationContract]
         [WebGet(UriTemplate = "/?token={key}&action=rss-update&feed-id={id}&update=1")]
         UTorrentBase UpdateRssFeed(string key, int id);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/?token={key}&action=remove&hash={hash}")]
+        UTorrentBase Remove(string key, string hash);
     }
 }
