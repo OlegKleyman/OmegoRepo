@@ -6,7 +6,8 @@ using TechTalk.SpecFlow;
 
 namespace Oleg.Kleyman.Tests.Integration
 {
-    public class UtorrentSteps
+    [Binding]
+    public class UtorrentSteps : Steps
     {
         [Given(@"UTorrent is running")]
         public void GivenIAddedAllTorrents()
@@ -19,7 +20,7 @@ namespace Oleg.Kleyman.Tests.Integration
             }
         }
 
-        [When(@"I add ([.\\\w]+) torrent")]
+        [When(@"I add ([.\\\w:]+) torrent")]
         public void WhenAddTorrent(string torrentPath)
         {
             const string arguments = "/directory {0} {1}";
