@@ -65,18 +65,28 @@ namespace Oleg.Kleyman.Xbmc.Copier.Tests.Integration.Features
             testRunner.CollectScenarioErrors();
         }
         
+        public virtual void FeatureBackground()
+        {
+#line 5
+#line 6
+ testRunner.Given("UTorrent is running", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+        }
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("When a TV torrent downloads it needs to be copied to the correct directory")]
         public virtual void WhenATVTorrentDownloadsItNeedsToBeCopiedToTheCorrectDirectory()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When a TV torrent downloads it needs to be copied to the correct directory", ((string[])(null)));
-#line 5
-this.ScenarioSetup(scenarioInfo);
-#line 6
- testRunner.Given("a Tv torrent has finished downloading", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 7
- testRunner.When("the XbmcFilerCopier runs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
+this.ScenarioSetup(scenarioInfo);
+#line 5
+this.FeatureBackground();
+#line 9
+ testRunner.Given("a Tv torrent has finished downloading", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 10
+ testRunner.When("the XbmcFilerCopier runs", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 11
  testRunner.Then("the torrent contents should be transfered to the correct directory", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
