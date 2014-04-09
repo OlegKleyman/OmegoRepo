@@ -28,7 +28,7 @@ namespace Oleg.Kleyman.Tests.Integration
             var process = Process.Start(GlobalValues.UTorrentPath, string.Format(CultureInfo.InvariantCulture,
                                                                                  arguments,
                                                                                  GlobalValues.DownloadPath,
-                                                                                 GlobalValues.TorrentFilesPath));
+                                                                                 torrentPath));
             if (process == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not start utorrent process at path {0}", GlobalValues.UTorrentPath));
