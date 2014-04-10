@@ -24,7 +24,10 @@ Scenario: Update RSS Feeds
 	Then I want to update all RSS feeds
 
 Scenario: Remove torrent
-	Given I have attained an API key
-	And I have a torrent with the hash of D4AD03979D0676F22A0724599FE96FC8BD610877
+	Given I have a torrent with the hash of D4AD03979D0676F22A0724599FE96FC8BD610877
 	When I call the Remove method on it
 	Then the torrent should be removed list
+
+Scenario: Get All Torrents
+	When I call the GetAll method
+	Then I should get all torrents

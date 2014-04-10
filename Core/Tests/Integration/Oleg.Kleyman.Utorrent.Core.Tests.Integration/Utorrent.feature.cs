@@ -148,13 +148,28 @@ this.ScenarioSetup(scenarioInfo);
 #line 5
 this.FeatureBackground();
 #line 27
- testRunner.Given("I have attained an API key", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I have a torrent with the hash of D4AD03979D0676F22A0724599FE96FC8BD610877", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 28
- testRunner.And("I have a torrent with the hash of D4AD03979D0676F22A0724599FE96FC8BD610877", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 29
  testRunner.When("I call the Remove method on it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 30
+#line 29
  testRunner.Then("the torrent should be removed list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Get All Torrents")]
+        public virtual void GetAllTorrents()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get All Torrents", ((string[])(null)));
+#line 31
+this.ScenarioSetup(scenarioInfo);
+#line 5
+this.FeatureBackground();
+#line 32
+ testRunner.When("I call the GetAll method", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 33
+ testRunner.Then("I should get all torrents", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
