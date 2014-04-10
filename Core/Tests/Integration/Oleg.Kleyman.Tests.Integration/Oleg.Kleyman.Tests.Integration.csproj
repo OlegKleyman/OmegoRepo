@@ -40,6 +40,16 @@
       <HintPath>..\..\..\..\Common\Lib\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Core\Oleg.Kleyman.Core.csproj">
+      <Project>{0675E555-1684-4D3F-8423-C3CA2D9C5D71}</Project>
+      <Name>Oleg.Kleyman.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Src\Oleg.Kleyman.Utorrent.Core\Oleg.Kleyman.Utorrent.Core.csproj">
+      <Project>{5FE4820F-C331-4504-AE10-A8B1D6E2399E}</Project>
+      <Name>Oleg.Kleyman.Utorrent.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
