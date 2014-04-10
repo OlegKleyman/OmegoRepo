@@ -75,6 +75,10 @@
       <Project>{5fe4820f-c331-4504-ae10-a8b1d6e2399e}</Project>
       <Name>Oleg.Kleyman.Utorrent.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Oleg.Kleyman.Core.Tests.Integration\Oleg.Kleyman.Core.Tests.Integration.csproj">
+      <Project>{df64518e-4a2b-4df7-9d99-d0650c7d06df}</Project>
+      <Name>Oleg.Kleyman.Core.Tests.Integration</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
