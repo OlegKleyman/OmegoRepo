@@ -17,6 +17,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         private const string TORRENT_HASH_KEY = "TORRENT_HASH";
         private const string UTORRENT_SERVICE_KEY = "UTORRENT_SERVICE";
         private const string SERVICE_TOKEN_KEY = "SERVICE_TOKEN";
+        private const string TORRENTLIST_KEY = "TORRENTLIST_KEY";
         internal static IUtorrentService ServiceClient { get; set; }
         private Torrent Torrent { get; set; }
 
@@ -128,16 +129,47 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
             });
         }
 
+        [When(@"I call the GetAll method")]
+        public void WhenICallTheGetAllMethod()
+        {
+            var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
+            var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
+            var torrentList = service.GetList(token);
+            ScenarioContext.Current.Set(torrentList, TORRENTLIST_KEY);
+        }
+
+        [Then(@"I should get all torrents")]
+        public void ThenIShouldGetAllTorrents()
+        {
+            var torrentList = ScenarioContext.Current.Get<UTorrentList>(TORRENTLIST_KEY);
+
+            Assert.That(torrentList.Torrents, Is.Not.Null, "Torrents is null");
+            Assert.That(torrentList.Torrents.Length, Is.EqualTo(4));
+
+            Assert.That(torrentList.Torrents[0].Hash, Is.Not.Null);
+            Assert.That(torrentList.Torrents[0].Hash.Value, Is.EqualTo("15DB4BB838E03B08A732584826E180C87CD2FD90"));
+
+            Assert.That(torrentList.Torrents[1].Hash, Is.Not.Null);
+            Assert.That(torrentList.Torrents[1].Hash.Value, Is.EqualTo("93ED1869741FBB7075831742539E6530C8A0661F"));
+
+            Assert.That(torrentList.Torrents[2].Hash, Is.Not.Null);
+            Assert.That(torrentList.Torrents[2].Hash.Value, Is.EqualTo("9488865BD3C39371AD92775E23A971DD125A6E9A"));
+
+            Assert.That(torrentList.Torrents[3].Hash, Is.Not.Null);
+            Assert.That(torrentList.Torrents[3].Hash.Value, Is.EqualTo("D4AD03979D0676F22A0724599FE96FC8BD610877"));
+        }
+
         [AfterScenario]
         public void AfterScenario()
         {
             var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
             var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
-            
-            service.Remove(token, "15DB4BB838E03B08A732584826E180C87CD2FD90");
-            service.Remove(token, "9488865BD3C39371AD92775E23A971DD125A6E9A");
-            service.Remove(token, "D4AD03979D0676F22A0724599FE96FC8BD610877");
-            service.Remove(token, "93ED1869741FBB7075831742539E6530C8A0661F");
+
+            var torrentList = service.GetList(token);
+            foreach (var torrent in torrentList.Torrents)
+            {
+                service.Remove(token, torrent.Hash.ToString());
+            }
 
             var utorrentProcesses = Process.GetProcessesByName("utorrent");
             if (utorrentProcesses.Length == 0)
