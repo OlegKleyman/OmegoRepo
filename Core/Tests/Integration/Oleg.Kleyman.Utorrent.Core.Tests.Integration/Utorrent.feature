@@ -3,7 +3,7 @@
 	get information from the utorrent web API
 
 Background:
-	Given I added all torrents
+	Given I added all torrents	
 	And I have attained an API key
 
 Scenario: Get utorrent key

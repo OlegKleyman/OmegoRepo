@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Linq;
 using Oleg.Kleyman.Tests.Integration;
@@ -12,7 +13,7 @@ using TechTalk.SpecFlow.Assist;
 namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
 {
     [Binding]
-    public class UtorrentSteps
+    public class UtorrentSteps : Steps
     {
         private const string TORRENT_HASH_KEY = "TORRENT_HASH";
         private const string SERVICE_TOKEN_KEY = "SERVICE_TOKEN";
@@ -116,6 +117,9 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not start utorrent process at path {0}", utorrentPath));
                 }
+
+                //Wait for utorrent to register the torrent
+                Thread.Sleep(500);
             });
         }
 
