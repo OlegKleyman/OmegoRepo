@@ -40,5 +40,8 @@ namespace Oleg.Kleyman.Tests.Integration
         {
             get { return Path.Combine(RepositoryPath, @"Common\Test\TorrentTest\DownloadDirectory"); }
         }
+
+        public const string SERVICE_TOKEN_KEY = "SERVICE_TOKEN";
+        public const string UTORRENT_SERVICE_KEY = "UTORRENT_SERVICE";
     }
 }

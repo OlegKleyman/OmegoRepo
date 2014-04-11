@@ -11,21 +11,20 @@ namespace Oleg.Kleyman.Tests.Integration
     [Binding]
     public class UtorrentSteps : Steps
     {
-        private const string UTORRENT_SERVICE_KEY = "UTORRENT_SERVICE";
         private const string SERVICE_TOKEN_KEY = "SERVICE_TOKEN";
 
         [BeforeFeature]
         public static void BeforeFeature()
         {
             var builder = new UtorrentServiceBuilder(new DefaultSettings());
-            FeatureContext.Current.Set(builder.GetService(), UTORRENT_SERVICE_KEY);
+            FeatureContext.Current.Set(builder.GetService(), GlobalValues.UTORRENT_SERVICE_KEY);
         }
 
         [When(@"I call the method GetKey")]
         [Given(@"I have attained an API key")]
         public void GivenIHaveAttainedAnApiKey()
         {
-            var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
+            var service = FeatureContext.Current.Get<IUtorrentService>(GlobalValues.UTORRENT_SERVICE_KEY);
             ScenarioContext.Current.Set(service.GetKey(), SERVICE_TOKEN_KEY);
         }
 
@@ -58,7 +57,7 @@ namespace Oleg.Kleyman.Tests.Integration
         [AfterScenario]
         public void AfterUTorrentScenario()
         {
-            var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
+            var service = FeatureContext.Current.Get<IUtorrentService>(GlobalValues.UTORRENT_SERVICE_KEY);
             var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
 
             var torrentList = service.GetList(token);

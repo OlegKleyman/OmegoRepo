@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using NUnit.Framework;
 using Oleg.Kleyman.Core.Linq;
+using Oleg.Kleyman.Tests.Integration;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
@@ -15,19 +15,9 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
     public class UtorrentSteps
     {
         private const string TORRENT_HASH_KEY = "TORRENT_HASH";
-        private const string UTORRENT_SERVICE_KEY = "UTORRENT_SERVICE";
         private const string SERVICE_TOKEN_KEY = "SERVICE_TOKEN";
         private const string TORRENTLIST_KEY = "TORRENTLIST_KEY";
-        internal static IUtorrentService ServiceClient { get; set; }
-        private Torrent Torrent { get; set; }
-
-        [BeforeFeature]
-        public static void Setup()
-        {
-            var builder = new UtorrentServiceBuilder(new DefaultSettings());
-            ServiceClient = builder.GetService();
-            FeatureContext.Current.Set(ServiceClient, UTORRENT_SERVICE_KEY);
-        }
+        private const string TORRENT_KEY = "TORRENT_KEY";
 
         [Then(@"It should result in returning the key to use for this utorrent session")]
         public void ThenItShouldResultInReturningTheKeyToUseForThisUtorrentSession()
@@ -37,46 +27,46 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
             Assert.AreEqual(64, token.Length);
         }
 
-        [When(@"I call the method GetKey")]
-        [Given(@"I have attained an API key")]
-        public void GivenIHaveAttainedAnApiKey()
-        {
-            ScenarioContext.Current.Set(ServiceClient.GetKey(), SERVICE_TOKEN_KEY);
-        }
-
         [When(@"I call the method GetTorrentFile with a hash of ""(.*)""")]
         public void WhenICallTheMethodGetTorrentFileWithAHashOf(string hash)
         {
+            var service = FeatureContext.Current.Get<IUtorrentService>(GlobalValues.UTORRENT_SERVICE_KEY);
             var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
-            Torrent = ServiceClient.GetTorrentFiles(token, hash);
+            var torrent = service.GetTorrentFiles(token, hash);
+            ScenarioContext.Current.Set(torrent, TORRENT_KEY);
         }
 
         [Then(@"It should return a torrent with build number ""(.*)""")]
         public void ThenItShouldReturnATorrentWithBuildNumber(int build)
         {
-            Assert.AreEqual(build, Torrent.BuildNumber);
+            var torrent = ScenarioContext.Current.Get<Torrent>(TORRENT_KEY);
+            Assert.AreEqual(build, torrent.BuildNumber);
         }
 
         [Then(@"the torrent should have a hash value of ""(.*)""")]
         public void ThenTheTorrentShouldHaveAHashValueOf(string hash)
         {
-            Assert.AreEqual(hash, Torrent.Hash.Value);
+            var torrent = ScenarioContext.Current.Get<Torrent>(TORRENT_KEY);
+            Assert.AreEqual(hash, torrent.Hash.Value);
         }
 
         [Then(@"the torrent should have a count of ""(.*)"" files")]
         public void ThenTheTorrentShouldHaveACountOfFiles(int numberOfFiles)
         {
-            Assert.AreEqual(numberOfFiles, Torrent.TorrentFiles.Length);
+            var torrent = ScenarioContext.Current.Get<Torrent>(TORRENT_KEY);
+            Assert.AreEqual(numberOfFiles, torrent.TorrentFiles.Length);
         }
 
         [Then(@"the file names should be")]
         public void ThenTheFileNamesShouldBe(Table table)
         {
+            var torrent = ScenarioContext.Current.Get<Torrent>(TORRENT_KEY);
+
             var files = table.CreateSet<TorrentFile>().ToArray();
-            Assert.That(files.Length, Is.EqualTo(Torrent.TorrentFiles.Length));
+            Assert.That(files.Length, Is.EqualTo(torrent.TorrentFiles.Length));
             for (int i = 0; i < files.Length; i++)
             {
-                Assert.AreEqual(files[i].Name, Torrent.TorrentFiles[i].Name);
+                Assert.AreEqual(files[i].Name, torrent.TorrentFiles[i].Name);
             }
         }
 
@@ -89,7 +79,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         [When(@"I call the Remove method on it")]
         public void WhenICallTheRemoveMethodOnIt()
         {
-            var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
+            var service = FeatureContext.Current.Get<IUtorrentService>(GlobalValues.UTORRENT_SERVICE_KEY);
             var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
             var torrentHash = ScenarioContext.Current.Get<string>(TORRENT_HASH_KEY);
             var result = service.Remove(token, torrentHash);
@@ -99,7 +89,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         [Then(@"the torrent should be removed list")]
         public void ThenTheTorrentShouldBeRemovedList()
         {
-            var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
+            var service = FeatureContext.Current.Get<IUtorrentService>(GlobalValues.UTORRENT_SERVICE_KEY);
             var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
             var torrentHash = ScenarioContext.Current.Get<string>(TORRENT_HASH_KEY);
 
@@ -132,7 +122,7 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
         [When(@"I call the GetAll method")]
         public void WhenICallTheGetAllMethod()
         {
-            var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
+            var service = FeatureContext.Current.Get<IUtorrentService>(GlobalValues.UTORRENT_SERVICE_KEY);
             var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
             var torrentList = service.GetList(token);
             ScenarioContext.Current.Set(torrentList, TORRENTLIST_KEY);
@@ -157,27 +147,6 @@ namespace Oleg.Kleyman.Utorrent.Core.Tests.Integration
 
             Assert.That(torrentList.Torrents[3].Hash, Is.Not.Null);
             Assert.That(torrentList.Torrents[3].Hash.Value, Is.EqualTo("D4AD03979D0676F22A0724599FE96FC8BD610877"));
-        }
-
-        [AfterScenario]
-        public void AfterScenario()
-        {
-            var service = FeatureContext.Current.Get<IUtorrentService>(UTORRENT_SERVICE_KEY);
-            var token = ScenarioContext.Current.Get<string>(SERVICE_TOKEN_KEY);
-
-            var torrentList = service.GetList(token);
-            foreach (var torrent in torrentList.Torrents)
-            {
-                service.Remove(token, torrent.Hash.ToString());
-            }
-
-            var utorrentProcesses = Process.GetProcessesByName("utorrent");
-            if (utorrentProcesses.Length == 0)
-            {
-                throw new InvalidOperationException("Could not locate processes with the name utorrent");
-            }
-
-            utorrentProcesses.ForEach(process => process.Kill());
         }
     }
 }
