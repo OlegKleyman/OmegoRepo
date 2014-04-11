@@ -75,9 +75,9 @@
       <Project>{5fe4820f-c331-4504-ae10-a8b1d6e2399e}</Project>
       <Name>Oleg.Kleyman.Utorrent.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Oleg.Kleyman.Core.Tests.Integration\Oleg.Kleyman.Core.Tests.Integration.csproj">
-      <Project>{df64518e-4a2b-4df7-9d99-d0650c7d06df}</Project>
-      <Name>Oleg.Kleyman.Core.Tests.Integration</Name>
+    <ProjectReference Include="..\Oleg.Kleyman.Tests.Integration\Oleg.Kleyman.Tests.Integration.csproj">
+      <Project>{74a755db-79d8-450f-ac82-aa143d91ef75}</Project>
+      <Name>Oleg.Kleyman.Tests.Integration</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
