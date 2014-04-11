@@ -15,7 +15,7 @@ namespace Oleg.Kleyman.Tests.Integration
         private const string SERVICE_TOKEN_KEY = "SERVICE_TOKEN";
 
         [BeforeFeature]
-        public void BeforeFeature()
+        public static void BeforeFeature()
         {
             var builder = new UtorrentServiceBuilder(new DefaultSettings());
             FeatureContext.Current.Set(builder.GetService(), UTORRENT_SERVICE_KEY);
