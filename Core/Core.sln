@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Utorrent.Core.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Utorrent.Core", "Src\Oleg.Kleyman.Utorrent.Core\Oleg.Kleyman.Utorrent.Core.csproj", "{5FE4820F-C331-4504-AE10-A8B1D6E2399E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oleg.Kleyman.Tests.Integration", "Tests\Integration\Oleg.Kleyman.Tests.Integration\Oleg.Kleyman.Tests.Integration.csproj", "{74A755DB-79D8-450F-AC82-AA143D91EF75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{5FE4820F-C331-4504-AE10-A8B1D6E2399E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FE4820F-C331-4504-AE10-A8B1D6E2399E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FE4820F-C331-4504-AE10-A8B1D6E2399E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74A755DB-79D8-450F-AC82-AA143D91EF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74A755DB-79D8-450F-AC82-AA143D91EF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74A755DB-79D8-450F-AC82-AA143D91EF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74A755DB-79D8-450F-AC82-AA143D91EF75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,5 +115,6 @@ Global
 		{A5ABABAB-9756-46E1-8719-0C5A45F84BCE} = {801C0731-0169-4B64-B23B-C4E9479F01FA}
 		{1007AEDF-BA4B-44C8-B103-8F35FA052036} = {801C0731-0169-4B64-B23B-C4E9479F01FA}
 		{730C358C-99A8-487F-9A0E-A8C2C8251A5E} = {801C0731-0169-4B64-B23B-C4E9479F01FA}
+		{74A755DB-79D8-450F-AC82-AA143D91EF75} = {801C0731-0169-4B64-B23B-C4E9479F01FA}
 	EndGlobalSection
 EndGlobal
