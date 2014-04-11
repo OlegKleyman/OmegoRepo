@@ -58,7 +58,6 @@
       <DependentUpon>Utorrent.feature</DependentUpon>
     </Compile>
     <Compile Include="UtorrentSteps.cs" />
-    <Compile Include="UtorrentServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UtorrentUpdateRssFeedsSteps.cs" />
   </ItemGroup>
