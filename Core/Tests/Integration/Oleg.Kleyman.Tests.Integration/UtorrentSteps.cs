@@ -29,7 +29,7 @@ namespace Oleg.Kleyman.Tests.Integration
         }
 
         [Given(@"UTorrent is running")]
-        public void GivenIAddedAllTorrents()
+        public void GivenUtorrentIsRunning()
         {
             var utorrentPath = Path.GetFullPath(@"..\..\..\..\..\..\Common\Test\TorrentTest\Utorrent\uTorrent.exe");
             var process = Process.Start(utorrentPath);
